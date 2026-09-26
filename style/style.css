@@ -443,6 +443,23 @@ body {
     }
 }
 
+dialog#gameFormModal {
+    margin: auto;
+    max-width: 400px;
+    width: 90%;
+    padding: var(--space-5);
+
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    color: var(--text-primary);
+
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+    }
+}
+
 @media (max-width: 1023px) {
     .banner { height: 160px; }
 }

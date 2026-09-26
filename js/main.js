@@ -172,6 +172,7 @@ app.addEventListener("click", (e) => {
         const editedGame = gamesArray.find(g => g.id === editingId);
         submitBtn.textContent = "Edit"
         
+        modal.showModal();
         fillFormWithGame(editedGame);
     }
 
