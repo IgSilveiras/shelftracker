@@ -141,9 +141,9 @@ form.addEventListener("submit", (e) => {
     const formData = new FormData(form);
     const newGame = Object.fromEntries(formData);
 
-    newGame.rating === "" ? newGame.rating = 0 : Number(newGame.rating);
-    newGame.release === "" ? newGame.release = 0 : Number(newGame.release);
-    newGame.playtime === "" ? newGame.playTime = 0 : Number(newGame.playtime);
+    newGame.rating === "" ? newGame.rating = 0 : newGame.rating = Number(newGame.rating);
+    newGame.release === "" ? newGame.release = 0 : newGame.release = Number(newGame.release);
+    newGame.playTime === "" ? newGame.playTime = 0 : newGame.playTime = Number(newGame.playTime);
     if (newGame.intensity === "none") delete newGame.intensity;
 
     if (editingId) {
