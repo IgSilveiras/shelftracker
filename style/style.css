@@ -21,8 +21,8 @@
 
     /* accent colors */
     --accent: #3fc7b8;
-    --bg-accent: rgba(47, 143, 138, 0.18);
-    --text-accent: #7fd4cd;
+    --bg-accent: color-mix(in srgb, var(--accent) 18%, transparent);
+    --text-accent: color-mix(in srgb, var(--accent) 70%, white);
 
     /* overlay over images */
     --overlay-bg: rgba(20, 20, 20, 0.65);
