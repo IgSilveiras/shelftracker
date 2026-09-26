@@ -5,28 +5,55 @@
 }
 
 :root {
-  /* spacing scale */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
+    /* surface colors */
+    --surface-0: #0d0f12; /* background */
+    --surface-1: #16191d; /* placeholders */
+    --surface-2: #1e2126; /* card background */
+    --surface-3: #292d33; /* card hover bg */
 
-  /* radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.24);
 
-  /* base typography */
-  --font-xs: 0.75rem;  
-  --font-sm: 0.875rem;    
-  --font-base: 1rem;
-  --font-md: 1.125rem;  
-  --font-lg: 1.5rem; 
+    /* text colors */
+    --text-primary: #f2f2f2;
+    --text-secondary: #a1a1aa;
+    --text-muted: #6b7280;
 
-  /* fonts */
-  --font-family-base: "Inter", system-ui, sans-serif;
-  --font-family-display: "Fraunces", sans-serif;
+    /* accent colors */
+    --accent: #2f8f8a;
+    --bg-accent: rgba(47, 143, 138, 0.18);
+    --text-accent: #7fd4cd;
+
+    /* overlay over images */
+    --overlay-bg: rgba(20, 20, 20, 0.65);
+    --overlay-bg-strong: rgba(20, 20, 20, 0.85);
+
+    /* modifier highlight */
+    --highlight: gold;
+
+
+    /* spacing scale */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+
+    /* radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+
+    /* base typography */
+    --font-xs: 0.75rem;  
+    --font-sm: 0.875rem;    
+    --font-base: 1rem;
+    --font-md: 1.125rem;  
+    --font-lg: 1.5rem; 
+
+    /* fonts */
+    --font-family-base: "Inter", system-ui, sans-serif;
+    --font-family-display: "Fraunces", sans-serif;
 }
 
 .sr-only {
@@ -46,7 +73,7 @@
     pointer-events: none;
 
     &:checked + label {
-        border: 2px solid white;
+        border: 2px solid var(--accent);
     }
 }
 
@@ -57,16 +84,16 @@ select::picker(select) {
 
 select {
     padding: var(--space-2) var(--space-3);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-md);
 
     font-size: var(--font-base);
-    color: white;
+    color: var(--text-primary);
 
     &::picker(select) {
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(20, 20, 20, 0.85);
+        border: 1px solid var(--border-strong);
+        background: var(--overlay-bg-strong);
         border-radius: var(--radius-sm);
         backdrop-filter: blur(2px);
     }
@@ -79,8 +106,8 @@ select {
         }
 
         &:checked {
-            background: rgba(255, 255, 255, 0.8);
-            color: black;
+            background: var(--bg-accent);
+            color: var(--text-accent);
             font-weight: 500;
         }
     }
@@ -88,8 +115,8 @@ select {
 
 
 body {
-    background-color: black;
-    color: white;
+    background-color: var(--surface-0);
+    color: var(--text-primary);
     font-family: var(--font-family-base);
 }
 
@@ -154,7 +181,7 @@ body {
             cursor: pointer;
 
             i {
-                color: white;
+                color: var(--text-primary);
                 font-size: 24px;
             }
         }
@@ -172,18 +199,18 @@ body {
 
         label {
             padding: var(--space-2); 
-            border: 1px solid slateblue;
+            border: 1px solid var(--text-accent);
             height: fit-content;
             cursor: pointer;
 
             i {
                 font-size: 20px;
-                color: white;
+                color: var(--text-primary);
             }
         }
 
         input:checked + label i {
-            color :slateblue;
+            color :var(--text-accent);
         }
     }
 }
@@ -221,15 +248,15 @@ body {
         .gameCard {
             display: flex;
             flex-direction: column;
-            background-color: #ffffff15;
-            border: 1px solid rgba(255, 255, 255, 0.192);
+            background-color: var(--surface-2);
+            border: 1px solid var(--border-strong);
             border-radius: var(--radius-md);
             overflow: hidden;
             transition: 0.075s;
             cursor: pointer;
 
             &:hover {
-                background-color: #ffffff30;
+                background-color: var(--surface-3);
             }
             
             .gameCardThumbnail {
@@ -247,9 +274,9 @@ body {
                     position: absolute;
                     width: fit-content;
                     padding: var(--space-1) var(--space-2);
-                    border: 1px solid white;
+                    border: 1px solid var(--text-primary);
                     border-radius: var(--radius-sm);
-                    background-color: rgba(20, 20, 20, 0.65);
+                    background-color: var(--overlay-bg);
                     backdrop-filter: blur(2px);
                     font-size: var(--font-sm)
                 }
@@ -296,7 +323,7 @@ body {
                     .extraIcon {
                         margin-left: var(--space-1);
                         font-size: var(--font-base);
-                        color: gold;
+                        color: var(--highlight);
                     }
 
                     i {
@@ -325,15 +352,15 @@ body {
             grid-template-columns: 1fr 3fr 3fr 1fr;
             align-items: center;
 
-            background-color: #ffffff15;
-            border: 1px solid rgba(255, 255, 255, 0.192);
+            background-color: var(--surface-2);
+            border: 1px solid var(--border-strong);
             border-radius: var(--radius-md);
             overflow: hidden;
             transition: 0.075s;
             cursor: pointer;
 
             &:hover {
-                background-color: #ffffff30;
+                background-color: var(--surface-3);
             }
             
             .gameThumbnail {
@@ -365,9 +392,9 @@ body {
                 margin-right: 1rem;
                 width: fit-content;
                 padding: var(--space-1) var(--space-2);
-                border: 1px solid white;
+                border: 1px solid var(--text-primary);
                 border-radius: var(--radius-sm);
-                background-color: rgba(20, 20, 20, 0.65);
+                background-color: var(--overlay-bg);
                 backdrop-filter: blur(2px);
                 font-size: var(--font-sm);
             }
@@ -392,8 +419,8 @@ body {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-evenly;
-                color: black;
                 background-color: var(--color);
+                color: var(--text-primary);
 
                 .gameRating {
                     font-size: clamp(2rem, 6vh, 3.25rem);
@@ -408,7 +435,7 @@ body {
 
                     .extraIcon {
                         font-size: var(--font-base);
-                        color: gold;
+                        color: var(--highlight);
                     }
                 }
             }

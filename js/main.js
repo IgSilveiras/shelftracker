@@ -108,8 +108,17 @@ function renderGames(gamesArray, view) {
     }
 }
 
+const modal = document.querySelector("#gameFormModal");
+const addGameBtn = document.querySelector("#addGameBtn");
+addGameBtn.addEventListener("click", () => modal.showModal());
+
+
 const form = document.querySelector("#gameForm");
 const submitBtn = form.querySelector("button[type='submit']")
+
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.close();
+})
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -137,6 +146,7 @@ form.addEventListener("submit", (e) => {
     localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
     submitBtn.textContent = "Add Game"
     form.reset();
+    modal.close()
 })
 
 

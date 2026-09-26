@@ -15,6 +15,9 @@
     <!-- CSS -->
     <link rel="stylesheet" href="./style/style.css">
 
+    <!-- local css for testing -->
+    <link rel="stylesheet" href="./style/local.css">
+
     <title>ShelfTracker</title>
 </head>
 
@@ -66,25 +69,30 @@
         
     </div>
 
-    <form id="gameForm">
-        <input type="text" name="name" placeholder="Game Name" required>
-        <input type="url" name="thumbnail" placeholder="Img URL">
-        <input type="number" name="release" placeholder="Launch Year">
-        <input type="number" name="rating" min="0" max="10" placeholder="Rating">
-        <input type="number" name="playTime" placeholder="Played Hours">
-        <select name="playState">
-            <option value="planToPlay">Plan to Play</option>
-            <option value="playing">Playing</option>
-            <option value="completed">Completed</option>
-            <option value="paused">Paused</option>
-            <option value="abandoned">Abandoned</option>
-        </select>
-        <textarea name="review" placeholder="Review"></textarea>
-        <button type="submit">Add Game</button>
-    </form>
+    <dialog id="gameFormModal">
+        <form id="gameForm">
+            <input type="text" name="name" placeholder="Game Name" required>
+            <input type="url" name="thumbnail" placeholder="Img URL">
+            <input type="number" name="release" placeholder="Launch Year">
+            <input type="number" name="rating" min="0" max="10" placeholder="Rating">
+            <input type="number" name="playTime" placeholder="Played Hours">
+            <select name="playState">
+                <option value="planToPlay">Plan to Play</option>
+                <option value="playing">Playing</option>
+                <option value="completed">Completed</option>
+                <option value="paused">Paused</option>
+                <option value="abandoned">Abandoned</option>
+            </select>
+            <textarea name="review" placeholder="Review"></textarea>
+            <button type="submit">Add Game</button>
+        </form>
+    </dialog>
 
-    <button id="editBtn">Edit Game</button>
-    <button id="deleteBtn">Delete Game</button>
+    <div id="listBtns">
+        <button id="addGameBtn">Add Game</button>
+        <button id="editBtn">Edit Game</button>
+        <button id="deleteBtn">Delete Game</button>
+    </div>
     
     <script src="./js/main.js"></script>
 </body>
