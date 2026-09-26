@@ -69,21 +69,65 @@
         
     </div>
 
-    <dialog id="gameFormModal">
+    <dialog id="gameFormModal" aria-labelledby="modalTitle">
+        <h2 id="modalTitle">Add Game</h2>
+
         <form id="gameForm">
-            <input type="text" name="name" placeholder="Game Name" required>
-            <input type="url" name="thumbnail" placeholder="Img URL">
-            <input type="number" name="release" placeholder="Launch Year">
-            <input type="number" name="rating" min="0" max="10" placeholder="Rating">
-            <input type="number" name="playTime" placeholder="Played Hours">
-            <select name="playState">
-                <option value="planToPlay">Plan to Play</option>
-                <option value="playing">Playing</option>
-                <option value="completed">Completed</option>
-                <option value="paused">Paused</option>
-                <option value="abandoned">Abandoned</option>
-            </select>
-            <textarea name="review" placeholder="Review"></textarea>
+            <div class="formGroup" id="formNameGroup">
+                <label for="formName">Game Name</label>
+                <input type="text" name="name" id="formName" placeholder="Game Name" required>
+            </div>
+
+            <div class="formGroup" id="formPlaytimeGroup">
+                <label for="formPlayTime">Playtime</label>
+                <input type="number" name="playTime" id="formPlayTime" placeholder="Played Hours">
+            </div>
+
+            <div class="formGroup" id="formRatingGroup">
+                <label for="formRating">Rating</label>
+                <input type="number" name="rating" id="formRating" min="0" max="10" placeholder="Rating">
+            </div>
+
+            <div class="formGroup" id="formPlayStateGroup">
+                <label for="formPlayState">Play State</label>
+                <select name="playState" id="formPlayState">
+                    <option value="planToPlay">Plan to Play</option>
+                    <option value="playing">Playing</option>
+                    <option value="completed">Completed</option>
+                    <option value="paused">Paused</option>
+                    <option value="abandoned">Abandoned</option>
+                </select>
+            </div>
+
+            <div class="formGroup" id="formIntensityGroup">
+                <label for="formIntensity" id="formIntensityLabel">Intensity</label>
+                <select name="intensity" id="formIntensity">
+                    <option value="">None</option>
+                    <option value="casual">Casual</option>
+                    <option value="tryhard">Tryhard</option>
+                </select>
+
+                <div id="formCompleted100Group" hidden>
+                    <input type="checkbox" name="completed100" id="formCompleted100">
+                    <label for="formCompleted100">100%</label>
+                </div>
+            </div>
+
+            <div class="formGroup" id="formThumbnailGroup">
+                <label for="formThumbnail">Thumbnail URL</label>
+                <input type="url" name="thumbnail" id="formThumbnail" placeholder="Img URL">
+            </div>
+
+            <div class="formGroup" id="formReleaseGroup">
+                <label for="formRelease">Release Year</label>
+                <input type="number" name="release" id="formRelease" placeholder="Launch Year">
+            </div>
+
+            <div class="formGroup" id="formReviewGroup">
+                <label for="formReview">Review</label>
+                <textarea name="review" placeholder="Review" id="formReview"></textarea>
+            </div>
+
             <button type="submit">Add Game</button>
         </form>
     </dialog>

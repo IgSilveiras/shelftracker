@@ -13,11 +13,15 @@ const INTENSITY_CONFIG = {
     casual:  { icon: "ti-feather",  label:"Casual"}
 }
 
+const NO_INTENSITY_STATES = ["completed"];
+
 let gamesArray = [];
 let currentFilter = "all";
 let currentSort = "custom"
 let currentSortOrder = "desc";
 let view = "grid";
+let editMode = false;
+let editingId = null;
 
 if (localStorage.getItem("gamesArray") === null) {
     fetch("./mock.json")
@@ -34,13 +38,17 @@ else {
     renderGames(sortGames(getFilteredGames(), currentSort, currentSortOrder), view);
 }
 
+function hasIntensity(playState) {
+    return !NO_INTENSITY_STATES.includes(playState);
+}
+
 function buildStateBadge(playState, intensity, completed100) {
     const status = STATUS_CONFIG[playState];
 
     const modifier = 
-        playState === "playing" && intensity ? INTENSITY_CONFIG[intensity]
-        : playState === "completed" && completed100 ? {icon: 'ti-trophy', label: "100%"}
-        : null
+        hasIntensity(playState) && intensity ? INTENSITY_CONFIG[intensity]
+      : playState === "completed" && completed100 ? { icon: "ti-trophy", label: "100% Completed" }
+      : null
 
     return `
         <span class="stateBadge ${status.className}">
@@ -110,7 +118,14 @@ function renderGames(gamesArray, view) {
 
 const modal = document.querySelector("#gameFormModal");
 const addGameBtn = document.querySelector("#addGameBtn");
-addGameBtn.addEventListener("click", () => modal.showModal());
+const modalTitle = document.querySelector("#modalTitle");
+
+function modalOpenHandler() {
+    modalTitle.textContent = editingId ? "Edit Game" : "Add Game";
+    modal.showModal();
+}
+
+addGameBtn.addEventListener("click", modalOpenHandler);
 
 
 const form = document.querySelector("#gameForm");
@@ -129,6 +144,7 @@ form.addEventListener("submit", (e) => {
     newGame.rating === "" ? newGame.rating = 0 : Number(newGame.rating);
     newGame.release === "" ? newGame.release = 0 : Number(newGame.release);
     newGame.playtime === "" ? newGame.playTime = 0 : Number(newGame.playtime);
+    if (newGame.intensity === "none") delete newGame.intensity;
 
     if (editingId) {
         const index = gamesArray.findIndex(g => g.id === editingId);
@@ -149,9 +165,24 @@ form.addEventListener("submit", (e) => {
     modal.close()
 })
 
+const formPlayState = form.querySelector("#formPlayState");
+const formIntensity = document.querySelector("#formIntensity");
+const formIntensityLabel = document.querySelector("#formIntensityLabel");
 
-let editMode = false;
-let editingId = null;
+function updateIntensityView() {
+    const value = formPlayState.value;
+    const showIntensity = hasIntensity(value);
+    const showCompleted100 = value === "completed";
+
+    formIntensity.hidden = !showIntensity;
+    formIntensityLabel.hidden = !showIntensity;
+
+    formCompleted100Group.hidden = !showCompleted100;
+    formCompleted100Group.querySelector("input").disabled = !showCompleted100;
+}
+
+formPlayState.addEventListener("change", updateIntensityView)
+
 const editBtn = document.querySelector("#editBtn");
 
 editBtn.addEventListener("click", () => {
@@ -170,9 +201,10 @@ app.addEventListener("click", (e) => {
     if (editMode) {    
         editingId = card.dataset.id;
         const editedGame = gamesArray.find(g => g.id === editingId);
-        submitBtn.textContent = "Edit"
+        submitBtn.textContent = "Edit Game"
         
-        modal.showModal();
+        document.querySelector("#modalTitle").textContent = editingId ? "Edit Game" : "Add Game";
+        modalOpenHandler();
         fillFormWithGame(editedGame);
     }
 
@@ -195,6 +227,8 @@ function fillFormWithGame(game) {
     form.playTime.value = game.playTime;
     form.playState.value = game.playState;
     form.review.value = game.review;
+    form.intensity.value = game.intensity;
+    form.completed100.value = game.completed100;
 }
 
 const deleteBtn = document.querySelector("#deleteBtn");

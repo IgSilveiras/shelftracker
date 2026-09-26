@@ -20,7 +20,7 @@
     --text-muted: #6b7280;
 
     /* accent colors */
-    --accent: #2f8f8a;
+    --accent: #3fc7b8;
     --bg-accent: rgba(47, 143, 138, 0.18);
     --text-accent: #7fd4cd;
 
@@ -443,20 +443,143 @@ body {
     }
 }
 
-dialog#gameFormModal {
+dialog {
     margin: auto;
-    max-width: 400px;
+    max-width: 480px;
     width: 90%;
-    padding: var(--space-5);
+    padding: var(--space-6) var(--space-5);
 
-    border: none;
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--surface-2);
     color: var(--text-primary);
 
+    text-align: center;
+
     &::backdrop {
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(2px);
+    }
+    
+    h2 {
+        margin-bottom: 5%;
+        font-size: var(--font-lg);
+        font-weight: 600;
+    }
+
+
+    &#gameFormModal form{
+        display: grid;
+        gap: var(--space-4);
+
+        grid-template-areas:
+        "name name"
+        "playtime rating"
+        "playstate intensity"
+        "thumbnail release"
+        "review review"
+        "submit submit";
+        
+        grid-template-columns: 1fr 1fr;
+
+        
+        .formGroup {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+            text-align: center;
+
+            label {
+                font-size: var(--font-sm);
+                color: var(--text-secondary);
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="url"],
+            textarea,
+            select {
+                width: 100%;
+                padding: var(--space-2) var(--space-3);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                background: var(--surface-1);
+                color: var(--text-primary);
+                font-family: var(--font-family-base);
+                font-size: var(--font-base);
+                text-align: center;
+            }
+
+            input:focus,
+            textarea:focus,
+            select:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+
+            textarea {
+                resize: vertical;
+                min-height: 120px;
+            }
+        }
+
+        #formNameGroup {
+            grid-area: name;
+        }
+        
+        #formPlayTimeGroup {
+            grid-area: playtime;
+        }
+        
+        #formRatingGroup {
+            grid-area: rating;
+        }
+
+        #formPlayStateGroup {
+            grid-area: playstate;
+        }
+
+        #formIntensityGroup {
+            grid-area: intensity;
+            justify-content: center;
+
+            #formCompleted100Group input[type="checkbox"] {
+                width: 1.1em;
+                height: 1.1em;
+                accent-color: var(--accent);
+            }
+        }
+
+        #formThumbnailGroup {
+            grid-area: thumbnail;
+        }
+        
+        #formReleaseGroup {
+            grid-area: release;
+        }
+
+        #formReviewGroup {
+            grid-area: review;
+        }
+
+        button[type=submit] {
+            grid-area: submit;
+            margin-top: 5%;
+            padding: var(--space-2);
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--accent);
+            color: var(--surface-0);
+            font-size: var(--font-base);
+            font-family: var(--font-family-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.075s;
+
+            &:hover {
+                background: var(--text-accent);
+            }
+        }
     }
 }
 
@@ -520,6 +643,26 @@ dialog#gameFormModal {
                     }
                 }
             }
+        }
+    }
+}
+@media (max-width: 340px) {
+    dialog#gameFormModal {
+        padding: var(--space-4) var(--space-3);
+
+        form {
+            grid-template-areas: 
+            "name"
+            "playtime"
+            "rating"
+            "playstate"
+            "intensity"
+            "thumbnail"
+            "release"
+            "review" 
+            "review"
+            "submit";
+            grid-template-columns: 1fr;
         }
     }
 }
