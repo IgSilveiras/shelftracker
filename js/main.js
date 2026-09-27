@@ -72,8 +72,8 @@ function renderGames(gamesArray, view) {
             <div class="gameCard" data-id="${id}">
                 <div class="gameCardThumbnail">
                     <img src="${thumbnail}" alt="${name} thumbnail" max-width="400" max-height="700">
-                    ${rating != "" ? `<p class="gameRating">${rating}</p>` : ""}
-                    ${playTime != "" ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
+                    ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
+                    ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                 </div>
                 <div class="gameCardInfo">
                     <p class="gameName" title="${name}">${name}</p>
@@ -101,9 +101,9 @@ function renderGames(gamesArray, view) {
                 <p class="gameRelease">${release}</p>
                 ${(startDate === "" || finishDate === "") || (startDate === undefined || finishDate === undefined) ? "" : `<p class="gameDates">${startDate} / ${finishDate}</p>`}
                 <p class="gameReview">${review}</p>
-                ${playTime != "" ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
+                ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                 <div class="gameState ${playState}"> 
-                    ${rating != "" ? `<p class="gameRating">${rating}</p>` : ""}
+                    ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
                     <div class="gameBadgeContainer">
                         ${buildStateBadge(playState, intensity, completed100)}
                     </div>
@@ -117,6 +117,7 @@ function renderGames(gamesArray, view) {
 }
 
 const modal = document.querySelector("#gameFormModal");
+const form = document.querySelector("#gameForm");
 const addGameBtn = document.querySelector("#addGameBtn");
 const modalTitle = document.querySelector("#modalTitle");
 
@@ -125,14 +126,20 @@ function modalOpenHandler() {
     modal.showModal();
 }
 
-addGameBtn.addEventListener("click", modalOpenHandler);
+
+function modalCloseHandler() {
+    form.reset();
+    editingId = null;
+    submitBtn.textContent = "Add Game";
+    modal.close();
+}
+addGameBtn.addEventListener("click", () => { modalOpenHandler() });
 
 
-const form = document.querySelector("#gameForm");
 const submitBtn = form.querySelector("button[type='submit']")
 
 modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.close();
+    if (e.target === modal) modalCloseHandler();
 })
 
 form.addEventListener("submit", (e) => {
@@ -162,7 +169,7 @@ form.addEventListener("submit", (e) => {
     localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
     submitBtn.textContent = "Add Game"
     form.reset();
-    modal.close()
+    modalCloseHandler();
 })
 
 const formPlayState = form.querySelector("#formPlayState");
@@ -190,6 +197,8 @@ editBtn.addEventListener("click", () => {
     btnTextHandler();
     deleteMode = false;
     app.classList.toggle("editMode", editMode);
+
+    if (!editMode) { editingId = null }
 })
 
 app.addEventListener("click", (e) => {
@@ -203,8 +212,7 @@ app.addEventListener("click", (e) => {
         const editedGame = gamesArray.find(g => g.id === editingId);
         submitBtn.textContent = "Edit Game"
         
-        document.querySelector("#modalTitle").textContent = editingId ? "Edit Game" : "Add Game";
-        modalOpenHandler();
+        modalOpenHandler()
         fillFormWithGame(editedGame);
     }
 

@@ -583,6 +583,16 @@ dialog {
     }
 }
 
+footer {
+    height: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    font-size: var(--font-sm);
+    background: var(--surface-1);
+}
+
 @media (max-width: 1023px) {
     .banner { height: 160px; }
 }
