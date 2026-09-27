@@ -53,7 +53,7 @@
         <fieldset id="viewSelect">
             <legend class="sr-only">view</legend>
             
-            <input type="radio" name="view" id="view-grid" value="grid" class="sr-only-input">
+            <input type="radio" name="view" id="view-grid" value="grid" class="sr-only-input" checked>
             <label for="view-grid" aria-label="grid view">
                 <i class="ti ti-layout-grid"></i>
             </label>
@@ -68,6 +68,11 @@
     <div id="app" class="appContainer">
         
     </div>
+
+    <button id="addGameBtn" class="fab" aria-label="Add game">
+        <i class="ti ti-plus" aria-hidden="true"></i>
+        <span class="fabLabel">Add Game</span>
+    </button>
 
     <dialog id="gameFormModal" aria-labelledby="modalTitle">
         <h2 id="modalTitle">Add Game</h2>
@@ -133,7 +138,6 @@
     </dialog>
 
     <div id="listBtns">
-        <button id="addGameBtn">Add Game</button>
         <button id="editBtn">Edit Game</button>
         <button id="deleteBtn">Delete Game</button>
     </div>
