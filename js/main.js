@@ -126,13 +126,17 @@ function modalOpenHandler() {
     modal.showModal();
 }
 
-
 function modalCloseHandler() {
-    form.reset();
-    editingId = null;
-    submitBtn.textContent = "Add Game";
-    modal.close();
+    modal.classList.add("closing");
+    modal.addEventListener("animationend", () => {
+        modal.classList.remove("closing");
+        modal.close();
+        form.reset();
+        editingId = null;
+        submitBtn.textContent = "Add Game";
+    }, { once: true })
 }
+
 addGameBtn.addEventListener("click", () => { modalOpenHandler() });
 
 
@@ -140,6 +144,11 @@ const submitBtn = form.querySelector("button[type='submit']")
 
 modal.addEventListener("click", (e) => {
     if (e.target === modal) modalCloseHandler();
+})
+
+modal.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    modalCloseHandler();
 })
 
 form.addEventListener("submit", (e) => {
