@@ -126,15 +126,21 @@ function modalOpenHandler() {
     modal.showModal();
 }
 
+function closeModalAnimated(modalEl, onClosed) {
+    modalEl.classList.add("closing");
+    modalEl.addEventListener("animationend", () => {
+        modalEl.classList.remove("closing");
+        modalEl.close();
+        if (onClosed) onClosed()
+    }, { once: true });
+}
+
 function modalCloseHandler() {
-    modal.classList.add("closing");
-    modal.addEventListener("animationend", () => {
-        modal.classList.remove("closing");
-        modal.close();
+    closeModalAnimated(modal, () => {
         form.reset();
         editingId = null;
         submitBtn.textContent = "Add Game";
-    }, { once: true })
+    });
 }
 
 addGameBtn.addEventListener("click", () => { modalOpenHandler() });
