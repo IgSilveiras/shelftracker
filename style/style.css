@@ -319,21 +319,19 @@ body {
 
                 .gameState {    
                     .stateBadge {
+                        display: inline-flex;
+                        align-items: center;
+                        padding: var(--space-1) var(--space-2);
+                        gap: 0.25em;
                         background-color: var(--color);
-                        padding: 0.08rem 0.375rem;
                         border-radius: var(--radius-sm);
                         font-size: var(--font-sm);
+                        line-height: 1;
                     }
 
                     .extraIcon {
-                        margin-left: var(--space-1);
                         font-size: var(--font-base);
                         color: var(--highlight);
-                    }
-
-                    i {
-                        position: relative;
-                        top: 5%;
                     }
                 }
             }
