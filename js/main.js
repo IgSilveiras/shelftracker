@@ -335,7 +335,10 @@ function toggleDetailMode() {
     const game = gamesArray.find(g => g.id === currentDetailId);
     if (!game) return;
 
-    if (editingMode) saveDetailFields(game);
+    if (editingMode) {
+        saveDetailFields(game);
+        refreshDetailheader(game);
+    }
 
     editingMode = !editingMode;
     renderDetailFields(game, editingMode);
@@ -394,7 +397,7 @@ function buildFieldInput(field, value) {
 
 function renderDetailFields(game, editing) {
     const container = document.querySelector("#detailedViewModalInfo");
-    const fieldsToRender = DETAIL_FIELDS.filter(f => editing || !!f.hideInReadMode);
+    const fieldsToRender = DETAIL_FIELDS.filter(f => editing || !f.hideInReadMode);
 
     container.innerHTML = fieldsToRender.map(field => {
         const rawValue = game[field.key] ?? "";
@@ -409,6 +412,14 @@ function renderDetailFields(game, editing) {
     }).join("");
 }
 
+function refreshDetailheader(game) {
+    detailModalTitle.textContent = game.name;
+    detailThumbnailImg.src = game.thumbnail;
+    detailThumbnailImg.alt = `${game.name} thumbnail`;
+    detailRelease.textContent = game.release;
+    detailBadge.innerHTML = buildStateBadge(game.playState, game.intensity, game.completed100);
+}
+
 function fillDetailedViewModal(id) {
     currentDetailId = id;
     editingMode = false;
@@ -416,12 +427,7 @@ function fillDetailedViewModal(id) {
     const game = gamesArray.find(g => g.id === id);
     if (!game) return;
 
-    detailModalTitle.textContent = game.name;
-    detailThumbnailImg.src = game.thumbnail;
-    detailThumbnailImg.alt = `${game.name} thumbnail`;
-    detailRelease.textContent = game.release;
-    detailBadge.innerHTML = buildStateBadge(game.playState, game.intensity, game.completed100);
-
+    refreshDetailheader(game);
     renderDetailFields(game, false);
     updateDetailActionButtons();
 
