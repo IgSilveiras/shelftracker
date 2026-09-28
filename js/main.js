@@ -35,9 +35,7 @@ let currentSort = "custom"
 let currentSortOrder = "desc";
 let view = "grid";
 const detailedViewModal = document.querySelector("#detailedViewModal");
-let editMode = false; // quitar cuando termine el edit de la detailView
-let editingDetail = false; // renombrar a editingMode
-let editingId = null;
+let editingMode = false;
 
 if (localStorage.getItem("gamesArray") === null) {
     fetch("./mock.json")
@@ -141,10 +139,6 @@ const formModalTitle = document.querySelector("#modalTitle");
 const form = document.querySelector("#gameForm");
 const addGameBtn = document.querySelector("#addGameBtn");
 
-function formModalOpenHandler() {
-    formModalTitle.textContent = editingId ? "Edit Game" : "Add Game";
-    formModal.showModal();
-}
 
 function closeModalAnimated(modalEl, onClosed) {
     modalEl.classList.add("closing");
@@ -156,28 +150,21 @@ function closeModalAnimated(modalEl, onClosed) {
 }
 
 function formModalCloseHandler() {
-    closeModalAnimated(formModal, () => {
-
-        if (editingId) {
-            form.reset();
-            editingId = null;
-        }
-        submitBtn.textContent = "Add Game";
-    });
+    closeModalAnimated(formModal);
 }
 
-addGameBtn.addEventListener("click", () => { formModalOpenHandler() });
+addGameBtn.addEventListener("click", () => { formModal.showModal() });
 
 
 const submitBtn = form.querySelector("button[type='submit']")
 
 formModal.addEventListener("click", (e) => {
-    if (e.target === formModal) formModalCloseHandler();
+    if (e.target === formModal) closeModalAnimated(formModal);
 })
 
 formModal.addEventListener("cancel", (e) => {
     e.preventDefault();
-    formModalCloseHandler();
+    closeModalAnimated(formModal);
 })
 
 detailedViewModal.addEventListener("click", (e) => {
@@ -206,23 +193,14 @@ form.addEventListener("submit", (e) => {
     newGame.playTime === "" ? newGame.playTime = 0 : newGame.playTime = Number(newGame.playTime);
     if (newGame.intensity === "none") delete newGame.intensity;
 
-    if (editingId) {
-        const index = gamesArray.findIndex(g => g.id === editingId);
-        
-        gamesArray[index] = { ...newGame, id: editingId};
-        editingId = null;
-    }
-    
-    else {
-        newGame.id = crypto.randomUUID()
-        gamesArray.push(newGame);
-    }
+    newGame.id = crypto.randomUUID()
+    gamesArray.push(newGame);
 
     renderGames(sortGames(getFilteredGames(), currentSort, currentSortOrder), view);
     localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
     submitBtn.textContent = "Add Game"
     form.reset();
-    formModalCloseHandler();
+    closeModalAnimated(formModal);
 })
 
 const formPlayState = form.querySelector("#formPlayState");
@@ -243,30 +221,9 @@ function updateIntensityView() {
 
 formPlayState.addEventListener("change", updateIntensityView)
 
-const editBtn = document.querySelector("#editBtn");
-
-editBtn.addEventListener("click", () => {
-    editMode = !editMode;
-    btnTextHandler();
-    deleteMode = false;
-    app.classList.toggle("editMode", editMode);
-
-    if (!editMode) { editingId = null }
-})
-
 app.addEventListener("click", (e) => {
     const card = e.target.closest(".gameCard");
     if (!card) return;
-
-    if (editMode) {    
-        editingId = card.dataset.id;
-        const editedGame = gamesArray.find(g => g.id === editingId);
-        submitBtn.textContent = "Edit Game"
-        
-        formModalOpenHandler()
-        fillFormWithGame(editedGame);
-        return;
-    }
 
     if (deleteMode) {
         deleteId = card.dataset.id;
@@ -283,31 +240,17 @@ app.addEventListener("click", (e) => {
     detailedViewModal.showModal();
 })
 
-function fillFormWithGame(game) {
-    form.name.value = game.name;
-    form.thumbnail.value = game.thumbnail;
-    form.release.value = game.release;
-    form.rating.value = game.rating;
-    form.playTime.value = game.playTime;
-    form.playState.value = game.playState;
-    form.review.value = game.review;
-    form.intensity.value = game.intensity;
-    form.completed100.value = game.completed100;
-}
-
 const deleteBtn = document.querySelector("#deleteBtn");
 let deleteMode = false;
 let deleteId = null;
 
 deleteBtn.addEventListener("click", () => {
     deleteMode = !deleteMode;
-    editMode = false;
     btnTextHandler();
     app.classList.toggle("deleteMode", deleteMode);
 })
 
 function btnTextHandler() {
-    editBtn.textContent = editMode ? "Finish Editing" : "Edit Game"
     deleteBtn.textContent = deleteMode ? "Finish Deleting" : "Delete Game";
 }
 
@@ -383,9 +326,6 @@ const detailBadge = document.querySelector("#detailedViewModalBadge");
 const detailEditBtn = document.querySelector("#detailedViewModalEditBtn");
 const detailDeleteBtn = document.querySelector("#detailedViewModalDeleteBtn");
 let currentDetailId = null;
-// editingDetail esta mas arriba
-
-
 
 
 function toggleDetailMode() {
