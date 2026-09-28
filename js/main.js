@@ -18,6 +18,9 @@ const NO_INTENSITY_STATES = ["completed"];
 const REVISIT_CHANCE_VALUES = ["none", "unlikely", "maybe", "likely", "definitely"];
 
 const DETAIL_FIELDS = [
+    { key: "name",              label: "Name",              type: "text", hideInReadMode: true },
+    { key: "thumbnail",         label: "Thumbnail URL",     type: "url", hideInReadMode: true },
+    { key: "release",           label: "Release Year",      type: "number", hideInReadMode: true },
     { key: "rating",            label: "Rating",            type: "number"},
     { key: "playTime",          label: "Playtime",          type: "number", suffix: "hs" },
     { key: "startDate",         label: "Start Date",        type: "date" },
@@ -391,8 +394,9 @@ function buildFieldInput(field, value) {
 
 function renderDetailFields(game, editing) {
     const container = document.querySelector("#detailedViewModalInfo");
-    
-    container.innerHTML = DETAIL_FIELDS.map(field => {
+    const fieldsToRender = DETAIL_FIELDS.filter(f => editing || !!f.hideInReadMode);
+
+    container.innerHTML = fieldsToRender.map(field => {
         const rawValue = game[field.key] ?? "";
         const displayValue = field.type === "select" && rawValue
             ? capitalize(rawValue)
