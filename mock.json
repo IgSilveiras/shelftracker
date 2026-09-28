@@ -9,7 +9,11 @@
         "intensity": "casual",
         "startDate": "",
         "finishDate": "",
+        "lastPlayedDate": "",
         "completed100": false,
+        "difficulty": "",
+        "revisitChance": "none",
+        "platform": "PC",
         "review": "el goat"
     },
     {
@@ -22,7 +26,11 @@
         "intensity": 0,
         "startDate": "",
         "finishDate": "",
+        "lastPlayedDate": "",
         "completed100": false,
+        "difficulty": "",
+        "revisitChance": "none",
+        "platform": "PC",
         "review": "el otro goat"
     },
     {
@@ -35,7 +43,11 @@
         "intensity": "tryhard",
         "startDate": "",
         "finishDate": "",
+        "lastPlayedDate": "",
         "completed100": false,
+        "difficulty": "",
+        "revisitChance": "none",
+        "platform": "PC",
         "review": "me trollean"
     },
     {
@@ -61,7 +73,11 @@
         "intensity": 0,
         "startDate": "",
         "finishDate": "",
+        "lastPlayedDate": "",
         "completed100": false,
+        "difficulty": "",
+        "revisitChance": "none",
+        "platform": "PC",
         "review": "mi goat no puede estar tan washed"
     },
     {
@@ -87,7 +103,11 @@
         "intensity": "",
         "startDate": "",
         "finishDate": "",
+        "lastPlayedDate": "",
         "completed100": false,
+        "difficulty": "",
+        "revisitChance": "none",
+        "platform": "PC",
         "review": "parece que ta weno"
     },
     {
@@ -100,7 +120,11 @@
         "intensity": "",
         "startDate": "",
         "finishDate": "",
+        "lastPlayedDate": "",
         "completed100": false,
+        "difficulty": "",
+        "revisitChance": "none",
+        "platform": "PC",
         "review": "parece que ta weno pero nunca sale"
     }
 ]

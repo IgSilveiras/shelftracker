@@ -15,12 +15,28 @@ const INTENSITY_CONFIG = {
 
 const NO_INTENSITY_STATES = ["completed"];
 
+const REVISIT_CHANCE_VALUES = ["none", "unlikely", "maybe", "likely", "definitely"];
+
+const DETAIL_FIELDS = [
+    { key: "rating",            label: "Rating",            type: "number"},
+    { key: "playTime",          label: "Playtime",          type: "number", suffix: "hs" },
+    { key: "startDate",         label: "Start Date",        type: "date" },
+    { key: "finishDate",        label: "Finish Date",       type: "date" },
+    { key: "platform",          label: "Platform",          type: "text" },
+    { key: "lastPlayed",        label: "Last Played",       type: "date" },
+    { key: "difficulty",        label: "Difficulty",        type: "text" },
+    { key: "revisitChance",     label: "Revisit Chance",    type: "select", options: REVISIT_CHANCE_VALUES },
+    { key: "review",            label: "Review",            type: "textarea" },
+]
+
 let gamesArray = [];
 let currentFilter = "all";
 let currentSort = "custom"
 let currentSortOrder = "desc";
 let view = "grid";
-let editMode = false;
+const detailedViewModal = document.querySelector("#detailedViewModal");
+let editMode = false; // quitar cuando termine el edit de la detailView
+let editingDetail = false; // renombrar a editingMode
 let editingId = null;
 
 if (localStorage.getItem("gamesArray") === null) {
@@ -40,6 +56,10 @@ else {
 
 function hasIntensity(playState) {
     return !NO_INTENSITY_STATES.includes(playState);
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function buildStateBadge(playState, intensity, completed100) {
@@ -116,14 +136,14 @@ function renderGames(gamesArray, view) {
     }
 }
 
-const modal = document.querySelector("#gameFormModal");
+const formModal = document.querySelector("#gameFormModal");
+const formModalTitle = document.querySelector("#modalTitle");
 const form = document.querySelector("#gameForm");
 const addGameBtn = document.querySelector("#addGameBtn");
-const modalTitle = document.querySelector("#modalTitle");
 
-function modalOpenHandler() {
-    modalTitle.textContent = editingId ? "Edit Game" : "Add Game";
-    modal.showModal();
+function formModalOpenHandler() {
+    formModalTitle.textContent = editingId ? "Edit Game" : "Add Game";
+    formModal.showModal();
 }
 
 function closeModalAnimated(modalEl, onClosed) {
@@ -135,26 +155,44 @@ function closeModalAnimated(modalEl, onClosed) {
     }, { once: true });
 }
 
-function modalCloseHandler() {
-    closeModalAnimated(modal, () => {
-        form.reset();
-        editingId = null;
+function formModalCloseHandler() {
+    closeModalAnimated(formModal, () => {
+
+        if (editingId) {
+            form.reset();
+            editingId = null;
+        }
         submitBtn.textContent = "Add Game";
     });
 }
 
-addGameBtn.addEventListener("click", () => { modalOpenHandler() });
+addGameBtn.addEventListener("click", () => { formModalOpenHandler() });
 
 
 const submitBtn = form.querySelector("button[type='submit']")
 
-modal.addEventListener("click", (e) => {
-    if (e.target === modal) modalCloseHandler();
+formModal.addEventListener("click", (e) => {
+    if (e.target === formModal) formModalCloseHandler();
 })
 
-modal.addEventListener("cancel", (e) => {
+formModal.addEventListener("cancel", (e) => {
     e.preventDefault();
-    modalCloseHandler();
+    formModalCloseHandler();
+})
+
+detailedViewModal.addEventListener("click", (e) => {
+    if (e.target === detailedViewModal) closeModalAnimated(detailedViewModal, () => {
+        editingDetail = false;
+        currentDetailId = null;
+    });
+})
+
+detailedViewModal.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    closeModalAnimated(detailedViewModal, () => {
+        editingDetail = false;
+        currentDetailId = null;
+    });
 })
 
 form.addEventListener("submit", (e) => {
@@ -184,7 +222,7 @@ form.addEventListener("submit", (e) => {
     localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
     submitBtn.textContent = "Add Game"
     form.reset();
-    modalCloseHandler();
+    formModalCloseHandler();
 })
 
 const formPlayState = form.querySelector("#formPlayState");
@@ -217,8 +255,6 @@ editBtn.addEventListener("click", () => {
 })
 
 app.addEventListener("click", (e) => {
-    if (!editMode && !deleteMode) return;
-
     const card = e.target.closest(".gameCard");
     if (!card) return;
 
@@ -227,8 +263,9 @@ app.addEventListener("click", (e) => {
         const editedGame = gamesArray.find(g => g.id === editingId);
         submitBtn.textContent = "Edit Game"
         
-        modalOpenHandler()
+        formModalOpenHandler()
         fillFormWithGame(editedGame);
+        return;
     }
 
     if (deleteMode) {
@@ -239,7 +276,11 @@ app.addEventListener("click", (e) => {
         deleteMode = false;
         btnTextHandler();
         localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
+        return;
     }
+
+    fillDetailedViewModal(card.dataset.id);
+    detailedViewModal.showModal();
 })
 
 function fillFormWithGame(game) {
@@ -333,3 +374,111 @@ viewSelect.addEventListener("change", (e) => {
     view = e.target.value.toLowerCase();
     renderGames(sortGames(getFilteredGames(), currentSort, currentSortOrder), view);
 })
+
+
+const detailModalTitle = document.querySelector("#detailModalTitle");
+const detailThumbnailImg = document.querySelector("#detailedViewModalThumbnail img");
+const detailRelease = document.querySelector("#detailedViewModalRelease");
+const detailBadge = document.querySelector("#detailedViewModalBadge");
+const detailEditBtn = document.querySelector("#detailedViewModalEditBtn");
+const detailDeleteBtn = document.querySelector("#detailedViewModalDeleteBtn");
+let currentDetailId = null;
+// editingDetail esta mas arriba
+
+
+
+
+function toggleDetailMode() {
+    const game = gamesArray.find(g => g.id === currentDetailId);
+    if (!game) return;
+
+    if (editingDetail) saveDetailFields(game);
+
+    editingDetail = !editingDetail;
+    renderDetailFields(game, editingDetail);
+    updateDetailActionButtons();
+}
+
+function updateDetailActionButtons() {
+    detailEditBtn.textContent = editingDetail ? "Confirm" : "Edit";
+
+    detailDeleteBtn.textContent = editingDetail ? "Cancel" : "Delete";
+    detailDeleteBtn.classList.toggle("btnNeutral", editingDetail);
+    detailDeleteBtn.classList.toggle("btnDanger", !editingDetail);
+}
+
+function saveDetailFields(game) {
+    document.querySelectorAll("#detailedViewModalInfo [data-field]").forEach(input => {
+        const field = DETAIL_FIELDS.find(f => f.key === input.dataset.field);
+        let value = input.value;
+        if (field.type === "number") value = value === "" ? 0 : Number(value);
+        game[field.key] = value;
+    });
+
+    localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
+    renderGames(sortGames(getFilteredGames(), currentSort, currentSortOrder), view);
+}
+
+detailEditBtn.addEventListener("click", toggleDetailMode);
+
+detailDeleteBtn.addEventListener("click", () => {
+    if (editingDetail) {
+        editingDetail = false;
+        const game = gamesArray.find(g => g.id === currentDetailId);
+        renderDetailFields(game, false);
+        updateDetailActionButtons();
+    }
+
+    else {
+        // TODO: modal de confirmacion de borrado
+    }
+})
+
+function buildFieldInput(field, value) {
+    if (field.type === "select") {
+        const options = field.options
+            .map(opt => `<option value="${opt}" ${value === opt ? "selected" : ""}>${capitalize(opt)}</option>`)
+            .join("")
+        return `<select data-field="${field.key}"><option value="">-</option>${options}</select>`;
+    }
+
+    if (field.type === "textarea") {
+        return `<textarea data-field="${field.key}">${value}</textarea>`;
+    }
+
+    return `<input type="${field.type}" data-field="${field.key}" value="${value}">`;
+}
+
+function renderDetailFields(game, editing) {
+    const container = document.querySelector("#detailedViewModalInfo");
+    
+    container.innerHTML = DETAIL_FIELDS.map(field => {
+        const rawValue = game[field.key] ?? "";
+        const displayValue = field.type === "select" && rawValue
+            ? capitalize(rawValue)
+            : field.suffix && rawValue !== "" ? `${rawValue}${field.suffix}` : rawValue;
+
+        return `
+            <dt>${field.label}</dt>
+            <dd>${editing ? buildFieldInput(field, rawValue) : (displayValue || "-")}</dd>
+        `
+    }).join("");
+}
+
+function fillDetailedViewModal(id) {
+    currentDetailId = id;
+    editingDetail = false;
+
+    const game = gamesArray.find(g => g.id === id);
+    if (!game) return;
+
+    detailModalTitle.textContent = game.name;
+    detailThumbnailImg.src = game.thumbnail;
+    detailThumbnailImg.alt = `${game.name} thumbnail`;
+    detailRelease.textContent = game.release;
+    detailBadge.innerHTML = buildStateBadge(game.playState, game.intensity, game.completed100);
+
+    renderDetailFields(game, false);
+    updateDetailActionButtons();
+
+}
