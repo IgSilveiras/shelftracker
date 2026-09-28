@@ -169,7 +169,7 @@ formModal.addEventListener("cancel", (e) => {
 
 detailedViewModal.addEventListener("click", (e) => {
     if (e.target === detailedViewModal) closeModalAnimated(detailedViewModal, () => {
-        editingDetail = false;
+        editingMode = false;
         currentDetailId = null;
     });
 })
@@ -177,7 +177,7 @@ detailedViewModal.addEventListener("click", (e) => {
 detailedViewModal.addEventListener("cancel", (e) => {
     e.preventDefault();
     closeModalAnimated(detailedViewModal, () => {
-        editingDetail = false;
+        editingMode = false;
         currentDetailId = null;
     });
 })
@@ -332,19 +332,19 @@ function toggleDetailMode() {
     const game = gamesArray.find(g => g.id === currentDetailId);
     if (!game) return;
 
-    if (editingDetail) saveDetailFields(game);
+    if (editingMode) saveDetailFields(game);
 
-    editingDetail = !editingDetail;
-    renderDetailFields(game, editingDetail);
+    editingMode = !editingMode;
+    renderDetailFields(game, editingMode);
     updateDetailActionButtons();
 }
 
 function updateDetailActionButtons() {
-    detailEditBtn.textContent = editingDetail ? "Confirm" : "Edit";
+    detailEditBtn.textContent = editingMode ? "Confirm" : "Edit";
 
-    detailDeleteBtn.textContent = editingDetail ? "Cancel" : "Delete";
-    detailDeleteBtn.classList.toggle("btnNeutral", editingDetail);
-    detailDeleteBtn.classList.toggle("btnDanger", !editingDetail);
+    detailDeleteBtn.textContent = editingMode ? "Cancel" : "Delete";
+    detailDeleteBtn.classList.toggle("btnNeutral", editingMode);
+    detailDeleteBtn.classList.toggle("btnDanger", !editingMode);
 }
 
 function saveDetailFields(game) {
@@ -362,8 +362,8 @@ function saveDetailFields(game) {
 detailEditBtn.addEventListener("click", toggleDetailMode);
 
 detailDeleteBtn.addEventListener("click", () => {
-    if (editingDetail) {
-        editingDetail = false;
+    if (editingMode) {
+        editingMode = false;
         const game = gamesArray.find(g => g.id === currentDetailId);
         renderDetailFields(game, false);
         updateDetailActionButtons();
@@ -407,7 +407,7 @@ function renderDetailFields(game, editing) {
 
 function fillDetailedViewModal(id) {
     currentDetailId = id;
-    editingDetail = false;
+    editingMode = false;
 
     const game = gamesArray.find(g => g.id === id);
     if (!game) return;
