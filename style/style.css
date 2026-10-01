@@ -123,6 +123,23 @@ select {
     }
 }
 
+.btnDanger {
+    background: var(--danger);
+    
+    &:hover {
+        background: color-mix(in srgb, var(--danger) 85%, black)
+    }
+}
+
+.btnNeutral {
+    background: var(--surface-1);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+
+    &:hover {
+        background: var(--surface-3);
+    }
+}
 
 body {
     background-color: var(--surface-0);
@@ -723,27 +740,40 @@ dialog {
                         background: var(--text-accent);
                     }
                 }
+            }
+        }
+    }
 
-                #detailedViewModalDeleteBtn {    
-                    
-                    &.btnDanger {
-                        background: var(--danger);
-                        
-                        &:hover {
-                            background: color-mix(in srgb, var(--danger) 85%, black)
-                        }
-                    }
-                    
-                    &.btnNeutral {
-                        background: var(--surface-1);
-                        border-color: var(--border-strong);
-                        color: var(--text-primary);
 
-                        &:hover {
-                            background: var(--surface-3);
-                        }
-                    }
-                }
+    /* Confirm Deletion Modal */
+    &#deleteGameModal {
+        max-width: 380px;
+        text-align: center;
+        padding: var(--space-5);
+
+        #deleteModalTitle #deleteGameTitle {
+            font-family: var(--font-family-display);
+        }
+
+        #deleteModalDescription {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-5);
+        }
+
+        #deleteModalActions {
+            display: flex;
+            gap: var(--space-3);
+
+            button {
+                flex: 1;
+                padding: var(--space-2) var(--space-4);
+                border: 1px solid transparent;
+                border-radius: var(--radius-sm);
+                font-size: var(--font-base);
+                font-weight: 600;
+                cursor: pointer;
+                transition: 0.075s;
             }
         }
     }

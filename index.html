@@ -161,8 +161,10 @@
     <dialog id="deleteGameModal" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalDescription">
         <h2 id="deleteModalTitle">Delete "<span id="deleteGameTitle"></span>"?</h2>
         <p id="deleteModalDescription">This will remove it from your list permanently.</p>
-        <button id="cancelDeleteBtn">Cancel</button>
-        <button id="confirmDeleteBtn">Delete</button>
+        <div id="deleteModalActions">
+            <button id="cancelDeleteBtn" class="btnNeutral">Cancel</button>
+            <button id="confirmDeleteBtn" class="btnDanger">Delete</button>
+        </div>
     </dialog>
 
     <footer>
