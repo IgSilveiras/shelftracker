@@ -228,34 +228,9 @@ app.addEventListener("click", (e) => {
     const card = e.target.closest(".gameCard");
     if (!card) return;
 
-    if (deleteMode) {
-        deleteId = card.dataset.id;
-        const deletedGame = gamesArray.findIndex(g => g.id === deleteId);
-        gamesArray.splice(deletedGame, 1);
-        renderGames(sortGames(getFilteredGames(), currentSort, currentSortOrder), view);
-        deleteMode = false;
-        btnTextHandler();
-        localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
-        return;
-    }
-
     fillDetailedViewModal(card.dataset.id);
     detailedViewModal.showModal();
 })
-
-const deleteBtn = document.querySelector("#deleteBtn");
-let deleteMode = false;
-let deleteId = null;
-
-deleteBtn.addEventListener("click", () => {
-    deleteMode = !deleteMode;
-    btnTextHandler();
-    app.classList.toggle("deleteMode", deleteMode);
-})
-
-function btnTextHandler() {
-    deleteBtn.textContent = deleteMode ? "Finish Deleting" : "Delete Game";
-}
 
 const filterSelect = document.querySelector("#filterSelect");
 
@@ -329,6 +304,10 @@ const detailRelease = document.querySelector("#detailedViewModalRelease");
 const detailBadge = document.querySelector("#detailedViewModalBadge");
 const detailEditBtn = document.querySelector("#detailedViewModalEditBtn");
 const detailDeleteBtn = document.querySelector("#detailedViewModalDeleteBtn");
+const deleteGameModal = document.querySelector("#deleteGameModal");
+const deleteGameTitle = document.querySelector("#deleteGameTitle");
+const cancelDeleteBtn = document.querySelector("#cancelDeleteBtn");
+const confirmDeleteBtn = document.querySelector("#confirmDeleteBtn");
 let currentDetailId = null;
 
 
@@ -342,7 +321,6 @@ function toggleDetailMode() {
     }
 
     editingMode = !editingMode;
-    detailedViewModalInfo.classList.toggle("editing");
     renderDetailFields(game, editingMode);
     updateDetailActionButtons();
 }
@@ -375,11 +353,13 @@ detailDeleteBtn.addEventListener("click", () => {
         const game = gamesArray.find(g => g.id === currentDetailId);
         renderDetailFields(game, false);
         updateDetailActionButtons();
-        detailedViewModalInfo.classList.toggle("editing");
     }
 
     else {
-        // TODO: modal de confirmacion de borrado
+        const game = gamesArray.find(g => g.id === currentDetailId);
+        if (!game) return;
+        deleteGameTitle.textContent = game.name;
+        deleteGameModal.showModal();
     }
 })
 
@@ -399,9 +379,7 @@ function buildFieldInput(field, value) {
 }
 
 function renderDetailFields(game, editing) {
-    if (!editingMode) {
-        detailedViewModalInfo.classList.remove("editing");
-    }
+    detailedViewModalInfo.classList.toggle("editing", editing);
     const fieldsToRender = DETAIL_FIELDS.filter(f => editing || !f.hideInReadMode);
 
     detailedViewModalInfo.innerHTML = fieldsToRender.map(field => {
@@ -435,5 +413,33 @@ function fillDetailedViewModal(id) {
     refreshDetailheader(game);
     renderDetailFields(game, false);
     updateDetailActionButtons();
-
 }
+
+confirmDeleteBtn.addEventListener("click", () => {
+    const index = gamesArray.findIndex(g => g.id === currentDetailId);
+    if (index === -1) return;
+
+    gamesArray.splice(index, 1);
+    localStorage.setItem("gamesArray", JSON.stringify(gamesArray));
+    renderGames(sortGames(getFilteredGames(), currentSort, currentSortOrder), view);
+    closeModalAnimated(deleteGameModal);
+    closeModalAnimated(detailedViewModal, () => {
+        editingMode = false;
+        currentDetailId = null;
+    });
+});
+
+function deleteModalCloseHandler() {
+    closeModalAnimated(deleteGameModal);
+}
+
+cancelDeleteBtn.addEventListener("click", deleteModalCloseHandler);
+
+deleteGameModal.addEventListener("click", (e) => {
+    if (e.target === deleteGameModal) deleteModalCloseHandler();
+})
+
+deleteGameModal.addEventListener("cancel", (e) => {
+    e.preventDefault;
+    deleteModalCloseHandler();
+})

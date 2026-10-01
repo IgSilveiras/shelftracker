@@ -158,9 +158,12 @@
 
     </dialog>
 
-    <div id="listBtns">
-        <button id="deleteBtn">Delete Game</button>
-    </div>
+    <dialog id="deleteGameModal" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalDescription">
+        <h2 id="deleteModalTitle">Delete "<span id="deleteGameTitle"></span>"?</h2>
+        <p id="deleteModalDescription">This will remove it from your list permanently.</p>
+        <button id="cancelDeleteBtn">Cancel</button>
+        <button id="confirmDeleteBtn">Delete</button>
+    </dialog>
 
     <footer>
         <p>© 2026 NanashiDev</p>
