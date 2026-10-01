@@ -13,7 +13,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Manrope&display=swap" rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="./style/tokens.css">
+    <link rel="stylesheet" href="./style/base.css">
+    <link rel="stylesheet" href="./style/layout.css">
+    <link rel="stylesheet" href="./style/badges.css">
+    <link rel="stylesheet" href="./style/cards-grid.css">
+    <link rel="stylesheet" href="./style/cards-list.css">
+    <link rel="stylesheet" href="./style/modal-base.css">
+    <link rel="stylesheet" href="./style/modal-add-game.css">
+    <link rel="stylesheet" href="./style/modal-detail.css">
+    <link rel="stylesheet" href="./style/modal-delete.css">
+    <link rel="stylesheet" href="./style/fab.css">
+    <link rel="stylesheet" href="./style/footer.css">
 
     <!-- local css for testing -->
     <link rel="stylesheet" href="./style/local.css">
@@ -133,7 +144,7 @@
                 <textarea name="review" placeholder="Review" id="formReview"></textarea>
             </div>
 
-            <button type="submit">Add Game</button>
+            <button type="submit" class="btn btnAccent">Add Game</button>
         </form>
     </dialog>
 
@@ -151,8 +162,8 @@
             <dl id="detailedViewModalInfo"></dl>
 
             <div id="detailedViewModalActions">
-                <button id="detailedViewModalEditBtn">Edit</button>
-                <button id="detailedViewModalDeleteBtn">Delete</button>
+                <button id="detailedViewModalEditBtn" class="btn btnAccent">Edit</button>
+                <button id="detailedViewModalDeleteBtn" class="btn btnDanger">Delete</button>
             </div>
         </div>
 
@@ -162,8 +173,8 @@
         <h2 id="deleteModalTitle">Delete "<span id="deleteGameTitle"></span>"?</h2>
         <p id="deleteModalDescription">This will remove it from your list permanently.</p>
         <div id="deleteModalActions">
-            <button id="cancelDeleteBtn" class="btnNeutral">Cancel</button>
-            <button id="confirmDeleteBtn" class="btnDanger">Delete</button>
+            <button id="cancelDeleteBtn" class="btn btnNeutral">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btnDanger">Delete</button>
         </div>
     </dialog>
 

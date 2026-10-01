@@ -1,0 +1,9 @@
+footer {
+    height: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--surface-1);
+    font-size: var(--font-sm);
+    text-align: center;
+}

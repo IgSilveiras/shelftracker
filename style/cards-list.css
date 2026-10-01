@@ -1,0 +1,96 @@
+.appContainer.gamesList {
+    display: grid;
+    grid-template-rows: repeat(auto-fill, minmax(10vh, 1fr));
+    gap: 2vh;
+    margin-bottom: var(--space-5);
+
+    .gameCard {
+        height: 15vh;
+        display: grid;
+        grid-template-areas:
+            "thumbnail name    playtime state"
+            "thumbnail release dates    state"
+            "thumbnail review  review   state";
+        grid-template-columns: 1fr 3fr 3fr 1fr;
+        align-items: center;
+        background-color: var(--surface-2);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        overflow: hidden;
+        transition: 0.075s;
+
+        &:hover { background-color: var(--surface-3); }
+
+        .gameThumbnail {
+            grid-area: thumbnail;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: scale-down;
+            overflow: hidden;
+        }
+
+        .gameName {
+            grid-area: name;
+            font-size: var(--font-lg);
+            font-family: var(--font-family-display);
+        }
+
+        .gameRelease {
+            grid-area: release;
+            align-self: flex-start;
+            font-size: var(--font-sm);
+            margin-left: 1%;
+        }
+
+        .gamePlaytime {
+            grid-area: playtime;
+            justify-self: flex-end;
+            padding: var(--space-1) var(--space-2);
+            width: fit-content;
+            margin-right: 1rem;
+            background: var(--overlay-bg);
+            border: 1px solid var(--text-primary);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-sm);
+            backdrop-filter: blur(2px);
+        }
+
+        .gameDates {
+            grid-area: dates;
+            justify-self: flex-end;
+            margin-right: 1rem;
+            font-size: var(--font-sm);
+        }
+
+        .gameReview {
+            grid-area: review;
+            font-size: var(--font-base);
+        }
+
+        .gameState {
+            grid-area: state;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            background: var(--color);
+            color: var(--text-primary);
+
+            .gameRating {
+                font-size: clamp(2rem, 6vh, 3.25rem);
+                text-align: center;
+            }
+
+            .gameBadgeContainer {
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: center;
+                justify-self: flex-end;
+            }
+        }
+    }
+}

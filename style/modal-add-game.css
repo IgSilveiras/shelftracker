@@ -1,0 +1,103 @@
+dialog#gameFormModal {
+    max-width: 480px;
+    width: 90%;
+    padding: var(--space-6) var(--space-5);
+
+    form {
+        display: grid;
+        grid-template-areas:
+        "name       name"
+        "playtime   rating"
+        "playstate  intensity"
+        "thumbnail  release"
+        "review     review"
+        "submit     submit";
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-4);
+
+        .formGroup {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+            text-align: center;
+
+            label {
+                font-size: var(--font-sm);
+                color: var(--text-secondary);
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="url"],
+            textarea,
+            select {
+                width: 100%;
+                padding: var(--space-2) var(--space-3);
+                background: var(--surface-1);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                color: var(--text-primary);
+                font-family: var(--font-family-base);
+                font-size: var(--font-base);
+                text-align: center;
+            }
+
+            input:focus,
+            textarea:focus,
+            select:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+
+            textarea {
+                resize: vertical;
+                min-height: 120px;
+            }
+        }
+
+        #formNameGroup       { grid-area: name; }
+        #formPlayTimeGroup   { grid-area: playtime; }
+        #formRatingGroup     { grid-area: rating; }
+        #formPlayStateGroup  { grid-area: playstate; }
+
+        #formIntensityGroup {
+            grid-area: intensity;
+            justify-content: center;
+
+            #formCompleted100Group input[type="checkbox"] {
+                width: 1.1em;
+                height: 1.1em;
+                accent-color: var(--accent);
+            }
+        }
+
+        #formThumbnailGroup { grid-area: thumbnail; }
+        #formReleaseGroup   { grid-area: release; }
+        #formReviewGroup    { grid-area: review; }
+
+        button[type="submit"] {
+            grid-area: submit;
+            margin-top: 5%;
+        }
+    }
+}
+
+@media (max-width: 340px) {
+    dialog#gameFormModal {
+        padding: var(--space-4) var(--space-3);
+
+        form {
+            grid-template-areas:
+            "name"
+            "playtime"
+            "rating"
+            "playstate"
+            "intensity"
+            "thumbnail"
+            "release"
+            "review"
+            "submit";
+            grid-template-columns: 1fr;
+        }
+    }
+}

@@ -1,0 +1,119 @@
+.banner {
+    display: flex;
+    height: 175px;
+    background-image: url("https://media.craiyon.com/2025-09-07/UBkkJv4rQS-4oFFKuC0APg.webp");
+    background-size: cover;
+    background-position: center 70%;
+    box-shadow: inset 0 0 16px black;
+
+    .profileInfo {
+        display: none;
+        align-self: flex-end;
+        margin-left: 2rem;
+        gap: 0.5rem;
+
+        .profileAvatar {
+            background-color: white;
+            width: 40px;
+            height: 40px;
+        }
+    }
+}
+
+.controls {
+    width: 80%;
+    margin-left: 10%;
+    padding: var(--space-3) var(--space-4);
+    display: grid;
+    grid-template-areas:
+        "filter filter"
+        "sort   view";
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+
+    #filterSelect {
+        grid-area: filter;
+        justify-self: center;
+        width: 100%;
+    }
+
+    .sortSelect {
+        grid-area: sort;
+
+        #sortDirection {
+            position: relative;
+            top: 12%;
+            padding: var(--space-1);
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            i {
+                color: var(--text-primary);
+                font-size: 24px;
+            }
+        }
+    }
+
+    #viewSelect {
+        grid-area: view;
+        justify-self: flex-end;
+        align-self: center;
+        height: 75%;
+        display: flex;
+        gap: 0.25rem;
+        border: none;
+
+        label {
+            padding: var(--space-2);
+            border: 1px solid var(--text-accent);
+            height: fit-content;
+            cursor: pointer;
+
+            i {
+                font-size: 20px;
+                color: var(--text-primary);
+            }
+        }
+
+        input:checked + label i {
+            color: var(--text-accent);
+        }
+    }
+}
+
+@media (max-width: 1023px) {
+    .banner { height: 160px; }
+}
+
+@media (max-width: 767px) {
+    .banner { height: 130px; }
+}
+
+@media (max-width: 479px) {
+    .banner { height: 110px; }
+
+    .banner .profileInfo .profileAvatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .controls {
+        width: 90%;
+        margin-left: 5%;
+        grid-template-columns: 3fr 1fr;
+        grid-template-rows: 1fr 2fr;
+        align-items: center;
+
+        .sortSelect select {
+            padding: var(--space-1) var(--space-2);
+            font-size: var(--font-sm);
+        }
+
+        #viewSelect {
+            position: relative;
+            top: 15%;
+            gap: 0.4rem;
+        }
+    }
+}

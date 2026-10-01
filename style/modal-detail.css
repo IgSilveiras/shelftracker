@@ -1,0 +1,120 @@
+dialog#detailedViewModal {
+    max-width: 760px;
+    padding: var(--space-5);
+
+    #detailModalTitle {
+        font-size: var(--font-xl);
+        font-family: var(--font-family-display);
+    }
+
+    #detailedViewModalBody {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        grid-template-areas:
+            "thumbnail info"
+            "thumbnail actions";
+        gap: var(--space-4);
+        margin-top: var(--space-3);
+
+        #detailedViewModalThumbnail {
+            grid-area: thumbnail;
+            position: relative;
+            height: 100%;
+            padding-bottom: var(--space-2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            gap: var(--space-1);
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                aspect-ratio: 3 / 4;
+                object-fit: contain;
+                display: block;
+            }
+
+            figcaption {
+                padding: var(--space-1) var(--space-2);
+                background: var(--overlay-bg);
+                border: 1px solid var(--text-primary);
+                border-radius: var(--radius-sm);
+                font-size: var(--font-xs);
+            }
+        }
+
+        &:has(.editing) #detailedViewModalThumbnail {
+            justify-content: center;
+        }
+
+        #detailedViewModalInfo {
+            grid-area: info;
+            height: 80%;
+            display: grid;
+            grid-template-columns: auto 1fr auto 1fr;
+            align-items: center;
+            gap: var(--space-2) var(--space-4);
+
+            &.editing {
+                grid-template-columns: auto 1fr;
+                padding: var(--space-3) var(--space-6);
+            }
+
+            dt {
+                font-size: var(--font-sm);
+                color: var(--text-secondary);
+                white-space: nowrap;
+                justify-self: flex-start;
+
+                &::after { content: ":"; }
+            }
+
+            dd { font-size: var(--font-base); }
+
+            dt.fullWidth,
+            dd.fullWidth {
+                grid-column: 1 / -1;
+                text-align: start;
+            }
+
+            dd.fullWidth textarea {
+                width: 100%;
+                min-height: 90px;
+            }
+        }
+
+        #detailedViewModalActions {
+            grid-area: actions;
+            justify-self: center;
+            align-self: end;
+            display: flex;
+            gap: var(--space-3);
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    dialog#detailedViewModal #detailedViewModalBody #detailedViewModalInfo {
+        grid-template-columns: auto 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    dialog#detailedViewModal #detailedViewModalBody {
+        grid-template-areas:
+        "thumbnail"
+        "info"
+        "actions";
+        grid-template-columns: 1fr;
+
+        #detailedViewModalThumbnail {
+            max-width: 160px;
+            margin: 0 auto;
+        }
+
+        #detailedViewModalInfo {
+            grid-template-columns: auto 1fr;
+        }
+    }
+}

@@ -440,6 +440,6 @@ deleteGameModal.addEventListener("click", (e) => {
 })
 
 deleteGameModal.addEventListener("cancel", (e) => {
-    e.preventDefault;
+    e.preventDefault();
     deleteModalCloseHandler();
 })

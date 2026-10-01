@@ -1,0 +1,21 @@
+.planToPlay { --color: dimgray; }
+.playing    { --color: green; }
+.completed  { --color: darkslateblue; }
+.paused     { --color: rgb(150, 71, 42); }
+.abandoned  { --color: rgb(128, 10, 34); }
+
+.stateBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    gap: 0.25em;
+    background-color: var(--color);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-sm);
+    line-height: 1;
+}
+
+.extraIcon {
+    font-size: var(--font-base);
+    color: var(--highlight);
+}

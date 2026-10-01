@@ -1,0 +1,22 @@
+dialog#deleteGameModal {
+    max-width: 380px;
+    text-align: center;
+    padding: var(--space-5);
+
+    #deleteModalTitle #deleteGameTitle {
+        font-family: var(--font-family-display);
+    }
+
+    #deleteModalDescription {
+        font-size: var(--font-base);
+        color: var(--text-secondary);
+        margin-bottom: var(--space-5);
+    }
+
+    #deleteModalActions {
+        display: flex;
+        gap: var(--space-3);
+
+        .btn { flex: 1; }
+    }
+}

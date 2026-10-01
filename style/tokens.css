@@ -1,0 +1,53 @@
+:root {
+    --surface-0: #0d0f12;
+    --surface-1: #16191d;
+    --surface-2: #1e2126;
+    --surface-3: #292d33;
+
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.24);
+
+    --text-primary: #f2f2f2;
+    --text-secondary: #a1a1aa;
+    --text-muted: #6b7280;
+
+    --accent: #3fc7b8;
+    --bg-accent: color-mix(in srgb, var(--accent) 18%, transparent);
+    --text-accent: color-mix(in srgb, var(--accent) 70%, white);
+
+    --danger: #b41f38;
+    --bg-danger: color-mix(in srgb, var(--danger) 18%, transparent);
+    --text-danger: color-mix(in srgb, var(--danger) 70%, white);
+
+    --overlay-bg: rgba(20, 20, 20, 0.65);
+    --overlay-bg-strong: rgba(20, 20, 20, 0.85);
+
+    --highlight: gold;
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+
+    --font-xs: 0.75rem;
+    --font-sm: 0.875rem;
+    --font-base: 1rem;
+    --font-md: 1.125rem;
+    --font-lg: 1.5rem;
+    --font-xl: 1.75rem;
+
+    --font-family-base: "Inter", system-ui, sans-serif;
+    --font-family-display: "Fraunces", sans-serif;
+}
+
+@media (max-width: 767px) {
+    :root {
+        --font-md: 1rem;
+        --font-lg: 1.25rem;
+    }
+}
