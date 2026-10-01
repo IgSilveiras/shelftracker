@@ -323,6 +323,7 @@ viewSelect.addEventListener("change", (e) => {
 
 
 const detailModalTitle = document.querySelector("#detailModalTitle");
+const detailedViewModalInfo = document.querySelector("#detailedViewModalInfo");
 const detailThumbnailImg = document.querySelector("#detailedViewModalThumbnail img");
 const detailRelease = document.querySelector("#detailedViewModalRelease");
 const detailBadge = document.querySelector("#detailedViewModalBadge");
@@ -341,6 +342,7 @@ function toggleDetailMode() {
     }
 
     editingMode = !editingMode;
+    detailedViewModalInfo.classList.toggle("editing");
     renderDetailFields(game, editingMode);
     updateDetailActionButtons();
 }
@@ -373,6 +375,7 @@ detailDeleteBtn.addEventListener("click", () => {
         const game = gamesArray.find(g => g.id === currentDetailId);
         renderDetailFields(game, false);
         updateDetailActionButtons();
+        detailedViewModalInfo.classList.toggle("editing");
     }
 
     else {
