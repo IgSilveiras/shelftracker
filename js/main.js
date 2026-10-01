@@ -29,7 +29,7 @@ const DETAIL_FIELDS = [
     { key: "lastPlayed",        label: "Last Played",       type: "date" },
     { key: "difficulty",        label: "Difficulty",        type: "text" },
     { key: "revisitChance",     label: "Revisit Chance",    type: "select", options: REVISIT_CHANCE_VALUES },
-    { key: "review",            label: "Review",            type: "textarea" },
+    { key: "review",            label: "Review",            type: "textarea", fullWidth: true },
 ]
 
 let gamesArray = [];
@@ -399,18 +399,20 @@ function buildFieldInput(field, value) {
 }
 
 function renderDetailFields(game, editing) {
-    const container = document.querySelector("#detailedViewModalInfo");
+    if (!editingMode) {
+        detailedViewModalInfo.classList.remove("editing");
+    }
     const fieldsToRender = DETAIL_FIELDS.filter(f => editing || !f.hideInReadMode);
 
-    container.innerHTML = fieldsToRender.map(field => {
+    detailedViewModalInfo.innerHTML = fieldsToRender.map(field => {
         const rawValue = game[field.key] ?? "";
         const displayValue = field.type === "select" && rawValue
             ? capitalize(rawValue)
             : field.suffix && rawValue !== "" ? `${rawValue}${field.suffix}` : rawValue;
 
         return `
-            <dt>${field.label}</dt>
-            <dd>${editing ? buildFieldInput(field, rawValue) : (displayValue || "-")}</dd>
+            <dt class="${field.fullWidth ? "fullWidth" : ""}">${field.label}</dt>
+            <dd class="${field.fullWidth ? "fullWidth" : ""}">${editing ? buildFieldInput(field, rawValue) : (displayValue || "-")}</dd>
         `
     }).join("");
 }

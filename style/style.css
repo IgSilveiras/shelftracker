@@ -688,6 +688,7 @@ dialog {
                 dt.fullWidth,
                 dd.fullWidth {
                     grid-column: 1 / -1;
+                    text-align: start;
                 }
 
                 dd.fullWidth textarea {
