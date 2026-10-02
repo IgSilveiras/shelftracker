@@ -36,17 +36,21 @@ export function renderGames(gamesArray, view) {
         app.classList.add("gamesList");
 
         for (const element of gamesArray) {
-            const { id, thumbnail, name, release, playTime, intensity, completed100, review, startDate, finishDate, playState, rating } = element;
+            const { id, thumbnail, name, release, playTime, intensity, completed100, review, lastPlayed, playState, rating } = element;
+            const metaParts = [release, lastPlayed ? `Last played: ${lastPlayed}` : null].filter(Boolean);
 
             html = `
-            <div class="gameCard" data-id="${id}">
+            <div class="gameCard ${playState}" data-id="${id}">
                 <img src="${thumbnail}" alt="${name}" class="gameThumbnail">
-                <p class="gameName">${name}</p>
-                <p class="gameRelease">${release}</p>
-                ${(!startDate || !finishDate) ? "" : `<p class="gameDates">${startDate} / ${finishDate}</p>`}
-                <p class="gameReview">${review}</p>
-                ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
-                <div class="gameState ${playState}">
+                <div class="gameInfo">
+                    <div class="gameInfoHeader">
+                        <p class="gameName" title="${name}">${name}</p>
+                        ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
+                    </div>
+                    <p class="gameMeta">${metaParts.join(" · ")}
+                    ${review ? `<p class="gameReview" title="${review}">${review}</p>` : ""}
+                </div>
+                <div class="gameState">
                     ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
                     <div class="gameBadgeContainer">
                         ${buildStateBadge(playState, intensity, completed100)}

@@ -1,96 +1,115 @@
 .appContainer.gamesList {
-    display: grid;
-    grid-template-rows: repeat(auto-fill, minmax(10vh, 1fr));
-    gap: 2vh;
-    margin-bottom: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
 
     .gameCard {
-        height: 15vh;
         display: grid;
-        grid-template-areas:
-            "thumbnail name    playtime state"
-            "thumbnail release dates    state"
-            "thumbnail review  review   state";
-        grid-template-columns: 1fr 3fr 3fr 1fr;
-        align-items: center;
-        background-color: var(--surface-2);
-        border: 1px solid var(--border-strong);
+        grid-template-areas: "thumbnail info state";
+        grid-template-columns: 72px 1fr 130px;
+        background: color-mix(in srgb, var(--color) 7%, var(--surface-2));
+        border-left: 3px solid var(--color);
         border-radius: var(--radius-md);
         cursor: pointer;
         overflow: hidden;
         transition: 0.075s;
 
-        &:hover { background-color: var(--surface-3); }
+        &:hover {
+            background: color-mix(in srgb, var(--color) 12%, var(--surface-3));
+        }
 
         .gameThumbnail {
             grid-area: thumbnail;
-            position: relative;
-            height: 100%;
-            width: 100%;
+            align-self: center;
+            width: calc(100% - var(--space-3));
+            margin: var(--space-3) 0 var(--space-3) var(--space-3);
             aspect-ratio: 3 / 4;
-            object-fit: scale-down;
-            overflow: hidden;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+        }
+
+        .gameInfo {
+            grid-area: info;
+            margin-left: var(--space-3);
+            padding: var(--space-3) 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--space-1);
+        }
+
+        .gameInfoHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: var(--space-2);
         }
 
         .gameName {
-            grid-area: name;
             font-size: var(--font-lg);
             font-family: var(--font-family-display);
-        }
-
-        .gameRelease {
-            grid-area: release;
-            align-self: flex-start;
-            font-size: var(--font-sm);
-            margin-left: 1%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .gamePlaytime {
-            grid-area: playtime;
-            justify-self: flex-end;
+            margin-right: 2%;
             padding: var(--space-1) var(--space-2);
-            width: fit-content;
-            margin-right: 1rem;
+            flex-shrink: 0;
             background: var(--overlay-bg);
             border: 1px solid var(--text-primary);
             border-radius: var(--radius-sm);
             font-size: var(--font-sm);
-            backdrop-filter: blur(2px);
+            white-space: nowrap;
         }
 
-        .gameDates {
-            grid-area: dates;
-            justify-self: flex-end;
-            margin-right: 1rem;
+        .gameMeta {
             font-size: var(--font-sm);
+            color: var(--text-secondary);
         }
 
         .gameReview {
-            grid-area: review;
             font-size: var(--font-base);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         .gameState {
             grid-area: state;
-            height: 100%;
-            width: 100%;
+            padding: var(--space-2);
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly;
+            align-items: center;
+            justify-content: center;
             background: var(--color);
             color: var(--text-primary);
+            gap: var(--space-1);
 
             .gameRating {
-                font-size: clamp(2rem, 6vh, 3.25rem);
-                text-align: center;
+                font-size: 2rem;
+                font-weight: 700;
             }
 
             .gameBadgeContainer {
                 display: flex;
-                flex-direction: column-reverse;
                 align-items: center;
-                justify-self: flex-end;
+                gap: var(--space-1);
             }
+        }
+    }
+}
+
+@media (max-width: 420px) {
+    .appContainer.gamesList .gameCard {
+        grid-template-columns: 56px 1fr 72px;
+        gap: var(--space-2);
+
+        .gameState .gameRating {
+            font-size: var(--font-lg);
         }
     }
 }
