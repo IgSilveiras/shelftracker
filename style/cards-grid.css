@@ -75,7 +75,19 @@
             .gameCardInfo {
                 font-size: var(--font-xs);
 
-                .gameState .stateBadge { font-size: 10px; }
+                .gameState {
+                    .stateBadge { font-size: 10px; }
+
+                    .stateBadgeLabel {
+                        position: absolute;
+                        width: 1px;
+                        height: 1px;
+                        margin: -1px;
+                        overflow: hidden;
+                        clip-path: hidden;
+                        white-space: nowrap;
+                    }
+                }
             }
         }
     }

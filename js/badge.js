@@ -10,8 +10,8 @@ export function buildStateBadge(playState, intensity, completed100) {
         : null;
 
     return `
-        <span class="stateBadge ${status.className}">
-            <i class="ti ${status.icon}" aria-hidden="true"></i> ${status.label}
+        <span class="stateBadge ${status.className}" title="${status.label}">
+            <i class="ti ${status.icon}" aria-hidden="true"></i> <span class="stateBadgeLabel">${status.label}</span>
         </span>
         ${modifier ? `<i class="ti ${modifier.icon} extraIcon" aria-hidden="true" title="${modifier.label}"></i>` : ""}
     `;
