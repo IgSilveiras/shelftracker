@@ -1,0 +1,31 @@
+export const STATUS_CONFIG = {
+    planToPlay: { icon: "ti-bookmark",    label: "Plan to Play", className: "planToPlay" },
+    playing:    { icon: "ti-player-play", label: "Playing",      className: "playing" },
+    completed:  { icon: "ti-check",       label: "Completed",    className: "completed" },
+    paused:     { icon: "ti-player-pause",label: "Paused",       className: "paused" },
+    abandoned:  { icon: "ti-x",           label: "Abandoned",    className: "abandoned" },
+};
+
+export const INTENSITY_CONFIG = {
+    tryhard: { icon: "ti-flame",   label: "Tryhard" },
+    casual:  { icon: "ti-feather", label: "Casual" },
+};
+
+export const NO_INTENSITY_STATES = ["completed"];
+
+export const REVISIT_CHANCE_VALUES = ["none", "unlikely", "maybe", "likely", "definitely"];
+
+export const DETAIL_FIELDS = [
+    { key: "name",          label: "Name",           type: "text",   hideInReadMode: true },
+    { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true },
+    { key: "release",       label: "Release Year",   type: "number", hideInReadMode: true },
+    { key: "rating",        label: "Rating",         type: "number" },
+    { key: "playTime",      label: "Playtime",       type: "number", suffix: "hs" },
+    { key: "startDate",     label: "Start Date",     type: "date" },
+    { key: "finishDate",    label: "Finish Date",    type: "date" },
+    { key: "platform",      label: "Platform",       type: "text" },
+    { key: "lastPlayed",    label: "Last Played",    type: "date" },
+    { key: "difficulty",    label: "Difficulty",     type: "text" },
+    { key: "revisitChance", label: "Revisit Chance", type: "select", options: REVISIT_CHANCE_VALUES },
+    { key: "review",        label: "Review",         type: "textarea", fullWidth: true },
+];
