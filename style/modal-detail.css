@@ -1,6 +1,8 @@
 dialog#detailedViewModal {
     max-width: 760px;
     padding: var(--space-5);
+    background: color-mix(in srgb, var(--color) 10%, var(--surface-1));
+    border: 2px solid var(--color);
 
     #detailModalTitle {
         font-size: var(--font-xl);
@@ -51,6 +53,7 @@ dialog#detailedViewModal {
         #detailedViewModalInfo {
             grid-area: info;
             height: 80%;
+            padding: var(--space-3);
             display: grid;
             grid-template-columns: auto 1fr auto 1fr;
             align-items: center;
@@ -94,9 +97,10 @@ dialog#detailedViewModal {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
     dialog#detailedViewModal #detailedViewModalBody #detailedViewModalInfo {
         grid-template-columns: auto 1fr;
+        padding: 0;
     }
 }
 

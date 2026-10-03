@@ -1,4 +1,4 @@
-import { DETAIL_FIELDS } from "./config.js";
+import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
 import { capitalize, closeModalAnimated } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
 
@@ -16,6 +16,8 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
     const detailDeleteBtn = document.querySelector("#detailedViewModalDeleteBtn");
 
     function refreshDetailHeader(game) {
+        detailedViewModal.classList.remove(...Object.keys(STATUS_CONFIG));
+        detailedViewModal.classList.add(game.playState);
         detailModalTitle.textContent = game.name;
         detailThumbnailImg.src = game.thumbnail;
         detailThumbnailImg.alt = `${game.name} thumbnail`;
