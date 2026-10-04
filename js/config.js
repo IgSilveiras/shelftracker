@@ -15,6 +15,13 @@ export const NO_INTENSITY_STATES = ["completed"];
 
 export const REVISIT_CHANCE_VALUES = ["none", "unlikely", "maybe", "likely", "definitely"];
 
+const DIFFICULTY_OPTIONS = [
+    { value: "easy", label:"Easy" },
+    { value: "medium", label:"Medium" },
+    { value: "hard", label:"Hard" },
+    { value: "veryHard", label:"Very Hard" }
+]
+
 export const DETAIL_FIELDS = [
     { key: "name",          label: "Name",           type: "text",   hideInReadMode: true , required: true },
     { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true },
@@ -35,7 +42,7 @@ export const DETAIL_FIELDS = [
     { key: "finishDate",    label: "Finish Date",    type: "date" },
     { key: "platform",      label: "Platform",       type: "text" },
     { key: "lastPlayed",    label: "Last Played",    type: "date" },
-    { key: "difficulty",    label: "Difficulty",     type: "text" },
+    { key: "difficulty",    label: "Difficulty",     type: "select", options: DIFFICULTY_OPTIONS },
     { key: "revisitChance", label: "Revisit Chance", type: "select", options: REVISIT_CHANCE_VALUES },
     { key: "review",        label: "Review",         type: "textarea", fullWidth: true },
 ];
