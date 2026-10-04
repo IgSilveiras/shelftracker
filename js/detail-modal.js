@@ -28,9 +28,14 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
     function buildFieldInput(field, value) {
         if (field.type === "select") {
             const options = field.options
-                .map(opt => `<option value="${opt}" ${value === opt ? "selected" : ""}>${capitalize(opt)}</option>`)
+                .map(opt => {
+                    const optValue = typeof opt === "string" ? opt : opt.value;
+                    const optLabel = typeof opt === "string" ? capitalize(opt) : opt.label;
+                    return `<option value="${optValue}" ${value === optValue ? "selected" : ""}>${optLabel}</option>`;
+                })
                 .join("");
-            return `<select data-field="${field.key}"><option value="">-</option>${options}</select>`;
+            const blankOption = field.required ? "" : `<option value="">-</option>`;
+            return `<select data-field="${field.key}">${blankOption}${options}</select>`;
         }
 
         if (field.type === "textarea") {
@@ -46,8 +51,12 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
 
         detailedViewModalInfo.innerHTML = fieldsToRender.map(field => {
             const rawValue = game[field.key] ?? "";
-            const displayValue = field.type === "select" && rawValue
-                ? capitalize(rawValue)
+            const displayValue = field.type === "select"
+                ? (() => {
+                    const opt = field.options.find(o => (typeof o === "string" ? o : o.value) === rawValue);
+                    if (!opt) return rawValue;
+                    return typeof opt === "string" ? capitalize(opt) : opt.label;
+                  })()
                 : field.suffix && rawValue !== "" ? `${rawValue}${field.suffix}` : rawValue;
 
             return `

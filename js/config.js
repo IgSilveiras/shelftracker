@@ -19,6 +19,14 @@ export const DETAIL_FIELDS = [
     { key: "name",          label: "Name",           type: "text",   hideInReadMode: true },
     { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true },
     { key: "release",       label: "Release Year",   type: "number", hideInReadMode: true },
+    {
+        key: "playState",
+        label: "Play State",
+        type: "select",
+        hideInReadMode: true,
+        required: true,
+        options: Object.entries(STATUS_CONFIG).map(([value, cfg]) => ({ value, label: cfg.label }))
+    },
     { key: "rating",        label: "Rating",         type: "number" },
     { key: "playTime",      label: "Playtime",       type: "number", suffix: "hs" },
     { key: "startDate",     label: "Start Date",     type: "date" },
