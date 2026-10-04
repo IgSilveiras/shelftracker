@@ -1,5 +1,5 @@
 import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
-import { capitalize, closeModalAnimated } from "./utils.js";
+import { capitalize, closeModalAnimated, hasIntensity } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
 
 let editingMode = false;
@@ -42,6 +42,10 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
             return `<textarea data-field="${field.key}">${value}</textarea>`;
         }
 
+        if (field.type === "checkbox") {
+            return `<input type="checkbox" data-field="${field.key}" ${value ? "checked" : ""}>`;
+        }
+
         return `<input type="${field.type}" data-field="${field.key}" value="${value}">`;
     }
 
@@ -60,10 +64,22 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
                 : field.suffix && rawValue !== "" ? `${rawValue}${field.suffix}` : rawValue;
 
             return `
-                <dt class="${field.fullWidth ? "fullWidth" : ""}">${field.label}</dt>
-                <dd class="${field.fullWidth ? "fullWidth" : ""}">${editing ? buildFieldInput(field, rawValue) : (displayValue || "-")}</dd>
+                <dt data-field-label="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${field.label}</dt>
+                <dd data-field-wrapper="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${editing ? buildFieldInput(field, rawValue) : (displayValue || "-")}</dd>
             `;
         }).join("");
+
+        if (editing) updateConditionalFieldsVisibility(game.playState);
+    }
+
+    function updateConditionalFieldsVisibility(playStateValue) {
+        DETAIL_FIELDS.filter(f => f.visibleWhen).forEach(f => {
+            const show = f.visibleWhen(playStateValue);
+            const dt = detailedViewModalInfo.querySelector(`[data-field-label="${f.key}"]`);
+            const dd = detailedViewModalInfo.querySelector(`[data-field-wrapper="${f.key}"]`);
+            if (dt) dt.hidden = !show;
+            if (dd) dd.hidden = !show;
+        })
     }
 
     function updateDetailActionButtons() {
@@ -76,10 +92,15 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
     function saveDetailFields(game) {
         document.querySelectorAll("#detailedViewModalInfo [data-field]").forEach(input => {
             const field = DETAIL_FIELDS.find(f => f.key === input.dataset.field);
-            let value = input.value;
-            if (field.type === "number") value = value === "" ? 0 : Number(value);
+            let value;
+            if (field.type === "checkbox") value = input.checked;
+            else if (field.type === "number") value = input.value === "" ? 0 : Number(input.value);
+            else value = input.value;
             game[field.key] = value;
         });
+
+        if (!hasIntensity(game.playState)) delete game.intensity;
+        if (game.playState !== "completed") delete game.completed100;
 
         onGameSaved();
     }
@@ -99,6 +120,12 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
     }
 
     detailEditBtn.addEventListener("click", toggleDetailMode);
+
+    detailedViewModalInfo.addEventListener("change", (e) => {
+        if (e.target.dataset.field === "playState") {
+            updateConditionalFieldsVisibility(e.target.value);
+        }
+    })
 
     detailDeleteBtn.addEventListener("click", () => {
         if (editingMode) {

@@ -16,17 +16,19 @@ export const NO_INTENSITY_STATES = ["completed"];
 export const REVISIT_CHANCE_VALUES = ["none", "unlikely", "maybe", "likely", "definitely"];
 
 export const DETAIL_FIELDS = [
-    { key: "name",          label: "Name",           type: "text",   hideInReadMode: true },
+    { key: "name",          label: "Name",           type: "text",   hideInReadMode: true , required: true },
     { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true },
     { key: "release",       label: "Release Year",   type: "number", hideInReadMode: true },
-    {
-        key: "playState",
-        label: "Play State",
-        type: "select",
-        hideInReadMode: true,
-        required: true,
-        options: Object.entries(STATUS_CONFIG).map(([value, cfg]) => ({ value, label: cfg.label }))
+    { key: "playState",     label: "Play State",     type: "select", hideInReadMode: true, required: true, options: Object.entries(STATUS_CONFIG).map(([value, cfg]) => ({ value, label: cfg.label })) },
+    { key: "intensity",     label: "Intensity",      type: "select", hideInReadMode: true, 
+        visibleWhen: (playState) => !NO_INTENSITY_STATES.includes(playState),
+        options: [
+            { value: "",        label: "None" },
+            { value: "casual",  label: "Casual" },
+            { value: "tryhard", label: "Tryhard" },
+        ],
     },
+    { key: "completed100", label: "100% Completed", type: "checkbox", hideInReadMode: true, visibleWhen: (playState) => playState === "completed" },
     { key: "rating",        label: "Rating",         type: "number" },
     { key: "playTime",      label: "Playtime",       type: "number", suffix: "hs" },
     { key: "startDate",     label: "Start Date",     type: "date" },
