@@ -23,8 +23,8 @@ const DIFFICULTY_OPTIONS = [
 ]
 
 export const DETAIL_FIELDS = [
-    { key: "name",          label: "Name",           type: "text",   hideInReadMode: true , required: true },
-    { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true },
+    { key: "name",          label: "Name",           type: "text",   hideInReadMode: true , required: true, fullWidth: true },
+    { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true, fullWidth: true },
     { key: "release",       label: "Release Year",   type: "number", hideInReadMode: true },
     { key: "playState",     label: "Play State",     type: "select", hideInReadMode: true, required: true, options: Object.entries(STATUS_CONFIG).map(([value, cfg]) => ({ value, label: cfg.label })) },
     { key: "intensity",     label: "Intensity",      type: "select", hideInReadMode: true, 
@@ -35,7 +35,7 @@ export const DETAIL_FIELDS = [
             { value: "tryhard", label: "Tryhard" },
         ],
     },
-    { key: "completed100", label: "100% Completed", type: "checkbox", hideInReadMode: true, visibleWhen: (playState) => playState === "completed" },
+    { key: "completed100", label: "100%", type: "checkbox", hideInReadMode: true, visibleWhen: (playState) => playState === "completed" },
     { key: "rating",        label: "Rating",         type: "number" },
     { key: "playTime",      label: "Playtime",       type: "number", suffix: "hs" },
     { key: "startDate",     label: "Start Date",     type: "date" },

@@ -107,3 +107,7 @@ select {
     width: 85%;
     margin: 0 auto;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}

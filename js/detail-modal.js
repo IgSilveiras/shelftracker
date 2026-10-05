@@ -77,8 +77,12 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
             const show = f.visibleWhen(playStateValue);
             const dt = detailedViewModalInfo.querySelector(`[data-field-label="${f.key}"]`);
             const dd = detailedViewModalInfo.querySelector(`[data-field-wrapper="${f.key}"]`);
-            if (dt) dt.hidden = !show;
-            if (dd) dd.hidden = !show;
+            if (dt) dt.classList.toggle("fieldHidden", !show);
+            if (dd) {
+                dd.classList.toggle("fieldHidden", !show);
+                const input = dd.querySelector("[data-field]");
+                if (input) input.disabled = !show;
+            }
         })
     }
 
