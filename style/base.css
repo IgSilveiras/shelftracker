@@ -58,6 +58,8 @@ select {
 
     option {
         padding: var(--space-2) var(--space-3);
+        color: var(--text-primary);
+        font-weight: 200;        
 
         &:hover {
             background: rgba(255, 255, 255, 0.1);
