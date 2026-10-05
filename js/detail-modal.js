@@ -1,5 +1,5 @@
 import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
-import { capitalize, closeModalAnimated, hasIntensity } from "./utils.js";
+import { capitalize, closeModalAnimated, hasIntensity, animateModalResize } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
 
 let editingMode = false;
@@ -119,7 +119,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
         }
 
         editingMode = !editingMode;
-        renderDetailFields(game, editingMode);
+        animateModalResize(() => renderDetailFields(game, editingMode));
         updateDetailActionButtons();
     }
 
@@ -135,7 +135,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
         if (editingMode) {
             editingMode = false;
             const game = getGame(currentDetailId);
-            renderDetailFields(game, false);
+            animateModalResize(() => renderDetailFields(game, false));
             updateDetailActionButtons();
         } else {
             onDeleteRequested(currentDetailId);

@@ -45,6 +45,12 @@
     --font-family-display: "Fraunces", sans-serif;
 }
 
+@property --color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: transparent;
+}
+
 @media (max-width: 767px) {
     :root {
         --font-md: 1rem;

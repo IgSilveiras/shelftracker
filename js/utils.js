@@ -16,3 +16,13 @@ export function closeModalAnimated(modalEl, onClosed) {
         if (onClosed) onClosed();
     }, { once: true });
 }
+
+export function animateModalResize(updateFn) {
+    if (document.startViewTransition) {
+        document.startViewTransition(updateFn);
+    }
+
+    else {
+        updateFn();
+    }
+}

@@ -3,6 +3,8 @@ dialog#detailedViewModal {
     padding: var(--space-5);
     background: color-mix(in srgb, var(--color) 10%, var(--surface-1));
     border: 2px solid var(--color);
+    transition: --color 0.3s ease;
+    view-transition-name: detal-modal;
 
     #detailModalTitle {
         font-size: var(--font-xl);
@@ -66,7 +68,7 @@ dialog#detailedViewModal {
 
         #detailedViewModalInfo {
             grid-area: info;
-            height: 80%;
+            height: auto;
             padding: var(--space-3);
             display: grid;
             grid-template-columns: auto 1fr auto 1fr;
