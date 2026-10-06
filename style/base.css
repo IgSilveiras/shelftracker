@@ -73,6 +73,19 @@ select {
     }
 }
 
+input[type="number"]::--webkit-outer-spim-button,
+input[type="number"]::--webkit-inner-spim-button {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
 .btn {
     padding: var(--space-2) var(--space-4);
     border: 1px solid transparent;
