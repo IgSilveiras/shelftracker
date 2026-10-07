@@ -2,9 +2,15 @@ import { buildStateBadge } from "./badge.js";
 
 const app = document.querySelector("#app");
 
-export function renderGames(gamesArray, view) {
+export function renderGames(gamesArray, view, showDragHandle) {
     app.innerHTML = "";
     let html;
+
+    const handleHTML = (name) => showDragHandle ? `
+        <div class="dragHandle" tabindex="0" role="button" aria-pressed="false" aria-label="Reorder ${name}">
+            <i class="ti ti-grip-vertical" aria-hidden="true"></i>
+        </div>
+    ` : "";
 
     if (view === "grid") {
         app.classList.remove("gamesList");
@@ -17,6 +23,7 @@ export function renderGames(gamesArray, view) {
             <div class="gameCard" data-id="${id}">
                 <div class="gameCardThumbnail">
                     <img src="${thumbnail}" alt="${name} thumbnail">
+                    ${handleHTML(name)}
                     ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
                     ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                 </div>
@@ -41,13 +48,14 @@ export function renderGames(gamesArray, view) {
 
             html = `
             <div class="gameCard ${playState}" data-id="${id}">
+            ${handleHTML(name)}
                 <img src="${thumbnail}" alt="${name}" class="gameThumbnail">
                 <div class="gameInfo">
                     <div class="gameInfoHeader">
                         <p class="gameName" title="${name}">${name}</p>
                         ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                     </div>
-                    <p class="gameMeta">${metaParts.join(" · ")}
+                    <p class="gameMeta">${metaParts.join(" · ")}</p>
                     ${review ? `<p class="gameReview" title="${review}">${review}</p>` : ""}
                 </div>
                 <div class="gameState">

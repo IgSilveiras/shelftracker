@@ -3,6 +3,7 @@ import { renderGames, getFilteredGames, sortGames } from "./game-list.js";
 import { initAddGameModal } from "./add-game-modal.js";
 import { initDetailModal } from "./detail-modal.js";
 import { initDeleteModal } from "./delete-modal.js";
+import { initCustomOrderDrag, initKeyboardReorder } from "./reorder.js";
 
 let gamesArray = [];
 const settings = loadSettings();
@@ -16,8 +17,44 @@ function persistSettings() {
 }
 
 function refresh() {
-    renderGames(sortGames(getFilteredGames(gamesArray, currentFilter), currentSort, currentSortOrder), view);
+    const showDragHandle = currentSort === "custom" && currentFilter === "all";
+    renderGames(sortGames(getFilteredGames(gamesArray, currentFilter), currentSort, currentSortOrder), view, showDragHandle);
+    dragController.setEnabled(showDragHandle);
 }
+
+function moveGameInCustomOrder(domOldIndex, domNewIndex) {
+    const reversed = currentSortOrder === "asc";
+    const length = gamesArray.length;
+    const oldIndex = reversed ? length - 1 - domOldIndex : domOldIndex;
+    const newIndex = reversed ? length - 1 - domNewIndex : domNewIndex;
+
+    const [moved] = gamesArray.splice(oldIndex, 1);
+    gamesArray.splice(newIndex, 0, moved);
+    persistAndRefresh();
+}
+
+const appEl = document.querySelector("#app");
+
+const dragController = initCustomOrderDrag({
+    containerEl: appEl,
+    onReorder: moveGameInCustomOrder,
+});
+
+initKeyboardReorder({
+    containerEl: appEl,
+    getView: () => view,
+    onReorder: (domOldIndex, domNewIndex, grabbedId) => {
+        moveGameInCustomOrder(domOldIndex, domNewIndex);
+        requestAnimationFrame(() => {
+            const card = document.querySelector(`.gameCard[data-id="${grabbedId}"]`);
+            const handle = card?.querySelector(".dragHandle");
+            
+            card?.classList.add("cardGrabbed");
+            handle?.setAttribute("aria-pressed", "true");
+            handle?.focus();
+        });
+    },
+})
 
 function persistAndRefresh() {
     saveGamesToStorage(gamesArray);

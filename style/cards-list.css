@@ -6,8 +6,8 @@
 
     .gameCard {
         display: grid;
-        grid-template-areas: "thumbnail info state";
-        grid-template-columns: 72px 1fr 130px;
+        grid-template-areas: "handle thumbnail info state";
+        grid-template-columns: 28px 72px 1fr 130px;
         background: color-mix(in srgb, var(--color) 7%, var(--surface-2));
         border-left: 3px solid var(--color);
         border-radius: var(--radius-md);
@@ -17,6 +17,17 @@
 
         &:hover {
             background: color-mix(in srgb, var(--color) 12%, var(--surface-3));
+        }
+
+        .dragHandle {
+            grid-area: handle;
+            height: fit-content;
+            align-self: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: grab;
         }
 
         .gameThumbnail {

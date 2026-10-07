@@ -126,3 +126,16 @@ input[type="number"] {
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
+
+.dragHandle[aria-pressed="true"] {
+    color: var(--accent);
+}
+
+.dragGhost {
+    opacity: 0.4;
+}
+
+.gameCard.cardGrabbed {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}

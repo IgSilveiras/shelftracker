@@ -46,6 +46,18 @@
 
             .gameRating   { top: 1.5%; right: 3.5%; }
             .gamePlaytime { bottom: 1.5%; left: 3.5%; }
+
+            .dragHandle {
+                position: absolute;
+                top: 1.5%;
+                left: 3.5%;
+                padding: var(--space-1);
+                background: var(--overlay-bg);
+                border: 1px solid var(--text-primary);
+                border-radius: var(--radius-sm);
+                backdrop-filter: blur(2px);
+                cursor: grab;
+            }
         }
 
         .gameCardInfo {
