@@ -109,12 +109,23 @@ const deleteModal = initDeleteModal({
     },
 });
 
-document.querySelector("#app").addEventListener("click", (e) => {
+appEl.addEventListener("click", (e) => {
     const card = e.target.closest(".gameCard");
     if (!card) return;
 
     detailModal.open(card.dataset.id);
 });
+
+appEl.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    if (e.target.closest(".dragHandle")) return;
+
+    const card = e.target.closest(".gameCard");
+    if (!card) return;
+
+    e.preventDefault();
+    detailModal.open(card.dataset.id);
+})
 
 const filterSelect = document.querySelector("#filterSelect");
 filterSelect.value = currentFilter;

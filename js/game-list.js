@@ -20,7 +20,7 @@ export function renderGames(gamesArray, view, showDragHandle) {
             const { id, thumbnail, name, playState, intensity, completed100, playTime, rating } = element;
 
             html = `
-            <div class="gameCard" data-id="${id}">
+            <div class="gameCard" data-id="${id}" tabindex="0" role="button" aria-label="View details for ${name}">
                 <div class="gameCardThumbnail">
                     <img src="${thumbnail}" alt="${name} thumbnail">
                     ${handleHTML(name)}
@@ -47,7 +47,7 @@ export function renderGames(gamesArray, view, showDragHandle) {
             const metaParts = [release, lastPlayed ? `Last played: ${lastPlayed}` : null].filter(Boolean);
 
             html = `
-            <div class="gameCard ${playState}" data-id="${id}">
+            <div class="gameCard ${playState}" data-id="${id}" tabindex="0" role="button" aria-label="View details for ${name}">
             ${handleHTML(name)}
                 <img src="${thumbnail}" alt="${name}" class="gameThumbnail">
                 <div class="gameInfo">
