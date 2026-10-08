@@ -7,7 +7,7 @@
     .gameCard {
         display: grid;
         grid-template-areas: "handle thumbnail info state";
-        grid-template-columns: 28px 72px 1fr 130px;
+        grid-template-columns: 28px 72px 1fr clamp(64px, 11vw, 130px);
         background: color-mix(in srgb, var(--color) 7%, var(--surface-2));
         border-left: 3px solid var(--color);
         border-radius: var(--radius-md);
@@ -52,13 +52,14 @@
         }
 
         .gameInfoHeader {
+            min-width: 0;
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
             gap: var(--space-2);
         }
 
         .gameName {
+            min-width: 0;
             font-size: var(--font-lg);
             font-family: var(--font-family-display);
             text-overflow: ellipsis;
@@ -99,16 +100,18 @@
             background: var(--color);
             color: var(--text-primary);
             gap: var(--space-1);
+            container-type: inline-size;
 
             .gameRating {
-                font-size: 2rem;
+                font-size: clamp(1.25rem, 3.5vw, 2rem);
                 font-weight: 700;
             }
 
             .gameBadgeContainer {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                gap: var(--space-1);
+                gap: 2px;
 
                 .stateBadge {
                     padding: 0;
@@ -118,13 +121,59 @@
     }
 }
 
-@media (max-width: 420px) {
+@container (max-width: 100px) {
+    .stateBadgeLabel {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .gameCard.gameState.gameRating {
+        font-size: clamp(1.75rem, 40cqw, 2.5rem);
+    }
+}
+
+@media (max-width: 360px) {
     .appContainer.gamesList .gameCard {
-        grid-template-columns: 56px 1fr 72px;
+        grid-template-columns: 20px 56px 1fr 64px;
         gap: var(--space-2);
 
-        .gameState .gameRating {
-            font-size: var(--font-lg);
+        .gameInfo {
+            margin-left: var(--space-2);
+        }
+
+        .gameInfoHeader {
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .gamePlaytime {
+            margin-right: 0;
+            padding: 2px var(--space-1);
+            align-self: flex-start;
+            font-size: var(--font-xs);
+        }
+
+        .gameThumbnail {
+            width: calc(100% - var(--space-1));
+            margin: 0;
+        }
+
+        .gameRelease {
+            display: none;
+        }
+
+        .gameMeta,
+        .gameReview {
+            font-size: var(--font-xs);
+        }
+
+        .gameState {
+            padding: var(--space-1);
         }
     }
 }

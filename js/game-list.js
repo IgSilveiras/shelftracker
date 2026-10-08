@@ -44,7 +44,6 @@ export function renderGames(gamesArray, view, showDragHandle) {
 
         for (const element of gamesArray) {
             const { id, thumbnail, name, release, playTime, intensity, completed100, review, lastPlayed, playState, rating } = element;
-            const metaParts = [release, lastPlayed ? `Last played: ${lastPlayed}` : null].filter(Boolean);
 
             html = `
             <div class="gameCard ${playState}" data-id="${id}" tabindex="0" role="button" aria-label="View details for ${name}">
@@ -55,7 +54,10 @@ export function renderGames(gamesArray, view, showDragHandle) {
                         <p class="gameName" title="${name}">${name}</p>
                         ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                     </div>
-                    <p class="gameMeta">${metaParts.join(" · ")}</p>
+                    <p class="gameMeta">
+                        <span class="gameRelease">${release}</span>
+                        ${lastPlayed ? `<span class="gameLastPlayed">· Last played: ${lastPlayed}</span>` : ""}
+                    </p>
                     ${review ? `<p class="gameReview" title="${review}">${review}</p>` : ""}
                 </div>
                 <div class="gameState">
