@@ -15,7 +15,7 @@
         "revisitChance": "none",
         "platform": "PC",
         "review": "el goat",
-        "favorite": "false"
+        "favorite": true
     },
     {
         "name": "Elden Ring",
@@ -33,7 +33,7 @@
         "revisitChance": "none",
         "platform": "PC",
         "review": "el otro goat",
-        "favorite": "false"
+        "favorite": false
     },
     {
         "name": "League of Legends",
@@ -51,7 +51,7 @@
         "revisitChance": "none",
         "platform": "PC",
         "review": "me trollean",
-        "favorite": "false"
+        "favorite": false
     },
     {
         "name": "Touhou Luna Nights",
@@ -65,7 +65,7 @@
         "finishDate": "2024-06-08",
         "completed100": true,
         "review": "ta re zarpado wtf",
-        "favorite": "false"
+        "favorite": false
     },
     {
         "name": "Honkai: Star Rail",
@@ -83,7 +83,7 @@
         "revisitChance": "none",
         "platform": "PC",
         "review": "mi goat no puede estar tan washed",
-        "favorite": "false"
+        "favorite": false
     },
     {
         "name": "Apex Legends",
@@ -97,7 +97,7 @@
         "finishDate": "",
         "completed100": true,
         "review": "ojala vuelva",
-        "favorite": "false"
+        "favorite": false
     },
     {
         "name": "Tekken 8",
@@ -115,7 +115,7 @@
         "revisitChance": "none",
         "platform": "PC",
         "review": "parece que ta weno",
-        "favorite": "false"
+        "favorite": false
     },
     {
         "name": "Witchbrook",
@@ -133,6 +133,6 @@
         "revisitChance": "none",
         "platform": "PC",
         "review": "parece que ta weno pero nunca sale",
-        "favorite": "false"
+        "favorite": false
     }
 ]
