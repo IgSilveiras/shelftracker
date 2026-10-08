@@ -152,12 +152,17 @@
         <h2 id="detailModalTitle"></h2>
 
         <div id="detailedViewModalBody">
-            <figure id="detailedViewModalThumbnail">
-                <img src="" alt="">
-                
-                <figcaption id="detailedViewModalRelease"></figcaption>
-                <div id="detailedViewModalBadge"></div>
-            </figure>
+            <div class="detailThumbnailColumn">
+                <figure id="detailedViewModalThumbnail">
+                    <img src="" alt="">
+                    
+                    <figcaption id="detailedViewModalRelease"></figcaption>
+                    <div id="detailedViewModalBadge"></div>
+                </figure>
+                <button id="detailedViewModalFavoriteBtn" aria-pressed="false" aria-label="Add to favorites">
+                    <svg class="starIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5L14.469 9.602L21.986 9.755L15.994 14.298L18.172 21.495L12 17.2L5.828 21.495L8.006 14.298L2.014 9.755L9.531 9.602Z"/></svg>
+                </button>
+            </div>
 
             <dl id="detailedViewModalInfo"></dl>
 

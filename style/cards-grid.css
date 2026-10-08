@@ -58,6 +58,12 @@
                 backdrop-filter: blur(2px);
                 cursor: grab;
             }
+
+            .favoriteBtn {
+                position: absolute;
+                bottom: 1.5%;
+                right: 3.5%;
+            }
         }
 
         .gameCardInfo {

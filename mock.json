@@ -14,7 +14,8 @@
         "difficulty": "",
         "revisitChance": "none",
         "platform": "PC",
-        "review": "el goat"
+        "review": "el goat",
+        "favorite": "false"
     },
     {
         "name": "Elden Ring",
@@ -31,7 +32,8 @@
         "difficulty": "",
         "revisitChance": "none",
         "platform": "PC",
-        "review": "el otro goat"
+        "review": "el otro goat",
+        "favorite": "false"
     },
     {
         "name": "League of Legends",
@@ -48,7 +50,8 @@
         "difficulty": "",
         "revisitChance": "none",
         "platform": "PC",
-        "review": "me trollean"
+        "review": "me trollean",
+        "favorite": "false"
     },
     {
         "name": "Touhou Luna Nights",
@@ -61,7 +64,8 @@
         "startDate": "2024-05-30",
         "finishDate": "2024-06-08",
         "completed100": true,
-        "review": "ta re zarpado wtf"
+        "review": "ta re zarpado wtf",
+        "favorite": "false"
     },
     {
         "name": "Honkai: Star Rail",
@@ -78,7 +82,8 @@
         "difficulty": "",
         "revisitChance": "none",
         "platform": "PC",
-        "review": "mi goat no puede estar tan washed"
+        "review": "mi goat no puede estar tan washed",
+        "favorite": "false"
     },
     {
         "name": "Apex Legends",
@@ -91,7 +96,8 @@
         "startDate": "",
         "finishDate": "",
         "completed100": true,
-        "review": "ojala vuelva"
+        "review": "ojala vuelva",
+        "favorite": "false"
     },
     {
         "name": "Tekken 8",
@@ -108,7 +114,8 @@
         "difficulty": "",
         "revisitChance": "none",
         "platform": "PC",
-        "review": "parece que ta weno"
+        "review": "parece que ta weno",
+        "favorite": "false"
     },
     {
         "name": "Witchbrook",
@@ -125,6 +132,7 @@
         "difficulty": "",
         "revisitChance": "none",
         "platform": "PC",
-        "review": "parece que ta weno pero nunca sale"
+        "review": "parece que ta weno pero nunca sale",
+        "favorite": "false"
     }
 ]

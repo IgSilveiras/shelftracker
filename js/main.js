@@ -95,6 +95,7 @@ const detailModal = initDetailModal({
     onDeleteRequested(id) {
         deleteModal.open(id);
     },
+    onToggleFavorite: toggleFavorite,
 });
 
 const deleteModal = initDeleteModal({
@@ -109,7 +110,22 @@ const deleteModal = initDeleteModal({
     },
 });
 
+function toggleFavorite(id) {
+    const game = getGameById(id);
+    if (!game) return;
+    game.favorite = !game.favorite;
+    persistAndRefresh();
+}
+
 appEl.addEventListener("click", (e) => {
+    const favoriteBtn = e.target.closest(".favoriteBtn");
+    if (favoriteBtn) {
+        const id = favoriteBtn.dataset.id;
+        toggleFavorite(id);
+        document.querySelector(`#app .favoriteBtn[data-id="${id}"]`)?.focus();
+        return;
+    }
+
     const card = e.target.closest(".gameCard");
     if (!card) return;
 
@@ -118,7 +134,7 @@ appEl.addEventListener("click", (e) => {
 
 appEl.addEventListener("keydown", (e) => {
     if (e.key !== "Enter" && e.key !== " ") return;
-    if (e.target.closest(".dragHandle")) return;
+    if (e.target.closest(".dragHandle, .favoriteBtn")) return;
 
     const card = e.target.closest(".gameCard");
     if (!card) return;

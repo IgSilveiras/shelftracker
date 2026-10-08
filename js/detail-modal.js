@@ -5,7 +5,7 @@ import { buildStateBadge } from "./badge.js";
 let editingMode = false;
 let currentDetailId = null;
 
-export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
+export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onToggleFavorite  }) {
     const detailedViewModal = document.querySelector("#detailedViewModal");
     const detailModalTitle = document.querySelector("#detailModalTitle");
     const detailedViewModalInfo = document.querySelector("#detailedViewModalInfo");
@@ -14,6 +14,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
     const detailBadge = document.querySelector("#detailedViewModalBadge");
     const detailEditBtn = document.querySelector("#detailedViewModalEditBtn");
     const detailDeleteBtn = document.querySelector("#detailedViewModalDeleteBtn");
+    const detailFavoriteBtn = document.querySelector("#detailedViewModalFavoriteBtn");
 
     function refreshDetailHeader(game) {
         detailedViewModal.classList.remove(...Object.keys(STATUS_CONFIG));
@@ -23,6 +24,14 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
         detailThumbnailImg.alt = `${game.name} thumbnail`;
         detailRelease.textContent = game.release;
         detailBadge.innerHTML = buildStateBadge(game.playState, game.intensity, game.completed100);
+        refreshFavoriteButton(game);
+    }
+
+    function refreshFavoriteButton(game) {
+        const isFav = !!game.favorite;
+        detailFavoriteBtn.classList.toggle("favorited", isFav);
+        detailFavoriteBtn.setAttribute("aria-pressed", isFav);
+        detailFavoriteBtn.setAttribute("aria-label", isFav ? "Remove from favorites" : "Add to favorites");
     }
 
     function buildFieldInput(field, value) {
@@ -154,6 +163,12 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested }) {
     detailedViewModal.addEventListener("cancel", (e) => {
         e.preventDefault();
         closeModalAnimated(detailedViewModal, resetDetailState);
+    });
+
+    detailFavoriteBtn.addEventListener("click", () => {
+        onToggleFavorite(currentDetailId);
+        const game = getGame(currentDetailId);
+        if (game) refreshFavoriteButton(game);
     });
 
     return {

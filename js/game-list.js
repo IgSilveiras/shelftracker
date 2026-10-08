@@ -1,5 +1,15 @@
 import { buildStateBadge } from "./badge.js";
 
+function buildFavoriteButton(game) {
+    const isFav = !!game.favorite;
+    const STAR_SVG = `<svg class="starIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245" /></svg>`;
+    return `
+        <button class="favoriteBtn ${isFav ? "favorited" : ""}" data-id="${game.id}" aria-pressed="${isFav}" aria-label="${isFav ? "Remove from favorites" : "Add to favorites"}">
+            ${STAR_SVG}
+        </button>
+    `;
+}
+
 const app = document.querySelector("#app");
 
 export function renderGames(gamesArray, view, showDragHandle) {
@@ -25,6 +35,7 @@ export function renderGames(gamesArray, view, showDragHandle) {
                     <img src="${thumbnail}" alt="${name} thumbnail">
                     ${handleHTML(name)}
                     ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
+                    ${buildFavoriteButton(element)}
                     ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                 </div>
                 <div class="gameCardInfo">
@@ -58,6 +69,7 @@ export function renderGames(gamesArray, view, showDragHandle) {
                         <span class="gameRelease">${release}</span>
                         ${lastPlayed ? `<span class="gameLastPlayed">· Last played: ${lastPlayed}</span>` : ""}
                     </p>
+                    ${buildFavoriteButton(element)}
                     ${review ? `<p class="gameReview" title="${review}">${review}</p>` : ""}
                 </div>
                 <div class="gameState">

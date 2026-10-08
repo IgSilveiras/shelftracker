@@ -24,31 +24,62 @@ dialog#detailedViewModal {
             grid-template-columns: 200px 1fr;
         }
 
-        #detailedViewModalThumbnail {
+        .detailThumbnailColumn  {
             grid-area: thumbnail;
-            position: relative;
-            height: 100%;
-            padding-bottom: var(--space-2);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-evenly;
-            gap: var(--space-1);
-            overflow: hidden;
-
-            img {
-                width: 100%;
-                aspect-ratio: 3 / 4;
-                object-fit: contain;
-                display: block;
+            gap: var(--space-2);
+            
+            #detailedViewModalThumbnail {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-evenly;
+                gap: var(--space-1);
+                
+                img {
+                    width: 100%;
+                    aspect-ratio: 3 / 4;
+                    object-fit: contain;
+                    display: block;
+                }
+                
+                figcaption {
+                    padding: var(--space-1) var(--space-2);
+                    background: var(--overlay-bg);
+                    border: 1px solid var(--text-primary);
+                    border-radius: var(--radius-sm);
+                    font-size: var(--font-xs);
+                }
             }
 
-            figcaption {
-                padding: var(--space-1) var(--space-2);
-                background: var(--overlay-bg);
-                border: 1px solid var(--text-primary);
+            #detailedViewModalFavoriteBtn {
+                width: 28px;
+                height: 28px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent;
+                border: 1px solid transparent;
                 border-radius: var(--radius-sm);
-                font-size: var(--font-xs);
+                color: var(--text-primary);
+                font-size: 18px;
+                cursor: pointer;
+                transition: 0.075s, color 0s;
+
+                &:hover,
+                &:focus-visible {
+                    background: var(--surface-3);
+                }
+
+                &.favorited {
+                    background: var(--overlay-bg);
+                    border-color: var(--text-primary);
+                    color: var(--highlight);
+                }
             }
         }
 
