@@ -48,3 +48,9 @@ export const DETAIL_FIELDS = [
 ];
 
 export const ADVANCED_ADD_FIELDS = ["startDate", "finishDate", "platform", "lastPlayed", "difficulty", "revisitChance"];
+
+export const EMPTY_STATES = {
+    library:        { icon: "ti-device-gamepad-2",  title: "Your shelf is empty",           text: "Add your first game with the + button." },
+    noFavorites:    { icon: "ti-star",              title: "No favorites yet",              text: "Tap the star on any game to add it here.", action: true },
+    filters:        { icon: "ti-filter-off",        title: "No games match these filters",  text: "Try a different state or clear the filters.", action: true }
+};

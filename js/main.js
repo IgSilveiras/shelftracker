@@ -17,9 +17,16 @@ function persistSettings() {
     saveSettings({ filter: currentFilter, favoritesOnly, sort: currentSort, sortOrder: currentSortOrder, view });
 }
 
+function getEmptyReason() {
+    if (gamesArray.length === 0) return "library";
+    if (favoritesOnly && currentFilter === "all") return "noFavorites";
+    return "filters";
+}
+
 function refresh() {
+    const visible = sortGames(getFilteredGames(gamesArray, currentFilter, favoritesOnly), currentSort, currentSortOrder);
     const showDragHandle = currentSort === "custom" && currentFilter === "all" && !favoritesOnly;
-    renderGames(sortGames(getFilteredGames(gamesArray, currentFilter, favoritesOnly), currentSort, currentSortOrder), view, showDragHandle);
+    renderGames(visible, view, showDragHandle, visible.length === 0 ? getEmptyReason() : null);
     dragController.setEnabled(showDragHandle);
 }
 
@@ -119,6 +126,11 @@ function toggleFavorite(id) {
 }
 
 appEl.addEventListener("click", (e) => {
+    if (e.target.closest(".clearFiltersBtn")) {
+        clearFilters();
+        return;
+    }
+
     const favoriteBtn = e.target.closest(".favoriteBtn");
     if (favoriteBtn) {
         const id = favoriteBtn.dataset.id;
@@ -189,3 +201,13 @@ viewSelect.addEventListener("change", (e) => {
     persistSettings();
     refresh();
 });
+
+function clearFilters() {
+    currentFilter = "all";
+    favoritesOnly = false;
+    filterSelect.value = "all";
+    favoritesFilterBtn.setAttribute("aria-pressed", "false");
+    persistSettings();
+    refresh();
+    filterSelect.focus();
+}

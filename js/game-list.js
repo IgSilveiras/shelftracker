@@ -1,4 +1,17 @@
 import { buildStateBadge } from "./badge.js";
+import { EMPTY_STATES } from "./config.js";
+
+function buildEmptyState(reason) {
+    const s = EMPTY_STATES[reason];
+    return `
+        <div class="emptyState" role="status">
+            <i class="ti ${s.icon}" aria-hidden="true"></i>
+            <p class="emptyStateTitle">${s.title}</p>
+            <p class="emptyStateText">${s.text}</p>
+            ${s.action ? `<button type="button" class="btn btnNeutral clearFiltersBtn">Clear Filters</button>` : ""}
+        </div>
+    `;
+}
 
 function buildFavoriteButton(game) {
     const isFav = !!game.favorite;
@@ -12,8 +25,14 @@ function buildFavoriteButton(game) {
 
 const app = document.querySelector("#app");
 
-export function renderGames(gamesArray, view, showDragHandle) {
+export function renderGames(gamesArray, view, showDragHandle, emptyReason = null) {
     app.innerHTML = "";
+
+    if (emptyReason) {
+        app.innerHTML = buildEmptyState(emptyReason);
+        return;
+    }
+
     let html;
 
     const handleHTML = (name) => showDragHandle ? `
