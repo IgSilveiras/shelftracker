@@ -17,8 +17,12 @@ export function closeModalAnimated(modalEl, onClosed) {
     }, { once: true });
 }
 
+export function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function animateModalResize(updateFn) {
-    if (document.startViewTransition) {
+    if (document.startViewTransition && !prefersReducedMotion()) {
         document.startViewTransition(updateFn);
     }
 

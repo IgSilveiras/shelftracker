@@ -191,3 +191,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .favorited .starIcon {
     fill: currentColor;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after,
+    ::backdrop {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+    }
+}

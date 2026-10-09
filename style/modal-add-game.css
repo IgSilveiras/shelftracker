@@ -2,7 +2,6 @@ dialog#gameFormModal {
     max-width: 480px;
     width: 90%;
     padding: var(--space-6) var(--space-5);
-    view-transition-name: add-game-modal;
 
     form {
         display: grid;

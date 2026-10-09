@@ -1,4 +1,5 @@
 import Sortable from "https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/+esm";
+import { prefersReducedMotion } from "./utils.js";
 
 export function getColumnCount(gridEl) {
     return getComputedStyle(gridEl).gridTemplateColumns.split(" ").length;
@@ -7,7 +8,7 @@ export function getColumnCount(gridEl) {
 export function initCustomOrderDrag({ containerEl, onReorder }) {
     const sortable = Sortable.create(containerEl, {
         handle: ".dragHandle",
-        animation: 150,
+        animation: prefersReducedMotion() ? 0 : 150,
         ghostClass: "dragGhost",
         disabled: true,
         onEnd(evt) {

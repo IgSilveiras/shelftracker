@@ -46,12 +46,3 @@ dialog {
     from { opacity: 1; }
     to   { opacity: 0; }
 }
-
-@media (prefers-reduced-motion: reduce) {
-    dialog,
-    dialog.closing,
-    dialog::backdrop,
-    dialog.closing::backdrop {
-        animation-duration: 0.01s;
-    }
-}
