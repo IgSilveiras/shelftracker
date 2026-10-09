@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+html {
+    scrollbar-gutter: stable;
+
+    &:has(dialog[open]) {
+        overflow: hidden;
+    }
+}
+
 body {
     background-color: var(--surface-0);
     color: var(--text-primary);

@@ -1,6 +1,7 @@
 import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
 import { capitalize, closeModalAnimated, hasIntensity, animateModalResize } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
+import { buildFieldInput } from "./fields.js";
 
 let editingMode = false;
 let currentDetailId = null;
@@ -32,30 +33,6 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
         detailFavoriteBtn.classList.toggle("favorited", isFav);
         detailFavoriteBtn.setAttribute("aria-pressed", isFav);
         detailFavoriteBtn.setAttribute("aria-label", isFav ? "Remove from favorites" : "Add to favorites");
-    }
-
-    function buildFieldInput(field, value) {
-        if (field.type === "select") {
-            const options = field.options
-                .map(opt => {
-                    const optValue = typeof opt === "string" ? opt : opt.value;
-                    const optLabel = typeof opt === "string" ? capitalize(opt) : opt.label;
-                    return `<option value="${optValue}" ${value === optValue ? "selected" : ""}>${optLabel}</option>`;
-                })
-                .join("");
-            const blankOption = field.required ? "" : `<option value="">-</option>`;
-            return `<select data-field="${field.key}">${blankOption}${options}</select>`;
-        }
-
-        if (field.type === "textarea") {
-            return `<textarea data-field="${field.key}">${value}</textarea>`;
-        }
-
-        if (field.type === "checkbox") {
-            return `<input type="checkbox" data-field="${field.key}" ${value ? "checked" : ""}>`;
-        }
-
-        return `<input type="${field.type}" data-field="${field.key}" value="${value}">`;
     }
 
     function renderDetailFields(game, editing) {

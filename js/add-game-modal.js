@@ -1,4 +1,6 @@
 import { hasIntensity, closeModalAnimated } from "./utils.js";
+import { DETAIL_FIELDS, ADVANCED_ADD_FIELDS } from "./config.js";
+import { buildFormGroup } from "./fields.js";
 
 export function initAddGameModal({ onGameAdded }) {
     const formModal = document.querySelector("#gameFormModal");
@@ -9,6 +11,9 @@ export function initAddGameModal({ onGameAdded }) {
     const formIntensity = document.querySelector("#formIntensity");
     const formIntensityLabel = document.querySelector("#formIntensityLabel");
     const formCompleted100Group = document.querySelector("#formCompleted100Group");
+
+    const advancedDetails = document.querySelector("#advancedDetails");
+    const advancedFields = document.querySelector("#advancedFields");
 
     function updateIntensityView() {
         const value = formPlayState.value;
@@ -21,6 +26,18 @@ export function initAddGameModal({ onGameAdded }) {
         formCompleted100Group.hidden = !showCompleted100;
         formCompleted100Group.querySelector("input").disabled = !showCompleted100;
     }
+
+    advancedFields.innerHTML = DETAIL_FIELDS
+        .filter(f => ADVANCED_ADD_FIELDS.includes(f.key))
+        .map(buildFormGroup)
+        .join("");
+
+    advancedDetails.querySelector("summary").addEventListener("click", (e) => {
+        e.preventDefault();
+        advancedDetails.open = !advancedDetails.open;
+    });
+
+    formModal.addEventListener("close", () => { advancedDetails.open = false });
 
     formPlayState.addEventListener("change", updateIntensityView);
 
@@ -47,6 +64,7 @@ export function initAddGameModal({ onGameAdded }) {
         if (newGame.intensity === "none") delete newGame.intensity;
 
         newGame.id = crypto.randomUUID();
+        ADVANCED_ADD_FIELDS.forEach(key => { if (newGame[key] === "") delete newGame[key]; });
         onGameAdded(newGame);
 
         form.reset();

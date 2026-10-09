@@ -5,6 +5,7 @@ dialog {
     border-radius: var(--radius-md);
     color: var(--text-primary);
     text-align: center;
+    overscroll-behavior: contain;
     animation: fadeIn 0.2s ease forwards;
 
     &::backdrop {

@@ -46,3 +46,5 @@ export const DETAIL_FIELDS = [
     { key: "revisitChance", label: "Revisit Chance", type: "select", options: REVISIT_CHANCE_VALUES },
     { key: "review",        label: "Review",         type: "textarea", fullWidth: true },
 ];
+
+export const ADVANCED_ADD_FIELDS = ["startDate", "finishDate", "platform", "lastPlayed", "difficulty", "revisitChance"];

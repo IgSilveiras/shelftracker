@@ -2,6 +2,7 @@ dialog#gameFormModal {
     max-width: 480px;
     width: 90%;
     padding: var(--space-6) var(--space-5);
+    view-transition-name: add-game-modal;
 
     form {
         display: grid;
@@ -11,6 +12,7 @@ dialog#gameFormModal {
         "playstate  intensity"
         "thumbnail  release"
         "review     review"
+        "advanced   advanced"
         "submit     submit";
         grid-template-columns: 1fr 1fr;
         gap: var(--space-4);
@@ -29,6 +31,7 @@ dialog#gameFormModal {
             input[type="text"],
             input[type="number"],
             input[type="url"],
+            input[type="date"],
             textarea,
             select {
                 width: 100%;
@@ -75,6 +78,24 @@ dialog#gameFormModal {
         #formReleaseGroup   { grid-area: release; }
         #formReviewGroup    { grid-area: review; }
 
+        #advancedDetails {
+            grid-area: advanced;
+
+            summary {
+                padding: var(--space-1) 0;
+                color: var(--text-secondary);
+                font-size: var(--font-sm);
+                cursor: pointer;
+            }
+
+            #advancedFields {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: var(--space-4);
+                padding-top: var(--space-3);
+            }
+        }
+
         button[type="submit"] {
             grid-area: submit;
             margin-top: 5%;
@@ -96,8 +117,11 @@ dialog#gameFormModal {
             "thumbnail"
             "release"
             "review"
+            "advanced"
             "submit";
             grid-template-columns: 1fr;
+
+            #advancedDetails #advancedFields { grid-template-columns: 1fr; }
         }
     }
 }

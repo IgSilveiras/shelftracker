@@ -4,7 +4,7 @@ dialog#detailedViewModal {
     background: color-mix(in srgb, var(--color) 10%, var(--surface-1));
     border: 2px solid var(--color);
     transition: --color 0.3s ease;
-    view-transition-name: detal-modal;
+    view-transition-name: detail-modal;
 
     #detailModalTitle {
         font-size: var(--font-xl);
