@@ -1,4 +1,5 @@
 footer {
+    margin-top: auto;
     height: 5vh;
     display: flex;
     flex-direction: column;
