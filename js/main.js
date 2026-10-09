@@ -8,17 +8,18 @@ import { initCustomOrderDrag, initKeyboardReorder } from "./reorder.js";
 let gamesArray = [];
 const settings = loadSettings();
 let currentFilter = settings.filter;
+let favoritesOnly = settings.favoritesOnly;
 let currentSort = settings.sort;
 let currentSortOrder = settings.sortOrder;
 let view = settings.view;
 
 function persistSettings() {
-    saveSettings({ filter: currentFilter, sort: currentSort, sortOrder: currentSortOrder, view });
+    saveSettings({ filter: currentFilter, favoritesOnly, sort: currentSort, sortOrder: currentSortOrder, view });
 }
 
 function refresh() {
-    const showDragHandle = currentSort === "custom" && currentFilter === "all";
-    renderGames(sortGames(getFilteredGames(gamesArray, currentFilter), currentSort, currentSortOrder), view, showDragHandle);
+    const showDragHandle = currentSort === "custom" && currentFilter === "all" && !favoritesOnly;
+    renderGames(sortGames(getFilteredGames(gamesArray, currentFilter, favoritesOnly), currentSort, currentSortOrder), view, showDragHandle);
     dragController.setEnabled(showDragHandle);
 }
 
@@ -150,6 +151,15 @@ filterSelect.addEventListener("change", () => {
     persistSettings();
     refresh();
 });
+
+const favoritesFilterBtn = document.querySelector("#favoritesFilterBtn");
+favoritesFilterBtn.setAttribute("aria-pressed", favoritesOnly);
+favoritesFilterBtn.addEventListener("click", () => {
+    favoritesOnly = !favoritesOnly;
+    favoritesFilterBtn.setAttribute("aria-pressed", favoritesOnly);
+    persistSettings();
+    refresh();
+})
 
 const sortSelect = document.querySelector("#sortSelect");
 sortSelect.value = currentSort;

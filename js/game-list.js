@@ -86,9 +86,11 @@ export function renderGames(gamesArray, view, showDragHandle) {
     }
 }
 
-export function getFilteredGames(gamesArray, currentFilter) {
-    if (currentFilter === "all") return gamesArray;
-    return gamesArray.filter(g => g.playState === currentFilter);
+export function getFilteredGames(gamesArray, currentFilter, favoritesOnly) {
+    return gamesArray.filter(g => 
+        (currentFilter === "all" || g.playState === currentFilter) &&
+        (!favoritesOnly || g.favorite)
+    );
 }
 
 export function sortGames(games, sortBy, direction) {

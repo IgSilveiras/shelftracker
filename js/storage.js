@@ -3,6 +3,7 @@ const SETTINGS_KEY = "userSettings";
 
 const DEFAULT_SETTINGS = {
     filter: "all",
+    favoritesOnly : false,
     sort: "custom",
     sortOrder: "desc",
     view: "grid",

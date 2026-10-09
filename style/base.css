@@ -44,6 +44,28 @@ body {
     }
 }
 
+.favoritesFilterBtn {
+    padding: var(--space-2) var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: var(--font-base);
+    cursor: pointer;
+    transition: 0.075s;
+
+    &:hover { background: var(--surface-3) }
+
+    &[aria-pressed="true"] {
+        color: var(--highlight);
+
+        .starIcon { fill: currentColor }
+    }
+}
+
 select,
 select::picker(select) {
     appearance: base-select;
