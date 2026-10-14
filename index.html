@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="./style/modal-add-game.css">
     <link rel="stylesheet" href="./style/modal-detail.css">
     <link rel="stylesheet" href="./style/modal-delete.css">
+    <link rel="stylesheet" href="./style/modal-import.css">
     <link rel="stylesheet" href="./style/fab.css">
     <link rel="stylesheet" href="./style/footer.css">
 
@@ -194,8 +195,23 @@
 
     <footer>
         <p>© 2026 NanashiDev</p>
+
+        <div class="backupActions">
+            <button type="button" id="exportBtn" class="linkBtn">Export List</button>
+            <button type="button" id="importBtn" class="linkBtn">Import List</button>
+            <input type="file" id="importFile" accept=".json,application/json" hidden>
+        </div>
     </footer>
     
+    <dialog id="importModal" aria-labelledby="importModalTitle" aria-describedby="importModalDescription">
+        <h2 id="importModalTitle"></h2>
+        <p id="importModalDescription"></p>
+        <div id="importModalActions">
+            <button id="cancelImportBtn" class="btn btnNeutral">Cancel</button>
+            <button id="confirmImportBtn" class="btn btnDanger">Replace List</button>
+        </div>
+    </dialog>
+
     <script type="module" src="./js/main.js"></script>
 </body>
 </html>

@@ -1,12 +1,15 @@
-import { loadGamesFromStorage, saveGamesToStorage, loadSettings, saveSettings } from "./storage.js";
+import { loadGamesFromStorage, saveGamesToStorage, loadSettings, saveSettings, loadProfile, saveProfile } from "./storage.js";
 import { renderGames, getFilteredGames, sortGames } from "./game-list.js";
 import { initAddGameModal } from "./add-game-modal.js";
 import { initDetailModal } from "./detail-modal.js";
 import { initDeleteModal } from "./delete-modal.js";
 import { initCustomOrderDrag, initKeyboardReorder } from "./reorder.js";
+import { downloadExport } from "./backup.js";
+import { initImport } from "./import-modal.js";
 
 let gamesArray = [];
 const settings = loadSettings();
+const profile = loadProfile();
 let currentFilter = settings.filter;
 let favoritesOnly = settings.favoritesOnly;
 let currentSort = settings.sort;
@@ -211,3 +214,18 @@ function clearFilters() {
     refresh();
     filterSelect.focus();
 }
+
+document.querySelector("#exportBtn").addEventListener("click", () => downloadExport(profile, gamesArray));
+
+initImport({
+    getGamesCount: () => gamesArray.length,
+    onImport({ username, games }) {
+        gamesArray = games;
+        if (username) {
+            profile.username = username;
+            saveProfile(profile);
+        }
+
+        persistAndRefresh();
+    },
+});

@@ -1,5 +1,5 @@
 import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
-import { capitalize, closeModalAnimated, hasIntensity, animateModalResize } from "./utils.js";
+import { capitalize, closeModalAnimated, hasIntensity, animateModalResize, escapeHTML } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
 import { buildFieldInput } from "./fields.js";
 
@@ -51,7 +51,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
 
             return `
                 <dt data-field-label="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${field.label}</dt>
-                <dd data-field-wrapper="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${editing ? buildFieldInput(field, rawValue) : (displayValue || "-")}</dd>
+                <dd data-field-wrapper="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${editing ? buildFieldInput(field, rawValue) : escapeHTML(displayValue || "-")}</dd>
             `;
         }).join("");
 

@@ -1,4 +1,4 @@
-import { capitalize } from "./utils.js";
+import { capitalize, escapeHTML } from "./utils.js";
 
 export function buildFieldInput(field, value = "", { id = "", name = "" } = {}) {
     const attrs = `data-field="${field.key}"${id ? ` id="${id}"` : ""}${name ? ` name="${name}"` : ""}`;
@@ -15,10 +15,10 @@ export function buildFieldInput(field, value = "", { id = "", name = "" } = {}) 
         return `<select ${attrs}>${blankOption}${options}</select>`;
     }
 
-    if (field.type === "textarea") return `<textarea ${attrs}>${value}</textarea>`;
+    if (field.type === "textarea") return `<textarea ${attrs}>${escapeHTML(value)}</textarea>`;
     if (field.type === "checkbox") return `<input type="checkbox" ${attrs} ${value ? "checked" : ""}>`;
 
-    return `<input type="${field.type}" ${attrs} value="${value}">`;
+    return `<input type="${field.type}" ${attrs} value="${escapeHTML(value)}">`;
 }
 
 export function buildFormGroup(field) {

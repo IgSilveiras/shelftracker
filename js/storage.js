@@ -1,5 +1,7 @@
 const STORAGE_KEY = "gamesArray";
 const SETTINGS_KEY = "userSettings";
+const PROFILE_KEY = "userProfile";
+const DEFAULT_PROFILE = { username: "Nanashi" };
 
 const DEFAULT_SETTINGS = {
     filter: "all",
@@ -25,4 +27,13 @@ export function loadSettings() {
 
 export function saveSettings(settings) {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+export function loadProfile() {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    return raw ? { ...DEFAULT_PROFILE, ...JSON.parse(raw) } : { ...DEFAULT_PROFILE };
+}
+
+export function saveProfile(profile) {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }

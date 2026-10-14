@@ -1,5 +1,6 @@
 import { buildStateBadge } from "./badge.js";
 import { EMPTY_STATES } from "./config.js";
+import { escapeHTML } from "./utils.js";
 
 function buildEmptyState(reason) {
     const s = EMPTY_STATES[reason];
@@ -51,7 +52,7 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
             html = `
             <div class="gameCard" data-id="${id}" tabindex="0" role="button" aria-label="View details for ${name}">
                 <div class="gameCardThumbnail">
-                    <img src="${thumbnail}" alt="${name} thumbnail">
+                    <img src="${escapeHTML(thumbnail)}" alt="${escapeHTML(name)} thumbnail">
                     ${handleHTML(name)}
                     ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
                     ${buildFavoriteButton(element)}
@@ -81,7 +82,7 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
                 <img src="${thumbnail}" alt="${name}" class="gameThumbnail">
                 <div class="gameInfo">
                     <div class="gameInfoHeader">
-                        <p class="gameName" title="${name}">${name}</p>
+                        <p class="gameName" title="${escapeHTML(name)}">${escapeHTML(name)}</p>
                         ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                     </div>
                     <p class="gameMeta">

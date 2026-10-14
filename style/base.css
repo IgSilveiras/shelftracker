@@ -82,6 +82,7 @@ select {
     border-radius: var(--radius-md);
     font-size: var(--font-base);
     color: var(--text-primary);
+    cursor: pointer;
 
     &::picker(select) {
         border: 1px solid var(--border-strong);
