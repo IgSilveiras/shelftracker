@@ -36,8 +36,15 @@
 <body>
     <div class="banner">
         <div class="profileInfo">
-            <img src="https://static.thenounproject.com/png/1743560-200.png" alt="user icon" class="profileAvatar">
-            <h1>Nanashi's Shelf</h1>
+            <h1 class="shelfTitle">
+                <button type="button" id="usernameBtn" class="usernameBtn" aria-describedby="usernameHint">
+                    <span id="usernameText"></span>'s Shelf<i class="ti ti-pencil" aria-hidden="true"></i>
+                </button>
+                <span id="usernameEdit" class="usernameEdit" hidden>
+                    <input type="text" id="usernameInput" maxlength="40" enterkeyhint="done" autocomplete="off" aria-label="Your name">'s Shelf
+                </span>
+            </h1>
+            <span id="usernameHint" hidden>Click to edit your name</span>
         </div>
     </div>
 

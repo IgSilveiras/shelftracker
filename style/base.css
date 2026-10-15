@@ -219,6 +219,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     fill: currentColor;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

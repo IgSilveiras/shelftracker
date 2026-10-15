@@ -6,6 +6,7 @@ import { initDeleteModal } from "./delete-modal.js";
 import { initCustomOrderDrag, initKeyboardReorder } from "./reorder.js";
 import { downloadExport } from "./backup.js";
 import { initImport } from "./import-modal.js";
+import { initProfile } from "./profile.js";
 
 let gamesArray = [];
 const settings = loadSettings();
@@ -15,6 +16,14 @@ let favoritesOnly = settings.favoritesOnly;
 let currentSort = settings.sort;
 let currentSortOrder = settings.sortOrder;
 let view = settings.view;
+
+const profileUI = initProfile({
+    getUsername: () => profile.username,
+    onRename(name) {
+        profile.username = name;
+        saveProfile(profile);
+    },
+});
 
 function persistSettings() {
     saveSettings({ filter: currentFilter, favoritesOnly, sort: currentSort, sortOrder: currentSortOrder, view });
@@ -224,6 +233,7 @@ initImport({
         if (username) {
             profile.username = username;
             saveProfile(profile);
+            profileUI.render();
         }
 
         persistAndRefresh();
