@@ -56,7 +56,7 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
             cards.push(`
             <div class="gameCard" data-id="${id}" tabindex="0" role="button" aria-label="${escapeHTML(t("card.viewDetails", { name }))}">
                 <div class="gameCardThumbnail">
-                    <img src="${escapeHTML(thumbnail)}" alt="${escapeHTML(t("card.thumbnailAlt", { name }))}">
+                    <img src="${escapeHTML(thumbnail)}" alt="${escapeHTML(t("card.thumbnailAlt", { name }))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
                     ${handleHTML(name)}
                     ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
                     ${buildFavoriteButton(element)}
@@ -84,7 +84,7 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
             cards.push(`
             <div class="gameCard ${playState}" data-id="${id}" tabindex="0" role="button" aria-label="${escapeHTML(t("card.viewDetails", { name }))}">
             ${handleHTML(name)}
-                <img src="${escapeHTML(thumbnail)}" class="gameThumbnail" alt="${escapeHTML(t("card.thumbnailAlt", { name }))}">
+                <img src="${escapeHTML(thumbnail)}" class="gameThumbnail" alt="${escapeHTML(t("card.thumbnailAlt", { name }))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
                 <div class="gameInfo">
                     <div class="gameInfoHeader">
                         <p class="gameName" title="${safeName}">${safeName}</p>
