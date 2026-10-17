@@ -1,4 +1,5 @@
 import { NO_INTENSITY_STATES } from "./config.js";
+import { t } from "./translations.js";
 
 export function hasIntensity(playState) {
     return !NO_INTENSITY_STATES.includes(playState);
@@ -39,4 +40,8 @@ export function escapeHTML(value) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#39;");
 
+}
+
+export function resolveLabel({ labelKey, label }) {
+    return labelKey ? t(labelKey) : label;
 }

@@ -1,6 +1,7 @@
 import { hasIntensity, closeModalAnimated } from "./utils.js";
 import { DETAIL_FIELDS, ADVANCED_ADD_FIELDS } from "./config.js";
 import { buildFormGroup } from "./fields.js";
+import { onLanguageChange } from "./translations.js";
 
 export function initAddGameModal({ onGameAdded }) {
     const formModal = document.querySelector("#gameFormModal");
@@ -27,10 +28,15 @@ export function initAddGameModal({ onGameAdded }) {
         formCompleted100Group.querySelector("input").disabled = !showCompleted100;
     }
 
-    advancedFields.innerHTML = DETAIL_FIELDS
-        .filter(f => ADVANCED_ADD_FIELDS.includes(f.key))
-        .map(buildFormGroup)
-        .join("");
+    function renderAdvancedFields() {    
+        advancedFields.innerHTML = DETAIL_FIELDS
+            .filter(f => ADVANCED_ADD_FIELDS.includes(f.key))
+            .map(buildFormGroup)
+            .join("");
+    }
+
+    renderAdvancedFields();
+    onLanguageChange(renderAdvancedFields);
 
     advancedDetails.querySelector("summary").addEventListener("click", (e) => {
         e.preventDefault();
@@ -61,7 +67,8 @@ export function initAddGameModal({ onGameAdded }) {
         newGame.rating = newGame.rating === "" ? 0 : Number(newGame.rating);
         newGame.release = newGame.release === "" ? 0 : Number(newGame.release);
         newGame.playTime = newGame.playTime === "" ? 0 : Number(newGame.playTime);
-        if (newGame.intensity === "none") delete newGame.intensity;
+        if (newGame.completed100 === "on") newGame.completed100 = true;
+        if (!newGame.intensity || !hasIntensity(newGame.playState)) delete newGame.intensity;
 
         newGame.id = crypto.randomUUID();
         ADVANCED_ADD_FIELDS.forEach(key => { if (newGame[key] === "") delete newGame[key]; });

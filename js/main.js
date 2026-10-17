@@ -193,15 +193,13 @@ sortSelect.addEventListener("change", () => {
     refresh();
 });
 
+const sortIconHTML = () => `<i class="ti ti-arrow-narrow-${currentSortOrder === "asc" ? "down" : "up"}" aria-hidden="true"></i>`;
+
 const sortDirection = document.querySelector("#sortDirection");
-sortDirection.innerHTML = currentSortOrder === "asc"
-    ? '<i class="ti ti-arrow-narrow-down"></i>'
-    : '<i class="ti ti-arrow-narrow-up"></i>';
+sortDirection.innerHTML = sortIconHTML(); 
 sortDirection.addEventListener("click", () => {
     currentSortOrder = currentSortOrder === "desc" ? "asc" : "desc";
-    sortDirection.innerHTML = currentSortOrder === "asc"
-        ? '<i class="ti ti-arrow-narrow-down"></i>'
-        : '<i class="ti ti-arrow-narrow-up"></i>';
+    sortDirection.innerHTML = sortIconHTML(); 
     persistSettings();
     refresh();
 });
@@ -209,7 +207,7 @@ sortDirection.addEventListener("click", () => {
 const viewSelect = document.querySelector("#viewSelect");
 document.querySelector(`input[name="view"][value="${view}"]`).checked = true;
 viewSelect.addEventListener("change", (e) => {
-    view = e.target.value.toLowerCase();
+    view = e.target.value;
     persistSettings();
     refresh();
 });

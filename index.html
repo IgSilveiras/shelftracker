@@ -30,7 +30,8 @@
     <!-- local css for testing -->
     <link rel="stylesheet" href="./style/local.css">
 
-    <link rel="shortcut icon" href="./favicon.svg" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 
     <title>ShelfTracker</title>
 </head>
@@ -40,52 +41,52 @@
         <div class="profileInfo">
             <h1 class="shelfTitle">
                 <button type="button" id="usernameBtn" class="usernameBtn" aria-describedby="usernameHint">
-                    <span id="usernameText"></span>'s Shelf<i class="ti ti-pencil" aria-hidden="true"></i>
+                    <span id="usernameText"></span><i class="ti ti-pencil" aria-hidden="true"></i>
                 </button>
                 <span id="usernameEdit" class="usernameEdit" hidden>
-                    <input type="text" id="usernameInput" maxlength="40" enterkeyhint="done" autocomplete="off" aria-label="Your name">'s Shelf
+                    <span id="usernameEditPrefix"></span><input type="text" id="usernameInput" maxlength="40" enterkeyhint="done" autocomplete="off"><span id="usernameEditSuffix"></span>
                 </span>
             </h1>
-            <span id="usernameHint" hidden>Click to edit your name</span>
+            <span id="usernameHint" data-translation="profile.hint" hidden>Click to edit your name</span>
         </div>
     </div>
 
     <div class="controls">
         <div class="filterGroup">
             <select id="filterSelect">
-                <option value="all">Any State</option>
-                <option value="planToPlay">Plan to Play</option>
-                <option value="playing">Playing</option>
-                <option value="completed">Completed</option>
-                <option value="paused">Paused</option>
-                <option value="abandoned">Abandoned</option>
+                <option value="all" data-translation="filter.all">Any State</option>
+                <option value="planToPlay" data-translation="status.planToPlay">Plan to Play</option>
+                <option value="playing" data-translation="status.playing">Playing</option>
+                <option value="completed" data-translation="status.completed">Completed</option>
+                <option value="paused" data-translation="status.paused">Paused</option>
+                <option value="abandoned" data-translation="status.abandoned">Abandoned</option>
             </select>
             
-            <button id="favoritesFilterBtn" class="favoritesFilterBtn" aria-pressed="false" aria-label="Show only favorites" title="Favorites Only"><svg class="starIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245" /></svg></button>
+            <button id="favoritesFilterBtn" class="favoritesFilterBtn" aria-pressed="false" aria-label="Show only favorites" title="Favorites Only" data-translation-aria-label="filter.favoritesAria" data-translation-title="filter.favorites"><svg class="starIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245" /></svg></button>
         </div>
             
         
         <div class="sortSelect">
-            <label for="sortSelect">Order:</label>
+            <label for="sortSelect" data-translation="sort.label">Order:</label>
             <select id="sortSelect">
-                <option value="custom">Custom</option>
-                <option value="rating">Rating</option>
-                <option value="playTime">Playtime</option>
-                <option value="name">Name</option>
+                <option value="custom" data-translation="sort.custom">Custom</option>
+                <option value="rating" data-translation="field.rating">Rating</option>
+                <option value="playTime" data-translation="field.playTime">Playtime</option>
+                <option value="name" data-translation="field.name">Name</option>
             </select>
-            <button id="sortDirection"><i class="ti ti-arrow-narrow-up"></i></button>
+            <button id="sortDirection" title="Change sort direction" data-translation-title="sort.direction" aria-label="Change sort direction" data-translation-aria-label="sort.direction"><i class="ti ti-arrow-narrow-up"></i></button>
         </div>
         
         <fieldset id="viewSelect">
-            <legend class="sr-only">view</legend>
+            <legend class="sr-only" data-translation="view.legend">view</legend>
             
             <input type="radio" name="view" id="view-grid" value="grid" class="sr-only-input" checked>
-            <label for="view-grid" aria-label="grid view">
+            <label for="view-grid" aria-label="grid view" data-translation-aria-label="view.grid">
                 <i class="ti ti-layout-grid"></i>
             </label>
             
             <input type="radio" name="view" id="view-list" value="list" class="sr-only-input">
-            <label for="view-list" aria-label="list view">
+            <label for="view-list" aria-label="list view" data-translation-aria-label="view.list">
                 <i class="ti ti-layout-list"></i>
             </label>
         </fieldset>
@@ -95,75 +96,75 @@
         
     </main>
 
-    <button id="addGameBtn" class="fab" aria-label="Add game">
+    <button id="addGameBtn" class="fab" aria-label="Add game" data-translation-aria-label="addGame.title">
         <i class="ti ti-plus" aria-hidden="true"></i>
-        <span class="fabLabel">Add Game</span>
+        <span class="fabLabel" data-translation="addGame.title">Add Game</span>
     </button>
 
     <dialog id="gameFormModal" aria-labelledby="modalTitle">
-        <h2 id="modalTitle">Add Game</h2>
+        <h2 id="modalTitle" data-translation="addGame.title">Add Game</h2>
 
         <form id="gameForm">
             <div class="formGroup" id="formNameGroup">
-                <label for="formName">Game Name</label>
-                <input type="text" name="name" id="formName" placeholder="Game Name" required>
+                <label for="formName" data-translation="form.name">Game Name</label>
+                <input type="text" name="name" id="formName" placeholder="Game Name" data-translation-placeholder="form.name" required>
             </div>
 
             <div class="formGroup" id="formPlayTimeGroup">
-                <label for="formPlayTime">Playtime</label>
-                <input type="number" name="playTime" id="formPlayTime" placeholder="Played Hours">
+                <label for="formPlayTime" data-translation="field.playTime">Playtime</label>
+                <input type="number" name="playTime" id="formPlayTime" placeholder="Played Hours" data-translation-placeholder="form.playTimePlaceholder">
             </div>
 
             <div class="formGroup" id="formRatingGroup">
-                <label for="formRating">Rating</label>
-                <input type="number" name="rating" id="formRating" min="0" max="10" placeholder="Rating">
+                <label for="formRating" data-translation="field.rating">Rating</label>
+                <input type="number" name="rating" id="formRating" min="0" max="10" placeholder="Rating" data-translation-placeholder="field.rating">
             </div>
 
             <div class="formGroup" id="formPlayStateGroup">
-                <label for="formPlayState">Play State</label>
+                <label for="formPlayState" data-translation="field.playState">Play State</label>
                 <select name="playState" id="formPlayState">
-                    <option value="planToPlay">Plan to Play</option>
-                    <option value="playing">Playing</option>
-                    <option value="completed">Completed</option>
-                    <option value="paused">Paused</option>
-                    <option value="abandoned">Abandoned</option>
+                    <option value="planToPlay" data-translation="status.planToPlay">Plan to Play</option>
+                    <option value="playing" data-translation="status.playing">Playing</option>
+                    <option value="completed" data-translation="status.completed">Completed</option>
+                    <option value="paused" data-translation="status.paused">Paused</option>
+                    <option value="abandoned" data-translation="status.abandoned">Abandoned</option>
                 </select>
             </div>
 
             <div class="formGroup" id="formIntensityGroup">
-                <label for="formIntensity" id="formIntensityLabel">Intensity</label>
+                <label for="formIntensity" id="formIntensityLabel" data-translation="field.intensity">Intensity</label>
                 <select name="intensity" id="formIntensity">
-                    <option value="">None</option>
+                    <option value="">-</option>
                     <option value="casual">Casual</option>
                     <option value="tryhard">Tryhard</option>
                 </select>
 
                 <div id="formCompleted100Group" hidden>
                     <input type="checkbox" name="completed100" id="formCompleted100">
-                    <label for="formCompleted100">100%</label>
+                    <label for="formCompleted100" data>100%</label>
                 </div>
             </div>
 
             <div class="formGroup" id="formThumbnailGroup">
-                <label for="formThumbnail">Thumbnail URL</label>
-                <input type="url" name="thumbnail" id="formThumbnail" placeholder="Img URL">
+                <label for="formThumbnail" data-translation="field.thumbnail">Thumbnail URL</label>
+                <input type="url" name="thumbnail" id="formThumbnail" placeholder="Thumbnail URL" data-translation-placeholder="field.thumbnail">
             </div>
 
             <div class="formGroup" id="formReleaseGroup">
-                <label for="formRelease">Release Year</label>
-                <input type="number" name="release" id="formRelease" placeholder="Launch Year">
+                <label for="formRelease" data-translation="field.release">Release Year</label>
+                <input type="number" name="release" id="formRelease" placeholder="Release Year" data-translation-placeholder="field.release">
             </div>
 
             <div class="formGroup" id="formReviewGroup">
-                <label for="formReview">Review</label>
-                <textarea name="review" placeholder="Review" id="formReview"></textarea>
+                <label for="formReview" data-translation="field.review">Review</label>
+                <textarea name="review" placeholder="Review" data-translation-placeholder="field.review" id="formReview"></textarea>
             </div>
 
             <details id="advancedDetails">
-                <summary>Advanced Options</summary>
+                <summary data-translation="form.advanced">Advanced Options</summary>
                 <div id="advancedFields"></div>
             </details>
-            <button type="submit" class="btn btnAccent">Add Game</button>
+            <button type="submit" class="btn btnAccent" data-translation="addGame.title">Add Game</button>
         </form>
     </dialog>
 
@@ -186,28 +187,30 @@
             <dl id="detailedViewModalInfo"></dl>
 
             <div id="detailedViewModalActions">
-                <button id="detailedViewModalEditBtn" class="btn btnAccent">Edit</button>
-                <button id="detailedViewModalDeleteBtn" class="btn btnDanger">Delete</button>
+                <button id="detailedViewModalEditBtn" class="btn btnAccent" data-translation="common.edit">Edit</button>
+                <button id="detailedViewModalDeleteBtn" class="btn btnDanger" data-translation="common.delete">Delete</button>
             </div>
         </div>
 
     </dialog>
 
     <dialog id="deleteGameModal" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalDescription">
-        <h2 id="deleteModalTitle">Delete "<span id="deleteGameTitle"></span>"?</h2>
-        <p id="deleteModalDescription">This will remove it from your list permanently.</p>
+        <h2 id="deleteModalTitle"><span id="deleteTitlePrefix"></span><span id="deleteGameTitle"></span><span id="deleteTitleSuffix"></span></h2>
+        <p id="deleteModalDescription" data-translation="delete.description">This will remove it from your list permanently.</p>
         <div id="deleteModalActions">
-            <button id="cancelDeleteBtn" class="btn btnNeutral">Cancel</button>
-            <button id="confirmDeleteBtn" class="btn btnDanger">Delete</button>
+            <button id="cancelDeleteBtn" class="btn btnNeutral" data-translation="common.cancel">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btnDanger" data-translation="common.delete">Delete</button>
         </div>
     </dialog>
 
     <footer>
+        <button type="button" id="languageToggle" class="linkBtn" aria-label="Change Language" data-translation-aria-label="lang.toggle">EN</button>
+
         <p>© 2026 NanashiDev</p>
 
         <div class="backupActions">
-            <button type="button" id="exportBtn" class="linkBtn">Export List</button>
-            <button type="button" id="importBtn" class="linkBtn">Import List</button>
+            <button type="button" id="importBtn" class="linkBtn" data-translation="backup.import">Import List</button>
+            <button type="button" id="exportBtn" class="linkBtn" data-translation="backup.export">Export List</button>
             <input type="file" id="importFile" accept=".json,application/json" hidden>
         </div>
     </footer>
@@ -216,8 +219,8 @@
         <h2 id="importModalTitle"></h2>
         <p id="importModalDescription"></p>
         <div id="importModalActions">
-            <button id="cancelImportBtn" class="btn btnNeutral">Cancel</button>
-            <button id="confirmImportBtn" class="btn btnDanger">Replace List</button>
+            <button id="cancelImportBtn" class="btn btnNeutral" data-translation="common.cancel">Cancel</button>
+            <button id="confirmImportBtn" class="btn btnDanger" data-translation="import.confirm">Replace List</button>
         </div>
     </dialog>
 

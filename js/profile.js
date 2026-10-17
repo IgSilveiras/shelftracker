@@ -1,17 +1,22 @@
+import { t, onLanguageChange } from "./translations.js";
+
 export function initProfile({ getUsername, onRename }) {
     const nameBtn = document.querySelector("#usernameBtn");
     const nameText = document.querySelector("#usernameText");
     const editWrap = document.querySelector("#usernameEdit");
     const input = document.querySelector("#usernameInput");
+    const editPrefix = document.querySelector("#usernameEditPrefix");
+    const editSuffix = document.querySelector("#usernameEditSuffix");
 
     let editing = false;
 
     function render() {
-        nameText.textContent = getUsername(); 
+        nameText.textContent = t("profile.shelfTitle", { name: getUsername() }); 
     }
 
     function startEditing() {
         editing = true;
+        [editPrefix.textContent, editSuffix.textContent] = t("profile.shelfTitle", { name: "{name}" }).split("{name}");
         input.value = getUsername();
         nameBtn.hidden = true;
         editWrap.hidden = false;
@@ -48,6 +53,7 @@ export function initProfile({ getUsername, onRename }) {
 
     input.addEventListener("blur", () => finishEditing({ save: true, restoreFocus: false }));
 
+    onLanguageChange(render);
     render();
     return { render };
 }

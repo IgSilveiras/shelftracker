@@ -1,4 +1,5 @@
-import { capitalize, escapeHTML } from "./utils.js";
+import { capitalize, escapeHTML, resolveLabel } from "./utils.js";
+import { t } from "./translations.js";
 
 export function buildFieldInput(field, value = "", { id = "", name = "" } = {}) {
     const attrs = `data-field="${field.key}"${id ? ` id="${id}"` : ""}${name ? ` name="${name}"` : ""}`;
@@ -6,9 +7,7 @@ export function buildFieldInput(field, value = "", { id = "", name = "" } = {}) 
     if (field.type === "select") {
         const options = field.options
             .map(opt => {
-                const optValue = typeof opt === "string" ? opt : opt.value;
-                const optLabel = typeof opt === "string" ? capitalize(opt) : opt.label;
-                return `<option value="${optValue}" ${value === optValue ? "selected" : ""}>${optLabel}</option>`;
+                return `<option value="${opt.value}" ${value === opt.value ? "selected" : ""}>${resolveLabel(opt)}</option>`;
             })
             .join("");
         const blankOption = field.required ? "" : `<option value="">-</option>`;
@@ -23,9 +22,10 @@ export function buildFieldInput(field, value = "", { id = "", name = "" } = {}) 
 
 export function buildFormGroup(field) {
     const id = `formAdvanced${capitalize(field.key)}`;
+    const key = `field.${field.key}`;
     return `
         <div class="formGroup">
-            <label for="${id}">${field.label}</label>
+            <label for="${id}">${t(key)}</label>
             ${buildFieldInput(field, "", { id, name: field.key })}
         </div>
     `;

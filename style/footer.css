@@ -3,33 +3,42 @@ footer {
     height: fit-content;
     min-height: 5vh;
     padding: var(--space-2);
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
     background: var(--surface-1);
     font-size: var(--font-sm);
     text-align: center;
     gap: var(--space-2);
+
+    .linkBtn {
+        padding: var(--space-1) var(--space-2);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: var(--font-sm);
+        text-decoration: underline;
+        cursor: pointer;
+        transition: 0.075s;
+
+        &:hover {
+            background-color: var(--surface-1);
+            color: var(--text-primary); 
+        }
+    }
+
+    #languageToggle {
+        width: fit-content;
+        text-decoration: none;
+    }
+
+    p {
+        text-align: center;
+    }
     
     .backupActions {
         display: flex;
         justify-content: center;
         gap: var(--space-3);
-
-        .linkBtn {
-            padding: var(--space-1) var(--space-2);
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            font-size: var(--font-sm);
-            text-decoration: underline;
-            cursor: pointer;
-            transition: 0.075s;
-
-            &:hover {
-                background-color: var(--surface-1);
-                color: var(--text-primary); 
-            }
-        }
     }
 }

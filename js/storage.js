@@ -1,3 +1,5 @@
+import { STATUS_CONFIG } from "./config.js";
+
 const STORAGE_KEY = "gamesArray";
 const SETTINGS_KEY = "userSettings";
 const PROFILE_KEY = "userProfile";
@@ -11,6 +13,13 @@ const DEFAULT_SETTINGS = {
     view: "grid",
 };
 
+const VALID_SETTINGS = {
+    filter: ["all", ...Object.keys(STATUS_CONFIG)],
+    sort: ["custom", "rating", "playTime", "name"],
+    sortOrder: ["asc", "desc"],
+    view: ["grid", "list"],
+};
+
 export function loadGamesFromStorage() {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
@@ -22,7 +31,17 @@ export function saveGamesToStorage(games) {
 
 export function loadSettings() {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    return raw ? { ...SETTINGS_KEY, ...JSON.parse(raw) } : { ...DEFAULT_SETTINGS };
+    if (!raw) return { ...DEFAULT_SETTINGS };
+
+    let saved;
+    try { saved = JSON.parse(raw); } catch { return { ...DEFAULT_SETTINGS }; }
+
+    const settings = { ...DEFAULT_SETTINGS, ...saved };
+    for (const [key, allowed] of Object.entries(VALID_SETTINGS)) {
+        if (!allowed.includes(settings[key])) settings[key] = DEFAULT_SETTINGS[key];
+    }
+    settings.favoritesOnly = settings.favoritesOnly === true;
+    return settings;
 }
 
 export function saveSettings(settings) {

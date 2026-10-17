@@ -1,5 +1,6 @@
 import { closeModalAnimated } from "./utils.js";
 import { parseImport } from "./backup.js";
+import { t } from "./translations.js";
 
 export function initImport({ getGamesCount, onImport }) {
     const importBtn = document.querySelector("#importBtn");
@@ -13,6 +14,7 @@ export function initImport({ getGamesCount, onImport }) {
     let pending = null;
 
     const closeModal = () => closeModalAnimated(modal);
+    const countLabel = (key, count) => t(count === 1 ? `${key}One` : `${key}Other`, { count });
 
     importBtn.addEventListener("click", () => fileInput.click());
 
@@ -25,21 +27,28 @@ export function initImport({ getGamesCount, onImport }) {
 
         if (!result.games) {
             pending = null;
-            title.textContent = "Couldn't Import";
-            description.textContent = result.error ?? "Unexpected problem while reading the file.";
+            title.textContent = t("import.failedTitle");
+            description.textContent = t(result.error ?? "import.errorUnexpected");
             confirmBtn.hidden = true;
-            cancelBtn.textContent = "Close";
+            cancelBtn.textContent = t("common.close");
         }
 
         else {
             pending = result;
-            const owner = result.username ? `${result.username}'s list` : "the imported list"
-            title.textContent = "Replace your List?";
+            const owner = result.username 
+                ? t("import.ownerNamed", { name: result.username })
+                : t("import.ownerUnnamed");
+            title.textContent = t("import.confirmTitle");
             description.textContent = 
-                `This replaces your current list (${getGamesCount()} games) with ${owner} (${result.games.length} games).` +
-                (result.skipped ? ` ${result.skipped} invalid entries will be skipped.` : "");
+                t("import.description", {
+                    current: countLabel("import.games", getGamesCount()),
+                    owner,
+                    incoming: countLabel("import.games", result.games.length),
+                }) +
+                (result.skipped ? ` ${countLabel("import.skipped", result.skipped)}` : "");
+
             confirmBtn.hidden = false;
-            cancelBtn.textContent = "Cancel";
+            cancelBtn.textContent = t("common.cancel");
         }
 
         modal.showModal();

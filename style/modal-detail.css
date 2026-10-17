@@ -1,5 +1,5 @@
 dialog#detailedViewModal {
-    max-width: 760px;
+    width: min(800px, 100% - 2rem);
     padding: var(--space-5);
     background: color-mix(in srgb, var(--color) 10%, var(--surface-1));
     border: 2px solid var(--color);
@@ -107,7 +107,7 @@ dialog#detailedViewModal {
             gap: var(--space-2) var(--space-4);
 
             dt {
-                font-size: var(--font-sm);
+                font-size: 0.82rem;
                 color: var(--text-secondary);
                 white-space: nowrap;
                 justify-self: flex-start;
@@ -159,14 +159,14 @@ dialog#detailedViewModal {
     }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 800px) {
     dialog#detailedViewModal #detailedViewModalBody #detailedViewModalInfo {
         grid-template-columns: auto 1fr;
         padding: 0;
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     dialog#detailedViewModal #detailedViewModalBody {
         grid-template-areas:
         "thumbnail"
@@ -180,7 +180,7 @@ dialog#detailedViewModal {
         }
 
         #detailedViewModalInfo {
-            grid-template-columns: auto 1fr;
+            grid-template-columns: auto auto;
         }
     }
 }

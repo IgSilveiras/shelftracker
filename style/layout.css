@@ -63,6 +63,8 @@
                 font: inherit;
                 outline: none;
             }
+
+            span { white-space: pre; }
         }
     }
 }

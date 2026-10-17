@@ -12,7 +12,7 @@ export function downloadExport(profile, games) {
         games,
     };
 
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "appliaction/json" });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const slug = profile.username.replace(/[^\w-]+/g, "_");
 
@@ -46,7 +46,7 @@ function sanitizeGame(raw) {
         }
 
         else if (field.type === "select") {
-            const valid = field.options.map(o => (typeof o === "string" ? o : o.value));
+            const valid = field.options.map(o => o.value);
             if (valid.includes(value)) game[field.key] = value;
         }
 
@@ -68,15 +68,15 @@ export function parseImport(text) {
     try {
         data = JSON.parse(text);
     } catch {
-        return { error: "This file is not valid JSON." };
+        return { error: "import.errorInvalidJson" };
     }
 
     if (data?.app !== APP_NAME || !Array.isArray(data.games)) {
-        return { error: "This file doesn't look like a ShelfTracker export." };
+        return { error: "import.errorNotShelfTracker" };
     }
 
     if (data.schemaVersion > SCHEMA_VERSION) {
-        return { error: "This file was exported from a newer version of ShelfTracker" };
+        return { error: "import.errorNewerVersion" };
     }
 
     const seen = new Set();
@@ -90,7 +90,7 @@ export function parseImport(text) {
         games.push(game);
     }
 
-    if (games.length === 0) return { error: "The file doesn't contain any valid games." };
+    if (games.length === 0) return { error: "import.errorNoValidGames" };
 
     return {
         username: String(data.profile?.username ?? "").trim().slice(0, 40),

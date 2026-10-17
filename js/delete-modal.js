@@ -1,10 +1,13 @@
 import { closeModalAnimated } from "./utils.js";
+import { t } from "./translations.js";
 
 export function initDeleteModal({ getGame, onConfirmed }) {
     const deleteGameModal = document.querySelector("#deleteGameModal");
     const deleteGameTitle = document.querySelector("#deleteGameTitle");
     const cancelDeleteBtn = document.querySelector("#cancelDeleteBtn");
     const confirmDeleteBtn = document.querySelector("#confirmDeleteBtn");
+    const deleteTitlePrefix = document.querySelector("#deleteTitlePrefix");
+    const deleteTitleSuffix = document.querySelector("#deleteTitleSuffix");
 
     let pendingId = null;
 
@@ -34,6 +37,8 @@ export function initDeleteModal({ getGame, onConfirmed }) {
             if (!game) return;
 
             pendingId = id;
+
+            [deleteTitlePrefix.textContent, deleteTitleSuffix.textContent] = t("delete.title", { name: "{name}" }).split("{name}");
             deleteGameTitle.textContent = game.name;
             deleteGameModal.showModal();
         },

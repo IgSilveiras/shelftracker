@@ -1,12 +1,12 @@
 import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
-import { capitalize, closeModalAnimated, hasIntensity, animateModalResize, escapeHTML } from "./utils.js";
+import { closeModalAnimated, hasIntensity, animateModalResize, escapeHTML, resolveLabel } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
 import { buildFieldInput } from "./fields.js";
-
-let editingMode = false;
-let currentDetailId = null;
+import { t } from "./translations.js";
 
 export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onToggleFavorite  }) {
+    let editingMode = false;
+    let currentDetailId = null;
     const detailedViewModal = document.querySelector("#detailedViewModal");
     const detailModalTitle = document.querySelector("#detailModalTitle");
     const detailedViewModalInfo = document.querySelector("#detailedViewModalInfo");
@@ -22,7 +22,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
         detailedViewModal.classList.add(game.playState);
         detailModalTitle.textContent = game.name;
         detailThumbnailImg.src = game.thumbnail;
-        detailThumbnailImg.alt = `${game.name} thumbnail`;
+        detailThumbnailImg.alt = t("card.thumbnailAlt", { name: game.name });
         detailRelease.textContent = game.release;
         detailBadge.innerHTML = buildStateBadge(game.playState, game.intensity, game.completed100);
         refreshFavoriteButton(game);
@@ -32,7 +32,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
         const isFav = !!game.favorite;
         detailFavoriteBtn.classList.toggle("favorited", isFav);
         detailFavoriteBtn.setAttribute("aria-pressed", isFav);
-        detailFavoriteBtn.setAttribute("aria-label", isFav ? "Remove from favorites" : "Add to favorites");
+        detailFavoriteBtn.setAttribute("aria-label", t(isFav ? "fav.remove" : "fav.add"));
     }
 
     function renderDetailFields(game, editing) {
@@ -43,14 +43,14 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
             const rawValue = game[field.key] ?? "";
             const displayValue = field.type === "select"
                 ? (() => {
-                    const opt = field.options.find(o => (typeof o === "string" ? o : o.value) === rawValue);
+                    const opt = field.options.find(o => o.value === rawValue);
                     if (!opt) return rawValue;
-                    return typeof opt === "string" ? capitalize(opt) : opt.label;
+                    return resolveLabel(opt);
                   })()
                 : field.suffix && rawValue !== "" ? `${rawValue}${field.suffix}` : rawValue;
 
             return `
-                <dt data-field-label="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${field.label}</dt>
+                <dt data-field-label="${field.key}"class="${field.fullWidth ? "fullWidth" : ""}">${t(`field.${field.key}`)}</dt>
                 <dd data-field-wrapper="${field.key}" class="${field.fullWidth ? "fullWidth" : ""}">${editing ? buildFieldInput(field, rawValue) : escapeHTML(displayValue || "-")}</dd>
             `;
         }).join("");
@@ -73,8 +73,8 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
     }
 
     function updateDetailActionButtons() {
-        detailEditBtn.textContent = editingMode ? "Confirm" : "Edit";
-        detailDeleteBtn.textContent = editingMode ? "Cancel" : "Delete";
+        detailEditBtn.textContent = t(editingMode ? "common.confirm" : "common.edit");
+        detailDeleteBtn.textContent = t(editingMode ? "common.cancel" : "common.delete");
         detailDeleteBtn.classList.toggle("btnNeutral", editingMode);
         detailDeleteBtn.classList.toggle("btnDanger", !editingMode);
     }

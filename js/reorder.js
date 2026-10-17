@@ -48,7 +48,7 @@ export function initKeyboardReorder({ containerEl, getView, onReorder }) {
         handle.setAttribute("aria-pressed", "true");
     }
 
-    function moveIndex(currentIndex, key, view, columnCount, lenght) {
+    function moveIndex(currentIndex, key, view, columnCount, length) {
         let target = currentIndex;
 
         if (view === "list") {
@@ -63,7 +63,7 @@ export function initKeyboardReorder({ containerEl, getView, onReorder }) {
             if (key === "ArrowDown") target = currentIndex + columnCount;
         }
 
-        if (target < 0 || target >= lenght) return currentIndex;
+        if (target < 0 || target >= length) return currentIndex;
         return target;
     }
 
@@ -107,17 +107,6 @@ export function initKeyboardReorder({ containerEl, getView, onReorder }) {
             return;
         }
 
-        containerEl.addEventListener("focusout", (e) => {
-            if (suppressNextFocusOut) return;
-
-            if (!grabbedId) return;
-
-            const leavingHandle = e.target.closest(".dragHandle");
-            if (!leavingHandle) return;
-
-            releaseGrabbedCard();
-        })
-
         if (!grabbedId) return;
         if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
 
@@ -134,10 +123,16 @@ export function initKeyboardReorder({ containerEl, getView, onReorder }) {
         requestAnimationFrame(() => { suppressNextFocusOut = false });
     });
 
+    containerEl.addEventListener("focusout", (e) => {
+        if (suppressNextFocusOut || !grabbedId) return;
+        if (!e.target.closest(".dragHandle")) return;
+        releaseGrabbedCard();
+    });
+
     containerEl.addEventListener("dragstart", (e) => {
     const card = e.target.closest(".gameCard");
     const img = card?.querySelector("img");
-    if (!img) return;
+    if (!img || !img.naturalWidth) return;
 
     const width = 80;
     const height = width * (img.naturalHeight / img.naturalWidth);
