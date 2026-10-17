@@ -11,6 +11,7 @@ function buildEmptyState(reason) {
             <p class="emptyStateTitle">${t(s.titleKey)}</p>
             <p class="emptyStateText">${t(s.textKey)}</p>
             ${s.action ? `<button type="button" class="btn btnNeutral clearFiltersBtn">${t("filter.clear")}</button>` : ""}
+            ${s.demo ? `<button type="button" class="btn btnAccent loadDemoBtn">${t("empty.loadDemo")}</button>` : ""}
         </div>
     `;
 }

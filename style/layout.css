@@ -161,7 +161,8 @@
         font-size: var(--font-sm);
     }
 
-    .clearFiltersBtn {
+    .clearFiltersBtn,
+    .loadDemoBtn {
         margin-top: var(--space-2);
     }
 }

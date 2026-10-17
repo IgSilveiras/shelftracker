@@ -85,19 +85,23 @@ function getGameById(id) {
     return gamesArray.find(g => g.id === id);
 }
 
-const stored = loadGamesFromStorage();
+gamesArray = loadGamesFromStorage() ?? [];
+refresh();
 
-if (stored === null) {
-    fetch("./mock.json")
-        .then(response => response.json())
-        .then(data => {
-            gamesArray = data;
-            gamesArray.forEach(g => g.id = crypto.randomUUID());
-            refresh();
-        });
-} else {
-    gamesArray = stored;
-    refresh();
+async function loadDemoGames() {
+    try {
+        const response = await fetch("./mock.json");
+        if (!response.ok) throw new Error(`mock.json: ${response.status}`);
+
+        const demo = await response.json();
+        demo.forEach(g => g.id = crypto.randomUUID());
+        gamesArray = demo;
+        persistAndRefresh();
+    }
+
+    catch (err) {
+        console.warn("Couldn't load demo games:", err);
+    }
 }
 
 initAddGameModal({
@@ -148,6 +152,13 @@ appEl.addEventListener("click", (e) => {
         const id = favoriteBtn.dataset.id;
         toggleFavorite(id);
         document.querySelector(`#app .favoriteBtn[data-id="${id}"]`)?.focus();
+        return;
+    }
+
+    const demoBtn = e.target.closest(".loadDemoBtn");
+    if (demoBtn) {
+        demoBtn.disabled = true;
+        loadDemoGames().finally(() => { demoBtn.disabled = false; });
         return;
     }
 

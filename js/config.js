@@ -46,7 +46,7 @@ export const DETAIL_FIELDS = [
 export const ADVANCED_ADD_FIELDS = ["startDate", "finishDate", "platform", "lastPlayed", "difficulty", "revisitChance"];
 
 export const EMPTY_STATES = {
-    library:        { icon: "ti-device-gamepad-2",  titleKey: "empty.libraryTitle",     textKey: "empty.libraryText" },
+    library:        { icon: "ti-device-gamepad-2",  titleKey: "empty.libraryTitle",     textKey: "empty.libraryText", demo: true },
     noFavorites:    { icon: "ti-star",              titleKey: "empty.noFavoritesTitle", textKey: "empty.noFavoritesText", action: true },
     filters:        { icon: "ti-filter-off",        titleKey: "empty.filtersTitle",     textKey: "empty.filtersText", action: true }
 };
