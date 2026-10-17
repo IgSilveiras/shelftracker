@@ -1,7 +1,7 @@
 .banner {
     display: flex;
     height: 175px;
-    background-image: url(/assets/banner.webp);
+    background-image: url(../assets/banner.webp);
     background-size: cover;
     background-position: center 50%;
     box-shadow: inset 0 0 16px black;
