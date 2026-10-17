@@ -65,7 +65,7 @@ On your first visit the shelf is empty. Use **Load Demo Games** to fill it with 
 
 - Banner image generated with [Craiyon](https://www.craiyon.com).
 - Icons by [Tabler Icons](https://tabler.io/icons) (MIT License).
-- Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces) and [Manrope](https://fonts.google.com/specimen/Manrope), both under the SIL Open Font License.
+- Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces) and [Inter](https://fonts.google.com/specimen/Inter), both under the SIL Open Font License.
 - Game artwork shown in the demo data, and in any cover URL you add, belongs to its respective owners.
 
 ## License
