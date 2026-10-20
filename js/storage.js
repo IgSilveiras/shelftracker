@@ -3,7 +3,7 @@ import { STATUS_CONFIG } from "./config.js";
 const STORAGE_KEY = "gamesArray";
 const SETTINGS_KEY = "userSettings";
 const PROFILE_KEY = "userProfile";
-const DEFAULT_PROFILE = { username: "Nanashi" };
+const DEFAULT_PROFILE = { username: "Nameless" };
 
 const DEFAULT_SETTINGS = {
     filter: "all",
