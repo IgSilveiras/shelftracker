@@ -45,3 +45,10 @@ export function escapeHTML(value) {
 export function resolveLabel({ labelKey, label }) {
     return labelKey ? t(labelKey) : label;
 }
+
+export function normalizeNumber(raw, { min = -Infinity, max = Infinity, step } = {}) {
+    let n = raw === "" ? 0 : Number(raw);
+    if(!Number.isFinite(n)) n = 0;
+    if (step === 1) n = Math.round(n);
+    return Math.min(max, Math.max(min, n));
+}

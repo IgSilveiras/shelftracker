@@ -1,4 +1,5 @@
 import { DETAIL_FIELDS } from "./config.js";
+import { normalizeNumber } from "./utils.js";
 
 const APP_NAME = "ShelfTracker";
 const SCHEMA_VERSION = 1;
@@ -34,8 +35,7 @@ function sanitizeGame(raw) {
         const value = raw[field.key];
 
         if (field.type === "number") {
-            const n = Number(value);
-            game[field.key] = Number.isFinite(n) ? n : 0;
+            game[field.key] = normalizeNumber(value, field);
             continue;
         }
 

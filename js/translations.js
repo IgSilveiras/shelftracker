@@ -89,7 +89,7 @@ const translations = {
         "field.review": "Review",
         "field.completed100": "100%",
         "addGame.title": "Add Game",
-        "form.name": "Game Name",
+        "form.nameLabel": "Game Name",
         "form.playTimePlaceholder": "Played Hours",
         "form.releasePlaceholder": "Launch Year",
         "form.advanced": "Advanced Options",

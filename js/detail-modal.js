@@ -1,5 +1,5 @@
 import { DETAIL_FIELDS, STATUS_CONFIG } from "./config.js";
-import { closeModalAnimated, hasIntensity, animateModalResize, escapeHTML, resolveLabel } from "./utils.js";
+import { closeModalAnimated, hasIntensity, animateModalResize, escapeHTML, resolveLabel, normalizeNumber } from "./utils.js";
 import { buildStateBadge } from "./badge.js";
 import { buildFieldInput } from "./fields.js";
 import { t } from "./translations.js";
@@ -84,7 +84,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
             const field = DETAIL_FIELDS.find(f => f.key === input.dataset.field);
             let value;
             if (field.type === "checkbox") value = input.checked;
-            else if (field.type === "number") value = input.value === "" ? 0 : Number(input.value);
+            else if (field.type === "number") value = normalizeNumber(input.value, field);
             else value = input.value;
             game[field.key] = value;
         });

@@ -17,7 +17,11 @@ export function buildFieldInput(field, value = "", { id = "", name = "" } = {}) 
     if (field.type === "textarea") return `<textarea ${attrs}>${escapeHTML(value)}</textarea>`;
     if (field.type === "checkbox") return `<input type="checkbox" ${attrs} ${value ? "checked" : ""}>`;
 
-    return `<input type="${field.type}" ${attrs} value="${escapeHTML(value)}">`;
+    const range = field.type === "number"
+        ? ["min", "max", "step"].filter(k => field[k] !== undefined).map(k => `${k}="${field[k]}"`).join("")
+        : "";
+
+    return `<input type="${field.type}" ${attrs}${range} value="${escapeHTML(value)}">`;
 }
 
 export function buildFormGroup(field) {
