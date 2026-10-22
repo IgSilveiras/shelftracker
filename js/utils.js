@@ -49,6 +49,6 @@ export function resolveLabel({ labelKey, label }) {
 export function normalizeNumber(raw, { min = -Infinity, max = Infinity, step } = {}) {
     let n = raw === "" ? 0 : Number(raw);
     if(!Number.isFinite(n)) n = 0;
-    if (step === 1) n = Math.round(n);
+    if (step) n = Math.round(n / step) * step;
     return Math.min(max, Math.max(min, n));
 }
