@@ -46,9 +46,11 @@ export const DETAIL_FIELDS = [
 export const ADVANCED_ADD_FIELDS = ["startDate", "finishDate", "platform", "lastPlayed", "difficulty", "revisitChance"];
 
 export const EMPTY_STATES = {
-    loading:        { icon: "ti-loader-2",          titleKey: "empty.loadingTitle",     textKey: "empty.loadingText" },
-    error:          { icon: "ti-alert-triangle",    titleKey: "empty.errorTitle",       textKey: "empty.errorText", retry: true },
-    library:        { icon: "ti-device-gamepad-2",  titleKey: "empty.libraryTitle",     textKey: "empty.libraryText", demo: true },
-    noFavorites:    { icon: "ti-star",              titleKey: "empty.noFavoritesTitle", textKey: "empty.noFavoritesText", action: true },
-    filters:        { icon: "ti-filter-off",        titleKey: "empty.filtersTitle",     textKey: "empty.filtersText", action: true }
+    loading:            { icon: "ti-loader-2",          titleKey: "empty.loadingTitle",             textKey: "empty.loadingText" },
+    error:              { icon: "ti-alert-triangle",    titleKey: "empty.errorTitle",               textKey: "empty.errorText",             retry: true },
+    libraryViewer:      { icon: "ti-device-gamepad-2",  titleKey: "empty.viewerLibraryTitle",       textKey: "empty.libraryViewerText" },
+    noFavoritesViewer:  { icon: "ti-star",              titleKey: "empty.viewerNoFavoritesTitle",   textKey: "empty.viewerNoFavoritesText", action: true },
+    library:            { icon: "ti-device-gamepad-2",  titleKey: "empty.libraryTitle",             textKey: "empty.libraryText",           demo: true },
+    noFavorites:        { icon: "ti-star",              titleKey: "empty.noFavoritesTitle",         textKey: "empty.noFavoritesText",       action: true },
+    filters:            { icon: "ti-filter-off",        titleKey: "empty.filtersTitle",             textKey: "empty.filtersText",           action: true }
 };

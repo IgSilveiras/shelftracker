@@ -1,6 +1,6 @@
 import { t, onLanguageChange } from "./translations.js";
 
-export function initProfile({ getUsername, onRename }) {
+export function initProfile({ getUsername, onRename, canEdit = () => true }) {
     const nameBtn = document.querySelector("#usernameBtn");
     const nameText = document.querySelector("#usernameText");
     const editWrap = document.querySelector("#usernameEdit");
@@ -12,6 +12,10 @@ export function initProfile({ getUsername, onRename }) {
 
     function render() {
         nameText.textContent = t("profile.shelfTitle", { name: getUsername() }); 
+        const editable = canEdit();
+        nameBtn.disabled = !editable;
+        if (editable) nameBtn.setAttribute("aria-describedby", "usernameHint");
+        else nameBtn.removeAttribute("aria-describedby");
     }
 
     function startEditing() {

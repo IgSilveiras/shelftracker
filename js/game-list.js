@@ -19,8 +19,13 @@ function buildEmptyState(reason) {
 
 const STAR_SVG = `<svg class="starIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245" /></svg>`;
 
-function buildFavoriteButton(game) {
+function buildFavoriteButton(game, readOnly) {
     const isFav = !!game.favorite;
+
+    if (readOnly) {
+        return isFav ? `<span class="favoriteBtn favorited" role="img" aria-label="${t("fav.marked")}">${STAR_SVG}</span>` : "";
+    }
+
     return `
         <button class="favoriteBtn ${isFav ? "favorited" : ""}" data-id="${game.id}" aria-pressed="${isFav}" aria-label="${t(isFav ? "fav.remove" : "fav.add")}">
             ${STAR_SVG}
@@ -31,8 +36,8 @@ function buildFavoriteButton(game) {
 const app = document.querySelector("#app");
 let lastRender = null;
 
-export function renderGames(gamesArray, view, showDragHandle, emptyReason = null) {
-    lastRender = { gamesArray, view, showDragHandle, emptyReason };
+export function renderGames(gamesArray, view, showDragHandle, emptyReason = null, readOnly = false) {
+    lastRender = { gamesArray, view, showDragHandle, emptyReason, readOnly };
 
     if (emptyReason) {
         app.innerHTML = buildEmptyState(emptyReason);
@@ -61,7 +66,7 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
                     <img src="${escapeHTML(thumbnail)}" alt="${escapeHTML(t("card.thumbnailAlt", { name }))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
                     ${handleHTML(name)}
                     ${rating != 0 ? `<p class="gameRating">${rating}</p>` : ""}
-                    ${buildFavoriteButton(element)}
+                    ${buildFavoriteButton(element, readOnly)}
                     ${playTime != 0 ? `<p class="gamePlaytime">${playTime}hs</p>` : ""}
                 </div>
                 <div class="gameCardInfo">
@@ -96,7 +101,7 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
                         <span class="gameRelease">${escapeHTML(release)}</span>
                         ${lastPlayed ? `<span class="gameLastPlayed">· ${t("card.lastPlayed")} ${escapeHTML(lastPlayed)}</span>` : ""}
                     </p>
-                    ${buildFavoriteButton(element)}
+                    ${buildFavoriteButton(element, readOnly)}
                     ${review ? `<p class="gameReview" title="${escapeHTML(review)}">${escapeHTML(review)}</p>` : ""}
                 </div>
                 <div class="gameState">
@@ -117,8 +122,8 @@ export function renderGames(gamesArray, view, showDragHandle, emptyReason = null
 onLanguageChange(() => {
     if (!lastRender) return;
 
-    const { gamesArray, view, showDragHandle, emptyReason } = lastRender;
-    renderGames(gamesArray, view, showDragHandle, emptyReason);
+    const { gamesArray, view, showDragHandle, emptyReason, readOnly } = lastRender;
+    renderGames(gamesArray, view, showDragHandle, emptyReason, readOnly);
 })
 
 export function getFilteredGames(gamesArray, currentFilter, favoritesOnly) {

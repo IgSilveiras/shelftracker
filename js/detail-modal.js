@@ -4,7 +4,7 @@ import { buildStateBadge } from "./badge.js";
 import { buildFieldInput } from "./fields.js";
 import { t } from "./translations.js";
 
-export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onToggleFavorite  }) {
+export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onToggleFavorite, isReadOnly }) {
     let editingMode = false;
     let currentDetailId = null;
     const detailedViewModal = document.querySelector("#detailedViewModal");
@@ -16,6 +16,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
     const detailEditBtn = document.querySelector("#detailedViewModalEditBtn");
     const detailDeleteBtn = document.querySelector("#detailedViewModalDeleteBtn");
     const detailFavoriteBtn = document.querySelector("#detailedViewModalFavoriteBtn");
+    const detailActions = document.querySelector("#detailedViewModalActions");
 
     function refreshDetailHeader(game) {
         detailedViewModal.classList.remove(...Object.keys(STATUS_CONFIG));
@@ -158,6 +159,9 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
             if (!game) return;
 
             refreshDetailHeader(game);
+            const readOnly = isReadOnly();
+            detailActions.hidden = readOnly;
+            detailFavoriteBtn.hidden = readOnly;
             renderDetailFields(game, false);
             updateDetailActionButtons();
             detailedViewModal.showModal();

@@ -46,6 +46,12 @@
                 outline-offset: 4px;
                 border-radius: var(--radius-sm);
             }
+
+            &:disabled {
+                cursor: default;
+
+                i { display: none };
+            }
         }
 
         .usernameEdit {

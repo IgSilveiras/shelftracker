@@ -21,8 +21,12 @@ let currentSort = settings.sort;
 let currentSortOrder = settings.sortOrder;
 let view = settings.view;
 
+// TEMP: when connected to firebase this gets replaced by /u/handle
+const readOnly = new URLSearchParams(location.search).has("readonly");
+
 const profileUI = initProfile({
     getUsername: () => profile.username,
+    canEdit: () => !readOnly,
     onRename(name) {
         profile.username = name;
         saveProfile(profile);
@@ -34,8 +38,8 @@ function persistSettings() {
 }
 
 function getEmptyReason() {
-    if (gamesArray.length === 0) return "library";
-    if (favoritesOnly && currentFilter === "all") return "noFavorites";
+    if (gamesArray.length === 0) return readOnly ? "libraryViewer" : "library";
+    if (favoritesOnly && currentFilter === "all") return readOnly ? "noFavoritesViewer" : "noFavorites";
     return "filters";
 }
 
@@ -54,8 +58,8 @@ function refresh() {
     }
     
     const visible = sortGames(getFilteredGames(gamesArray, currentFilter, favoritesOnly), currentSort, currentSortOrder);
-    const showDragHandle = currentSort === "custom" && currentFilter === "all" && !favoritesOnly;
-    renderGames(visible, view, showDragHandle, visible.length === 0 ? getEmptyReason() : null);
+    const showDragHandle = !readOnly && currentSort === "custom" && currentFilter === "all" && !favoritesOnly;
+    renderGames(visible, view, showDragHandle, visible.length === 0 ? getEmptyReason() : null, readOnly);
     dragController.setEnabled(showDragHandle);
 }
 
@@ -159,6 +163,7 @@ initAddGameModal({
 
 const detailModal = initDetailModal({
     getGame: getGameById,
+    isReadOnly: () => readOnly,
     onGameSaved(game, previous) {
         refresh();
         persist(store.saveGame(game), () => {
@@ -206,7 +211,7 @@ appEl.addEventListener("click", (e) => {
         return;
     }
 
-    const favoriteBtn = e.target.closest(".favoriteBtn");
+    const favoriteBtn = e.target.closest("button.favoriteBtn");
     if (favoriteBtn) {
         const id = favoriteBtn.dataset.id;
         toggleFavorite(id);
@@ -307,3 +312,6 @@ initImport({
         replaceGames(games);
     },
 });
+
+addGameBtn.hidden = readOnly;
+document.querySelector(".backupActions").hidden = readOnly;
