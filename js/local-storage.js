@@ -14,6 +14,7 @@ export function createLocalStore() {
 
     return {
         async loadGames() {
+            await new Promise(r => setTimeout(r, 2000))
             return read();
         },
 

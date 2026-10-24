@@ -39,7 +39,14 @@ function getEmptyReason() {
     return "filters";
 }
 
+function updateActionsAvailability() {
+    const blocked = status !== "ready";
+    for (const btn of [addGameBtn, importBtn, exportBtn]) btn.disabled = blocked;
+}
+
 function refresh() {
+    updateActionsAvailability();
+
     if (status !== "ready") {
         renderGames([], view, false, status);
         dragController.setEnabled(false);

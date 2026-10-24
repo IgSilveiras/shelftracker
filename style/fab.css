@@ -32,15 +32,22 @@
         transition: max-width 0.25s ease-in, opacity 0.2s ease 0.08s, margin-left 0.25s ease;
     }
 
-    &:hover i,
-    &:focus-visible i {
+    &:not(:disabled):hover i,
+    &:not(:disabled):focus-visible i {
         transform: rotate(180deg);
     }
 
-    &:hover .fabLabel,
-    &:focus-visible .fabLabel {
+    &:not(:disabled):hover .fabLabel,
+    &:not(:disabled):focus-visible .fabLabel {
         max-width: 120px;
         opacity: 1;
         margin-left: var(--space-2);
+    }
+
+    &:disabled {
+        background: var(--surface-3);
+        color: var(--text-muted);
+        box-shadow: none;
+        cursor: not-allowed;
     }
 }
