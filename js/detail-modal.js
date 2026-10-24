@@ -32,6 +32,13 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
     function refreshFavoriteButton(game) {
         const isFav = !!game.favorite;
         detailFavoriteBtn.classList.toggle("favorited", isFav);
+        
+        if (isReadOnly()) {
+            detailFavoriteBtn.removeAttribute("aria-pressed");
+            detailFavoriteBtn.setAttribute("aria-label", t("fav.marked"));
+            return;
+        }
+
         detailFavoriteBtn.setAttribute("aria-pressed", isFav);
         detailFavoriteBtn.setAttribute("aria-label", t(isFav ? "fav.remove" : "fav.add"));
     }
@@ -145,6 +152,8 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
     });
 
     detailFavoriteBtn.addEventListener("click", () => {
+        if (isReadOnly()) return;
+        
         onToggleFavorite(currentDetailId);
         const game = getGame(currentDetailId);
         if (game) refreshFavoriteButton(game);
@@ -161,7 +170,8 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
             refreshDetailHeader(game);
             const readOnly = isReadOnly();
             detailActions.hidden = readOnly;
-            detailFavoriteBtn.hidden = readOnly;
+            detailFavoriteBtn.disabled = readOnly;
+            detailFavoriteBtn.hidden = readOnly && !game.favorite;
             renderDetailFields(game, false);
             updateDetailActionButtons();
             detailedViewModal.showModal();

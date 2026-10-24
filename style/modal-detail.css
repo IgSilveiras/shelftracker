@@ -70,8 +70,8 @@ dialog#detailedViewModal {
                 cursor: pointer;
                 transition: 0.075s, color 0s;
 
-                &:hover,
-                &:focus-visible {
+                &:not(disabled):hover,
+                &:not(disabled):focus-visible {
                     background: var(--surface-3);
                 }
 
@@ -79,6 +79,10 @@ dialog#detailedViewModal {
                     background: var(--overlay-bg);
                     border-color: var(--text-primary);
                     color: var(--highlight);
+                }
+
+                &:disabled {
+                    cursor: default;
                 }
             }
         }
