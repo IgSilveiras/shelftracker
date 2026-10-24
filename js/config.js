@@ -48,7 +48,7 @@ export const ADVANCED_ADD_FIELDS = ["startDate", "finishDate", "platform", "last
 export const EMPTY_STATES = {
     loading:            { icon: "ti-loader-2",          titleKey: "empty.loadingTitle",             textKey: "empty.loadingText" },
     error:              { icon: "ti-alert-triangle",    titleKey: "empty.errorTitle",               textKey: "empty.errorText",             retry: true },
-    libraryViewer:      { icon: "ti-device-gamepad-2",  titleKey: "empty.viewerLibraryTitle",       textKey: "empty.libraryViewerText" },
+    libraryViewer:      { icon: "ti-device-gamepad-2",  titleKey: "empty.viewerLibraryTitle",       textKey: "empty.viewerLibraryText" },
     noFavoritesViewer:  { icon: "ti-star",              titleKey: "empty.viewerNoFavoritesTitle",   textKey: "empty.viewerNoFavoritesText", action: true },
     library:            { icon: "ti-device-gamepad-2",  titleKey: "empty.libraryTitle",             textKey: "empty.libraryText",           demo: true },
     noFavorites:        { icon: "ti-star",              titleKey: "empty.noFavoritesTitle",         textKey: "empty.noFavoritesText",       action: true },
