@@ -80,6 +80,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
     }
 
     function saveDetailFields(game) {
+        const previous = structuredClone(game);
         document.querySelectorAll("#detailedViewModalInfo [data-field]").forEach(input => {
             const field = DETAIL_FIELDS.find(f => f.key === input.dataset.field);
             let value;
@@ -92,7 +93,7 @@ export function initDetailModal({ getGame, onGameSaved, onDeleteRequested, onTog
         if (!hasIntensity(game.playState)) delete game.intensity;
         if (game.playState !== "completed") delete game.completed100;
 
-        onGameSaved();
+        onGameSaved(game, previous);
     }
 
     function toggleDetailMode() {

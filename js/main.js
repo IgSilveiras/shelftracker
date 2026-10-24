@@ -1,4 +1,6 @@
-import { loadGamesFromStorage, saveGamesToStorage, loadSettings, saveSettings, loadProfile, saveProfile } from "./storage.js";
+import { loadSettings, saveSettings, loadProfile, saveProfile } from "./storage.js";
+import { createLocalStore } from "./local-storage.js";
+import { nextOrder, moveGame, applyOrders, compareByOrder } from "./order.js";
 import { renderGames, getFilteredGames, sortGames } from "./game-list.js";
 import { initAddGameModal } from "./add-game-modal.js";
 import { initDetailModal } from "./detail-modal.js";
@@ -9,6 +11,8 @@ import { initImport } from "./import-modal.js";
 import { initProfile } from "./profile.js";
 
 let gamesArray = [];
+const store = createLocalStore();
+let status = "loading";
 const settings = loadSettings();
 const profile = loadProfile();
 let currentFilter = settings.filter;
@@ -36,6 +40,12 @@ function getEmptyReason() {
 }
 
 function refresh() {
+    if (status !== "ready") {
+        renderGames([], view, false, status);
+        dragController.setEnabled(false);
+        return;
+    }
+    
     const visible = sortGames(getFilteredGames(gamesArray, currentFilter, favoritesOnly), currentSort, currentSortOrder);
     const showDragHandle = currentSort === "custom" && currentFilter === "all" && !favoritesOnly;
     renderGames(visible, view, showDragHandle, visible.length === 0 ? getEmptyReason() : null);
@@ -48,9 +58,9 @@ function moveGameInCustomOrder(domOldIndex, domNewIndex) {
     const oldIndex = reversed ? length - 1 - domOldIndex : domOldIndex;
     const newIndex = reversed ? length - 1 - domNewIndex : domNewIndex;
 
-    const [moved] = gamesArray.splice(oldIndex, 1);
-    gamesArray.splice(newIndex, 0, moved);
-    persistAndRefresh();
+    const { changes, previous } = moveGame(gamesArray, oldIndex, newIndex);
+    refresh();
+    persist(store.updateOrders(changes), () => applyOrders(gamesArray, previous));
 }
 
 const appEl = document.querySelector("#app");
@@ -76,17 +86,43 @@ initKeyboardReorder({
     },
 })
 
-function persistAndRefresh() {
-    saveGamesToStorage(gamesArray);
+function persist(operation, rollback) {
+    operation.catch((err) => {
+        console.error("Couldn't save changes:", err);
+        rollback();
+        refresh();
+    })
+}
+
+function replaceGames(newGames) {
+    const previous = gamesArray;
+    gamesArray = newGames;
     refresh();
+    persist(store.replaceAll(newGames), () => { gamesArray = previous; });
 }
 
 function getGameById(id) {
     return gamesArray.find(g => g.id === id);
 }
 
-gamesArray = loadGamesFromStorage() ?? [];
-refresh();
+async function init() {
+    status = "loading";
+    refresh();
+
+    try {
+        gamesArray = await store.loadGames();
+        status = "ready";
+    }
+
+    catch (err) {
+        console.error("Couln't load games:", err);
+        status = "error";
+    }
+
+    refresh();
+}
+
+init();
 
 async function loadDemoGames() {
     try {
@@ -94,9 +130,8 @@ async function loadDemoGames() {
         if (!response.ok) throw new Error(`mock.json: ${response.status}`);
 
         const demo = await response.json();
-        demo.forEach(g => g.id = crypto.randomUUID());
-        gamesArray = demo;
-        persistAndRefresh();
+        demo.forEach((g, i) => { g.id = crypto.randomUUID(); g.order = i; });
+        replaceGames(demo);
     }
 
     catch (err) {
@@ -106,15 +141,22 @@ async function loadDemoGames() {
 
 initAddGameModal({
     onGameAdded(newGame) {
+        newGame.order = nextOrder(gamesArray);
         gamesArray.push(newGame);
-        persistAndRefresh();
+        refresh();
+        persist(store.addGame(newGame), () => {
+            gamesArray = gamesArray.filter(g => g.id !== newGame.id);
+        });
     },
 });
 
 const detailModal = initDetailModal({
     getGame: getGameById,
-    onGameSaved() {
-        persistAndRefresh();
+    onGameSaved(game, previous) {
+        refresh();
+        persist(store.saveGame(game), () => {
+            gamesArray = gamesArray.map(g => g.id === previous.id ? previous : g);
+        });
     },
     onDeleteRequested(id) {
         deleteModal.open(id);
@@ -128,9 +170,13 @@ const deleteModal = initDeleteModal({
         const index = gamesArray.findIndex(g => g.id === id);
         if (index === -1) return;
 
-        gamesArray.splice(index, 1);
-        persistAndRefresh();
+        const [removed] = gamesArray.splice(index, 1);
+        refresh();
         detailModal.close();
+        persist(store.deleteGame(id), () => {
+            gamesArray.push(removed);
+            gamesArray.sort(compareByOrder);
+        });
     },
 });
 
@@ -138,12 +184,18 @@ function toggleFavorite(id) {
     const game = getGameById(id);
     if (!game) return;
     game.favorite = !game.favorite;
-    persistAndRefresh();
+    refresh();
+    persist(store.saveGame(game), () => { game.favorite = !game.favorite; });
 }
 
 appEl.addEventListener("click", (e) => {
     if (e.target.closest(".clearFiltersBtn")) {
         clearFilters();
+        return;
+    }
+
+    if (e.target.closest(".retryBtn")) {
+        init();
         return;
     }
 
@@ -238,13 +290,13 @@ document.querySelector("#exportBtn").addEventListener("click", () => downloadExp
 initImport({
     getGamesCount: () => gamesArray.length,
     onImport({ username, games }) {
-        gamesArray = games;
+        games.forEach((g, i) => { g.order = i; });
         if (username) {
             profile.username = username;
             saveProfile(profile);
             profileUI.render();
         }
 
-        persistAndRefresh();
+        replaceGames(games);
     },
 });

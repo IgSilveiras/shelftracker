@@ -6,12 +6,13 @@ import { t, onLanguageChange } from "./translations.js";
 function buildEmptyState(reason) {
     const s = EMPTY_STATES[reason];
     return `
-        <div class="emptyState" role="status">
+        <div class="emptyState" role="${reason === "error" ? "alert" : "status"}">
             <i class="ti ${s.icon}" aria-hidden="true"></i>
             <p class="emptyStateTitle">${t(s.titleKey)}</p>
             <p class="emptyStateText">${t(s.textKey)}</p>
             ${s.action ? `<button type="button" class="btn btnNeutral clearFiltersBtn">${t("filter.clear")}</button>` : ""}
             ${s.demo ? `<button type="button" class="btn btnAccent loadDemoBtn">${t("empty.loadDemo")}</button>` : ""}
+            ${s.retry ? `<button type="button" class="btn btnNeutral retryBtn">${t("empty.errorRetry")}</button>` : ""}
         </div>
     `;
 }

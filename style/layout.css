@@ -162,9 +162,22 @@
     }
 
     .clearFiltersBtn,
-    .loadDemoBtn {
+    .loadDemoBtn,
+    .retryBtn {
         margin-top: var(--space-2);
     }
+
+    .ti-loader-2 {
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .emptyState .ti-loader-2 { animation: none; }
 }
 
 @media (max-width: 1023px) {
