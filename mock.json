@@ -11,7 +11,7 @@
         "lastPlayed": "2026-10-12",
         "difficulty": "medium",
         "revisitChance": "maybe",
-        "platform": "PC",
+        "platform": "PC | Steam",
         "review": "Huge map and a great soundtrack. Settlements are the best part.",
         "favorite": false
     },
@@ -27,7 +27,7 @@
         "lastPlayed": "2026-10-19",
         "difficulty": "hard",
         "revisitChance": "likely",
-        "platform": "PC",
+        "platform": "PC | Steam",
         "review": "Ranked grind in progress. Campaign was short but fun.",
         "favorite": false
     },
@@ -43,7 +43,7 @@
         "lastPlayed": "2026-06-30",
         "difficulty": "easy",
         "revisitChance": "definitely",
-        "platform": "PC",
+        "platform": "PC | Steam",
         "review": "Beautiful world, slow pace. I'll get back to it on a quiet weekend.",
         "favorite": false
     },
@@ -60,7 +60,7 @@
         "lastPlayed": "2025-04-05",
         "difficulty": "medium",
         "revisitChance": "likely",
-        "platform": "PC",
+        "platform": "PC | Epic Games",
         "review": "Story done and 100%. Still the best open world to just mess around in.",
         "favorite": true
     },
