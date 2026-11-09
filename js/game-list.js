@@ -13,6 +13,7 @@ function buildEmptyState(reason) {
             ${s.action ? `<button type="button" class="btn btnNeutral clearFiltersBtn">${t("filter.clear")}</button>` : ""}
             ${s.demo ? `<button type="button" class="btn btnAccent loadDemoBtn">${t("empty.loadDemo")}</button>` : ""}
             ${s.retry ? `<button type="button" class="btn btnNeutral retryBtn">${t("empty.errorRetry")}</button>` : ""}
+            ${s.home ? `<a class="btn btnNeutral" href="/">${t("empty.goHome")}</a>` : ""}
         </div>
     `;
 }

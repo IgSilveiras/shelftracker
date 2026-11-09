@@ -1,4 +1,4 @@
-import { hasIntensity, closeModalAnimated } from "./utils.js";
+import { hasIntensity, closeModalAnimated, normalizeNumber } from "./utils.js";
 import { DETAIL_FIELDS, ADVANCED_ADD_FIELDS } from "./config.js";
 import { buildFormGroup } from "./fields.js";
 import { onLanguageChange } from "./translations.js";
@@ -64,9 +64,9 @@ export function initAddGameModal({ onGameAdded }) {
         const formData = new FormData(form);
         const newGame = Object.fromEntries(formData);
 
-        newGame.rating = newGame.rating === "" ? 0 : Number(newGame.rating);
-        newGame.release = newGame.release === "" ? 0 : Number(newGame.release);
-        newGame.playTime = newGame.playTime === "" ? 0 : Number(newGame.playTime);
+        newGame.rating = newGame.rating === "" ? 0 : normalizeNumber(Number(newGame.rating));
+        newGame.release = newGame.release === "" ? 0 : normalizeNumber(Number(newGame.release), 0, 3000);
+        newGame.playTime = newGame.playTime === "" ? 0 : normalizeNumber(Number(newGame.playTime), 0, 1000000);
         if (newGame.completed100 === "on") newGame.completed100 = true;
         if (!newGame.intensity || !hasIntensity(newGame.playState)) delete newGame.intensity;
 

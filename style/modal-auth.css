@@ -1,0 +1,110 @@
+dialog#authModal {
+    width: min(380px, 100% - 2rem);
+    padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
+
+    .authView {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .formGroup {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+
+        label {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: var(--space-2);
+            background: var(--surface-1);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font-family-base);
+            font-size: var(--font-base);
+            text-align: center;
+
+            &:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+        }
+    }
+
+    .authActions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .authLinks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-3);
+
+        button {
+            padding: 0;
+            background: none;
+            border: none;
+            color: var(--text-accent);
+            font-size: var(--font-sm);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .authMessage {
+        min-height: 1.25em;
+        margin-top: var(--space-3);
+        color: var(--text-secondary);
+        font-size: var(--font-sm);
+
+        &[data-kind="error"] { color: var(--text-danger) }
+    }
+
+    .authNotice {
+        font-size: var(--font-sm);
+        color: var(--text-secondary);
+    }
+
+    .authHint {
+        font-size: var(--font-xs);
+        color: var(--text-muted);
+    }
+
+    .authCheck {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        gap: var(--space-1);
+        
+        span {
+            font-size: var(--font-xs);
+            color: var(--text-secondary);
+        }
+
+        #authImportDelete {
+            width: 1.1em;
+            height: 1.1em;
+            accent-color: var(--accent);
+        }
+    }
+
+    #authAccountView .authPublicRow {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space.1);
+    }
+}

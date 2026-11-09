@@ -18,7 +18,7 @@
     <meta property="og:image" content="https://igsilveiras.github.io/shelftracker/assets/og-cover.png">
     <meta property="og:image:alt" content="Shelftracker logo and title">
     <meta property="og:locale" content="en_US">
-    <meta name="twitter:card" content="og-cover.png">
+    <meta name="twitter:summary_large_image" content="og-cover.png">
 
     <!-- TablerIcons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.47.0/tabler-icons-200.min.css" integrity="sha512-zDwDnyfLle2c87N9D6zssQzAkp9P7I+SlMdHlWMgVlK0yCcEslrgl8TzbEBvHdv9fsSD0NjfI6jZ6DzN2Ik8ng==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -26,27 +26,29 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Manrope&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter&display=swap" rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="./style/tokens.css">
-    <link rel="stylesheet" href="./style/base.css">
-    <link rel="stylesheet" href="./style/layout.css">
-    <link rel="stylesheet" href="./style/badges.css">
-    <link rel="stylesheet" href="./style/cards-grid.css">
-    <link rel="stylesheet" href="./style/cards-list.css">
-    <link rel="stylesheet" href="./style/modal-base.css">
-    <link rel="stylesheet" href="./style/modal-add-game.css">
-    <link rel="stylesheet" href="./style/modal-detail.css">
-    <link rel="stylesheet" href="./style/modal-delete.css">
-    <link rel="stylesheet" href="./style/modal-import.css">
-    <link rel="stylesheet" href="./style/fab.css">
-    <link rel="stylesheet" href="./style/footer.css">
+    <link rel="stylesheet" href="/style/tokens.css">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/layout.css">
+    <link rel="stylesheet" href="/style/badges.css">
+    <link rel="stylesheet" href="/style/cards-grid.css">
+    <link rel="stylesheet" href="/style/cards-list.css">
+    <link rel="stylesheet" href="/style/modal-base.css">
+    <link rel="stylesheet" href="/style/modal-add-game.css">
+    <link rel="stylesheet" href="/style/modal-detail.css">
+    <link rel="stylesheet" href="/style/modal-delete.css">
+    <link rel="stylesheet" href="/style/modal-import.css">
+    <link rel="stylesheet" href="/style/modal-auth.css">
+    <link rel="stylesheet" href="/style/fab.css">
+    <link rel="stylesheet" href="/style/footer.css">
+    <link rel="stylesheet" href="/style/toast.css">
 
 
     <!-- Favicon -->
-    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="./assets/apple-touch.icon.png">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
 </head>
 
@@ -62,6 +64,11 @@
                 </span>
             </h1>
             <span id="usernameHint" data-translation="profile.hint" hidden>Click to edit your name</span>
+        </div>
+
+        <div class="accountBar">
+            <span id="modeBadge" class="modeBadge"></span>
+            <button type="button" id="accountBtn" class="btn btnNeutral accountBtn"></button>
         </div>
     </div>
 
@@ -126,7 +133,7 @@
 
             <div class="formGroup" id="formPlayTimeGroup">
                 <label for="formPlayTime" data-translation="field.playTime">Playtime</label>
-                <input type="number" name="playTime" id="formPlayTime" placeholder="Played Hours" data-translation-placeholder="form.playTimePlaceholder">
+                <input type="number" name="playTime" id="formPlayTime" min="0" max="1000000" placeholder="Played Hours" data-translation-placeholder="form.playTimePlaceholder">
             </div>
 
             <div class="formGroup" id="formRatingGroup">
@@ -217,6 +224,89 @@
         </div>
     </dialog>
 
+    <dialog id="authModal" aria-labelledby="authModalTitle">
+        <h2 id="authModalTitle"></h2>
+
+        <form id="authForm" class="authView" novalidate>
+            <div class="formGroup">
+                <label for="authEmail" data-translation="auth.email">Email</label>
+                <input type="email" id="authEmail" autocomplete="email">
+            </div>
+            <div class="formGroup" id="authPasswordGroup">
+                <label for="authPassword" data-translation="auth.password">Password</label>
+                <input type="password" id="authPassword">
+            </div>
+            <button type="submit" class="btn btnAccent" id="authSubmitBtn"></button>
+            <div class="authLinks">
+                <button type="button" id="authSwitchBtn"></button>
+                <button type="button" id="authForgotBtn" data-translation="auth.forgot">Forgot your password?</button>
+            </div>
+        </form>
+
+        <div id="authVerifyView" class="authView" hidden>
+            <p id="authVerifyText"></p>
+            <div class="authActions">
+                <button type="button" class="btn btnAccent" id="authVerifiedBtn" data-translation="auth.verifiedCheck">I've verified my email</button>
+                <button type="button" class="btn btnNeutral" id="authResendBtn" data-translation="auth.resend">Resend Email</button>
+            </div>
+        </div>
+
+        <div id="authAccountView" class="authView" hidden>
+            <p id="authAccountEmail"></p>
+            <p id="authAccountStatus"></p>
+            <div id="authPublicRow" class="authPublicRow" hidden>
+                <label class="authCheck">
+                    <input type="checkbox" id="authPublicToggle" aria-describedby="authPublicHint">
+                    <span data-translation="account.publicLabel">Public list</span>
+                </label>
+            </div>
+            <div class="authActions">
+                <button type="button" class="btn btnAccent" id="authAccountVerifyBtn" data-translation="auth.verifyNow" hidden>Verify Email</button>
+                <button type="button" class="btn btnNeutral" id="authRenameBtn" data-translation="account.rename" hidden>Change Username</button>
+                <button type="button" class="btn btnDanger" id="authLogoutBtn" data-translation="account.logout">Logout</button>
+            </div>
+            <p class="authHint" id="authDeleteHint">To delete your account, email nanashidev774@gmail.com</p>
+        </div>
+
+        <form id="authSetupForm" class="authView" novalidate hidden>
+            <p data-translation="profile.setupIntro">This is how your shelf will be known.</p>
+            <div class="formGroup">
+                <label for="authUsername" data-translation="profile.usernameLabel">Username</label>
+                <input type="text" id="authUsername" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false" aria-describedby="authUsernameHint">
+                <p class="authHint" id="authUsernameHint" data-translation="profile.usernameHint">3 to 20 characters: letters, numbers, - and _</p>
+            </div>
+            <p class="authNotice" data-translation="profile.publicNotice">Your shelf will be public by default.</p>
+            <button type="submit" class="btn btnAccent" id="authSetupSubmitBtn" data-translation="profile.setupSubmit">Continue</button>
+        </form>
+
+        <form id="authRenameForm" class="authView" novalidate hidden>
+            <div class="formGroup">
+                <label for="authRenameInput" data-translation="profile.usernameLabel">Username</label>
+                <input type="text" id="authRenameInput" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false" aria-describedby="authRenameHint">
+                <p class="authHint" id="authRenameHint" data-translation="profile.usernameHint">3 to 20 characters: letters, numbers, - and _</p>
+            </div>
+            <p class="authNotice" data-translation="profile.renameNotice">Links with your previous username will stop working.</p>
+            <div class="authActions">
+                <button type="submit" class="btn btnAccent" id="authRenameSubmitBtn" data-translation="common.confirm">Confirm</button>
+                <button type="button" class="btn btnDanger" id="authRenameCancelBtn" data-translation="common.cancel">Cancel</button>
+            </div>
+        </form>
+
+        <div id="authImportView" class="authView" hidden>
+            <p data-translation="auth.importText">We found games saved in this browser. Add them to your list?</p>
+            <label class="authCheck">
+                <input type="checkbox" id="authImportDelete">
+                <span data-translation="auth.importDelete">Delete local list after importing</span>
+            </label>
+            <div class="authActions">
+                <button type="button" class="btn btnAccent" id="authImportYesBtn" data-translation="auth.importYes">Add them at the end</button>
+                <button type="button" class="btn btnNeutral" id="authImportNoBtn" data-translation="auth.importNo">Don't import</button>
+            </div> 
+        </div>
+
+        <p id="authMessage" class="authMessage"></p>
+    </dialog>
+
     <footer>
         <button type="button" id="languageToggle" class="linkBtn" aria-label="Change Language" data-translation-aria-label="lang.toggle">EN</button>
 
@@ -238,6 +328,8 @@
         </div>
     </dialog>
 
-    <script type="module" src="./js/main.js"></script>
+    <div id="toast" popover="manual" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>

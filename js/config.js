@@ -22,7 +22,7 @@ const DIFFICULTY_OPTIONS = ["easy", "medium", "hard", "veryHard"]
 export const DETAIL_FIELDS = [
     { key: "name",          label: "Name",           type: "text",   hideInReadMode: true , required: true, fullWidth: true },
     { key: "thumbnail",     label: "Thumbnail URL",  type: "url",    hideInReadMode: true, fullWidth: true },
-    { key: "release",       label: "Release Year",   type: "number", hideInReadMode: true },
+    { key: "release",       label: "Release Year",   type: "number", hideInReadMode: true, min: 0, max: 2100 },
     { key: "playState",     label: "Play State",     type: "select", hideInReadMode: true, required: true, options: Object.entries(STATUS_CONFIG).map(([value, cfg]) => ({ value, labelKey: cfg.labelKey })) },
     { key: "intensity",     label: "Intensity",      type: "select", hideInReadMode: true, 
         visibleWhen: (playState) => !NO_INTENSITY_STATES.includes(playState),
@@ -33,7 +33,7 @@ export const DETAIL_FIELDS = [
     },
     { key: "completed100",  label: "100%", type: "checkbox", hideInReadMode: true, visibleWhen: (playState) => playState === "completed" },
     { key: "rating",        label: "Rating",         type: "number", min: 0, max: 10, step: 0.5 },
-    { key: "playTime",      label: "Playtime",       type: "number", min: 0, suffix: "hs" },
+    { key: "playTime",      label: "Playtime",       type: "number", min: 0, max: 1000000, suffix: "hs" },
     { key: "startDate",     label: "Start Date",     type: "date" },
     { key: "finishDate",    label: "Finish Date",    type: "date" },
     { key: "platform",      label: "Platform",       type: "text" },
@@ -48,6 +48,8 @@ export const ADVANCED_ADD_FIELDS = ["startDate", "finishDate", "platform", "last
 export const EMPTY_STATES = {
     loading:            { icon: "ti-loader-2",          titleKey: "empty.loadingTitle",             textKey: "empty.loadingText" },
     error:              { icon: "ti-alert-triangle",    titleKey: "empty.errorTitle",               textKey: "empty.errorText",             retry: true },
+    notFound:           { icon: "ti-user-off",          titleKey: "empty.notFoundTitle",            textKey: "empty.notFoundText",          home: true},
+    private:            { icon: "ti-lock",              titleKey: "empty.privateTitle",             textKey: "empty.privateText",           home: true},
     libraryViewer:      { icon: "ti-device-gamepad-2",  titleKey: "empty.viewerLibraryTitle",       textKey: "empty.viewerLibraryText" },
     noFavoritesViewer:  { icon: "ti-star",              titleKey: "empty.viewerNoFavoritesTitle",   textKey: "empty.viewerNoFavoritesText", action: true },
     library:            { icon: "ti-device-gamepad-2",  titleKey: "empty.libraryTitle",             textKey: "empty.libraryText",           demo: true },

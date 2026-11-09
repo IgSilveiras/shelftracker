@@ -3,6 +3,8 @@ import { normalizeNumber } from "./utils.js";
 
 const APP_NAME = "ShelfTracker";
 const SCHEMA_VERSION = 1;
+const TEXT_LIMITS = { name: 200, platform: 50, review: 15000, thumbnail: 2000 };
+const DATE_KEYS = ["startDate", "finishDate", "lastPlayed"];
 
 export function downloadExport(profile, games) {
     const payload = {
@@ -26,7 +28,7 @@ export function downloadExport(profile, games) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function sanitizeGame(raw) {
+export function sanitizeGame(raw) {
     if (typeof raw !== "object" || raw === null) return null;
 
     const game = {};
@@ -56,6 +58,16 @@ function sanitizeGame(raw) {
     }
 
     if (!game.name?.trim() || !game.playState) return null;
+
+    for (const [key, max] of Object.entries(TEXT_LIMITS)) {
+        if (game[key]) game[key] = game[key].slice(0, max);
+    }
+
+    if (game.thumbnail && !/^https?:\/\//.test(game.thumbnail)) delete game.thumbnail;
+
+    for (const key of DATE_KEYS) {
+        if (game[key] && !/^\d{4}-\d{2}-\d{2}$/.test(game[key])) delete game[key];
+    }
 
     if (raw.favorite === true) game.favorite = true;
     game.id = typeof raw.id === "string" && /^[\w-]{1,64}$/.test(raw.id) ? raw.id : crypto.randomUUID();

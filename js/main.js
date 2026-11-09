@@ -1,4 +1,4 @@
-import { loadSettings, saveSettings, loadProfile, saveProfile } from "./storage.js";
+import { loadSettings, saveSettings, loadProfile, saveProfile, loadGamesFromStorage, saveGamesToStorage } from "./storage.js";
 import { createLocalStore } from "./local-storage.js";
 import { nextOrder, moveGame, applyOrders, compareByOrder } from "./order.js";
 import { renderGames, getFilteredGames, sortGames } from "./game-list.js";
@@ -6,12 +6,22 @@ import { initAddGameModal } from "./add-game-modal.js";
 import { initDetailModal } from "./detail-modal.js";
 import { initDeleteModal } from "./delete-modal.js";
 import { initCustomOrderDrag, initKeyboardReorder } from "./reorder.js";
-import { downloadExport } from "./backup.js";
+import { downloadExport, sanitizeGame } from "./backup.js";
 import { initImport } from "./import-modal.js";
 import { initProfile } from "./profile.js";
+import { mightHaveSession, startSession, retrySession, hasSessionError, onSessionChange, getSessionUser, getSessionProfile, isSessionSettled, whenSessionSettled } from "./session.js";
+import { createFirestoreStore } from "./firestore-store.js";
+import { loadFirebase } from "./firebase.js";
+import { initAuthModal } from "./auth-modal.js";
+import { getRoute } from "./route.js";
+import { resolvePublicShelf } from "./public-shelf.js";
+import { t, onLanguageChange } from "./translations.js";
+import { showToast } from "./toast.js";
 
 let gamesArray = [];
-const store = createLocalStore();
+let store = createLocalStore();
+let activeKey = null;
+let loadToken = 0;
 let status = "loading";
 const settings = loadSettings();
 const profile = loadProfile();
@@ -20,13 +30,22 @@ let favoritesOnly = settings.favoritesOnly;
 let currentSort = settings.sort;
 let currentSortOrder = settings.sortOrder;
 let view = settings.view;
-
-// TEMP: when connected to firebase this gets replaced by /u/handle
-const readOnly = new URLSearchParams(location.search).has("readonly");
+const route = getRoute();
+const SESSION_WAIT_MS = 8000;
+const readOnly = route.type === "public";
+let displayMode = readOnly ? "public" : "local";
+let publicUsername = null;
 
 const profileUI = initProfile({
-    getUsername: () => profile.username,
-    canEdit: () => !readOnly,
+    getUsername: () => {
+        if (displayMode === "public") return publicUsername ?? route.handle ?? "...";
+        if (displayMode === "account") return getSessionProfile().username;
+        if (displayMode === "pending") return "...";
+        return profile.username;
+    },
+
+    canEdit: () => !readOnly && displayMode === "local",
+
     onRename(name) {
         profile.username = name;
         saveProfile(profile);
@@ -98,10 +117,13 @@ initKeyboardReorder({
 })
 
 function persist(operation, rollback) {
+    const token = loadToken;
     operation.catch((err) => {
         console.error("Couldn't save changes:", err);
+        if (token !== loadToken) return;
         rollback();
         refresh();
+        showToast(t("toast.saveError"));
     })
 }
 
@@ -116,16 +138,78 @@ function getGameById(id) {
     return gamesArray.find(g => g.id === id);
 }
 
-async function init() {
+function redirectIfOwner() {
+    if (!readOnly) return false;
+
+    const own = getSessionProfile()?.username;
+    if (!own || own.toLowerCase() !== route.handle?.toLowerCase()) return false;
+
+    location.replace("/" + location.search);
+    return true;
+}
+
+async function startPublicView() {
+    const token = ++loadToken;
     status = "loading";
     refresh();
 
+    if (mightHaveSession()) {
+        await Promise.race([
+            whenSessionSettled(),
+            new Promise((resolve) => setTimeout(resolve, SESSION_WAIT_MS)),
+        ]);
+        if (token !== loadToken) return;
+        if (redirectIfOwner()) return;
+    }
+
     try {
+        const result = route.handle
+            ? await resolvePublicShelf(route.handle)
+            : { status: "notFound" };
+        if (token !== loadToken) return;
+
+        if (result.username) {
+            publicUsername = result.username;
+            document.title = `${result.username} · ShelfTracker`;
+            profileUI.render();
+        }
+
+        if (result.status !== "ok") {
+            status = result.status;
+            return;
+        }
+
+        store = result.store;
         gamesArray = await store.loadGames();
+        if (token !== loadToken) return;
         status = "ready";
     }
 
     catch (err) {
+        if (token !== loadToken) return;
+        console.error("Couldn't load public shelf:", err);
+        status = err?.code === "permission-denied" ? "private" : "error";
+    }
+
+    finally {
+        if (token === loadToken) refresh();
+    }
+}
+
+async function init() {
+    const token = ++loadToken;
+    status = "loading";
+    refresh();
+
+    try {
+        const games = await store.loadGames();
+        if (token !== loadToken) return;
+        gamesArray = games;
+        status = "ready";
+    }
+
+    catch (err) {
+        if (token !== loadToken) return;
         console.error("Couln't load games:", err);
         status = "error";
     }
@@ -133,11 +217,68 @@ async function init() {
     refresh();
 }
 
-init();
+function currentMode() {
+    if (hasSessionError()) return "error";
+
+    const user = getSessionUser();
+    if (user === undefined && mightHaveSession()) return "pending";
+
+    if (user?.emailVerified) {
+        const sessionProfile = getSessionProfile();
+        if (sessionProfile === undefined) return "pending";
+        if (sessionProfile) return "account";
+    }
+
+    return "local";
+}
+
+function applyMode() {
+    const mode = currentMode();
+    displayMode = mode;
+    profileUI.render();
+    renderAccountUI();
+
+    if (mode === "pending" || mode === "error") {
+        loadToken++;
+        activeKey = null;
+        status = mode === "pending" ? "loading" : "error";
+        refresh();
+        return;
+    }
+
+    const user = getSessionUser();
+    const key = mode === "account" ? `account:${user.uid}` : "local";
+    if (key === activeKey) return;
+    activeKey = key;
+
+    if (mode === "local") {
+        store = createLocalStore();
+        init();
+        return;
+    }
+
+    status = "loading";
+    refresh();
+
+    loadFirebase()
+        .then(({ db, sdk }) => {
+            if (activeKey !== key) return;
+            store = createFirestoreStore({ db, uid: user.uid, sdk });
+            init();
+        })
+
+        .catch((err) => {
+            console.error("Couldn't load Firebase:", err);
+            if (activeKey !== key) return;
+            activeKey = null;
+            status = "error";
+            refresh();
+        });
+}
 
 async function loadDemoGames() {
     try {
-        const response = await fetch("./mock.json");
+        const response = await fetch("/mock.json");
         if (!response.ok) throw new Error(`mock.json: ${response.status}`);
 
         const demo = await response.json();
@@ -207,7 +348,9 @@ appEl.addEventListener("click", (e) => {
     }
 
     if (e.target.closest(".retryBtn")) {
-        init();
+        if (readOnly) startPublicView();
+        else if (hasSessionError()) retrySession();
+        else { activeKey = null; applyMode(); }
         return;
     }
 
@@ -297,13 +440,15 @@ function clearFilters() {
     filterSelect.focus();
 }
 
-document.querySelector("#exportBtn").addEventListener("click", () => downloadExport(profile, gamesArray));
+document.querySelector("#exportBtn").addEventListener("click", () => 
+    downloadExport({ username: displayMode === "account" ? getSessionProfile().username : profile.username }, gamesArray)
+);
 
 initImport({
     getGamesCount: () => gamesArray.length,
     onImport({ username, games }) {
         games.forEach((g, i) => { g.order = i; });
-        if (username) {
+        if (username && displayMode === "local") {
             profile.username = username;
             saveProfile(profile);
             profileUI.render();
@@ -313,5 +458,77 @@ initImport({
     },
 });
 
+function getLocalCount() {
+    try { return loadGamesFromStorage()?.length ?? 0; }
+    catch { return 0; }
+}
+
+async function importLocalGames({ deleteLocal }) {
+    const user = getSessionUser();
+    const local = await createLocalStore().loadGames();
+    const incoming = local.map(sanitizeGame).filter(Boolean);
+
+    if (incoming.length) {
+        const { db, sdk } = await loadFirebase();
+        const remote = createFirestoreStore({ db, uid: user.uid, sdk });
+        const existing = await remote.loadGames();
+        const start = nextOrder(existing);
+        incoming.forEach((g, i) => { g.order = start + i; });
+        await remote.replaceAll([...existing, ...incoming]);
+    }
+
+    if (deleteLocal) saveGamesToStorage([]);
+
+    if (!readOnly) {
+        activeKey = null;
+        applyMode();
+    }
+}
+
 addGameBtn.hidden = readOnly;
 document.querySelector(".backupActions").hidden = readOnly;
+
+const authModal = initAuthModal({
+    getLocalCount,
+    onImportLocal: importLocalGames,
+    onSetupDone: () => { if (readOnly) location.href = "/" + location.search },
+    onClosed: redirectIfOwner,
+});
+
+const accountBtn = document.querySelector("#accountBtn");
+const modeBadge = document.querySelector("#modeBadge");
+
+function renderAccountUI() {
+    const user = getSessionUser();
+    const checking = displayMode === "pending" || (readOnly && mightHaveSession() && !isSessionSettled());
+
+    accountBtn.textContent = checking ? "..." : (user ? (getSessionProfile()?.username ?? user.email) : t("auth.loginButton"));
+    accountBtn.disabled = checking;
+
+    modeBadge.hidden = displayMode !== "local";
+    modeBadge.textContent = t("mode.local");
+}
+
+accountBtn.addEventListener("click", () => {
+   if (readOnly && getSessionProfile()) location.href = "/" + location.search;
+   else authModal.open(); 
+});
+
+onLanguageChange(renderAccountUI);
+
+if (readOnly) {
+    renderAccountUI();
+    onSessionChange(() => {
+        renderAccountUI();
+        if (!authModal.isOpen()) redirectIfOwner();
+    });
+
+    if (mightHaveSession()) startSession();
+    startPublicView();
+}
+
+else {
+    onSessionChange(applyMode);
+    if (mightHaveSession()) startSession();
+    applyMode();
+}

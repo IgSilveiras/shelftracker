@@ -1,0 +1,19 @@
+{
+  "name": "palfolio1",
+  "version": "1.0.0",
+  "description": "A video game tracker to log what you're playing, what you've already played and what you plan to play, with details like how intensely you play and when you started and finished each game.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-shelftracker \"node --test --test-concurrency=1 tests/*.test.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "firebase": "^13.1.0",
+    "firebase-tools": "^15.34.1"
+  }
+}

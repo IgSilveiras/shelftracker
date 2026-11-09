@@ -73,6 +73,30 @@
             span { white-space: pre; }
         }
     }
+
+    .accountBar {
+        margin: var(--space-3) var(--space-4) 0 auto;
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-2);
+
+        .modeBadge {
+            padding: var(--space-1) var(--space-2);
+            background: var(--overlay-bg);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-xs);
+            backdrop-filter: blur(2px);
+        }
+
+        .accountBtn {
+            max-width: 14rem;
+            overflow: hidden;
+            font-size: var(--font-sm);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
 }
 
 .controls {

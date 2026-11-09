@@ -1,0 +1,140 @@
+rules_version = '2';
+service cloud.firestore {
+    match /databases/{database}/documents {
+        
+        // --- helpers ---
+        function isOwner(uid) {
+            return request.auth != null && request.auth.uid == uid;
+        }
+
+        function isVerified() {
+            return request.auth.token.email_verified == true;
+        }
+
+        function userDoc(uid) {
+            return /databases/$(database)/documents/users/$(uid);
+        }
+
+        function usernameDoc(handle) {
+            return /databases/$(database)/documents/usernames/$(handle);
+        }
+
+        function isPublic(uid) {
+            return exists(userDoc(uid)) && get(userDoc(uid)).data.isPublic == true;
+        }
+
+        function optString(d, key, max) {
+            return !(key in d) || (d[key] is string && d[key].size() <= max);
+        }
+
+        function optNumber(d, key, min, max) {
+            return !(key in d) || (d[key] is number && d[key] >= min && d[key] <= max);
+        }
+
+        function optBool(d, key) {
+            return !(key in d) || d[key] is bool;
+        }
+
+        function optEnum(d, key, allowed) {
+            return !(key in d) || (d[key] is string && d[key] in allowed);
+        }
+
+        function optUrl(d, key) {
+            return !(key in d) || (d[key] is string && d[key].size() <= 2000 && d[key].matches('^(https?://.*)?$'));
+        }
+
+        function optDate(d, key) {
+            return !(key in d) || (d[key] is string && d[key].matches('^([0-9]{4}-[0-9]{2}-[0-9]{2})?$'));
+        }
+
+        function validGame(d, gameId) {
+            return d.keys().hasOnly(['id', 'name', 'thumbnail', 'release', 'playState', 'intensity',
+                               'completed100', 'rating', 'playTime', 'startDate', 'finishDate',
+                               'platform', 'lastPlayed', 'difficulty', 'revisitChance',
+                               'review', 'favorite', 'order'])
+                && d.keys().hasAll(['id', 'name', 'playState', 'order'])
+                && d.id == gameId
+                && d.name is string && d.name.size() > 0 && d.name.size() <= 200
+                && d.playState in ['planToPlay', 'playing', 'completed', 'paused', 'abandoned']
+                && d.order is number
+                && optUrl(d, 'thumbnail')
+                && optNumber(d, 'release', 0, 2100)
+                && optNumber(d, 'rating', 0, 10)
+                && optNumber(d, 'playTime', 0, 1000000)
+                && optEnum(d, 'intensity', ['', 'casual', 'tryhard'])
+                && optEnum(d, 'difficulty', ['', 'easy', 'medium', 'hard', 'veryHard'])
+                && optEnum(d, 'revisitChance', ['', 'none', 'unlikely', 'maybe', 'likely', 'definitely'])
+                && optDate(d, 'startDate')
+                && optDate(d, 'finishDate')
+                && optDate(d, 'lastPlayed')
+                && optString(d, 'platform', 50)
+                && optString(d, 'review', 15000)
+                && optBool(d, 'favorite')
+                && optBool(d, 'completed100');
+        }
+
+        function validProfile(d) {
+            return d.keys().hasOnly(['username', 'isPublic'])
+                && d.keys().hasAll(['username', 'isPublic'])
+                && d.username is string
+                && d.username.matches('^[A-Za-z0-9_-]{3,20}$')
+                && d.isPublic is bool;
+        }
+
+
+        // --- profile ---
+        match /users/{uid} {
+            allow get: if true;
+            allow list: if false;
+
+            allow create:   if isOwner(uid)
+                            && isVerified()
+                            && validProfile(request.resource.data)
+                            && 
+                            getAfter(usernameDoc(request.resource.data.username.lower())).data.uid == uid;
+            
+            allow update:   if isOwner(uid)
+                            && isVerified()
+                            && validProfile(request.resource.data)
+                            && (request.resource.data.username.lower() == resource.data.username.lower() 
+                                || (getAfter(usernameDoc(request.resource.data.username.lower())).data.uid == uid 
+                                    && !existsAfter(usernameDoc(resource.data.username.lower()))));
+
+            allow delete: if false; // fix later when delete acc is implemented
+        }
+
+        
+        // --- handle => uid --- 
+        match /usernames/{handle} {
+            allow get: if true;
+            allow list: if false;
+
+            allow create:   if request.resource.data.keys().hasOnly(['uid'])
+                            && request.resource.data.uid is string
+                            && isOwner(request.resource.data.uid)
+                            && isVerified()
+                            && handle.matches('^[a-z0-9_-]{3,20}$')
+                            && getAfter(userDoc(request.resource.data.uid)).data.username.lower() == handle;
+
+            allow update: if false;
+
+            allow delete:   if isOwner(resource.data.uid)
+                            && isVerified()
+                            && (!existsAfter(userDoc(resource.data.uid))
+                                || getAfter(userDoc(resource.data.uid)).data.username.lower() != handle);
+        }
+
+
+
+        // --- games ---
+        match /users/{uid}/games/{gameId} {
+            allow read: if isOwner(uid) || isPublic(uid);
+            
+            allow create, update:   if isOwner(uid)
+                                    && isVerified()
+                                    && validGame(request.resource.data, gameId);
+
+            allow delete: if isOwner(uid) && isVerified();
+        }
+    }
+}

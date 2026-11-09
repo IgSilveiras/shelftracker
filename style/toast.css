@@ -1,0 +1,32 @@
+#toast {
+    inset: auto 0 var(--space-5);
+    margin: 0 auto;
+    max-width: min(420px, 100% - 2rem);
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-3);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: var(--font-sm);
+    text-align: center;
+    opacity: 0;
+    translate: 0 8px;
+    transition: 0.2s allow-discrete;
+
+    &:popover-open {
+        opacity: 1;
+        translate: 0 0;
+
+        @starting-style {
+            opacity: 0;
+            translate: 0 8px;
+        }
+    }
+
+    &[data-kind="error"] { 
+        background: linear-gradient(135deg, var(--danger), #c2410c);
+        border-color: rgb(255 255 255 / 0.25);
+        color: white;
+        font-weight: 600;
+    };
+}
