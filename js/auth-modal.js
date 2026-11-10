@@ -14,7 +14,7 @@ const FORM_VIEWS = {
     reset:      { title: "auth.resetTitle",     submit: "auth.resetSubmit",     switchTo: "login",      switchLabel: "auth.toLogin",        password: false, forgot: false, autocomplete: "off"},
 };
 
-export function initAuthModal({ getLocalCount, onImportLocal, onSetupDone= () => {}, onClosed = () => {} }) {
+export function initAuthModal({ getLocalCount, onImportLocal, onGoToShelf= () => {}, onClosed = () => {} }) {
     const modal = document.querySelector("#authModal");
     const title = document.querySelector("#authModalTitle");
     const message = document.querySelector("#authMessage");
@@ -65,7 +65,7 @@ export function initAuthModal({ getLocalCount, onImportLocal, onSetupDone= () =>
 
     function finishSetup() {
         close();
-        onSetupDone();
+        onGoToShelf();
     }
 
     function setMessage(text = "", kind = "info") {
@@ -154,7 +154,7 @@ export function initAuthModal({ getLocalCount, onImportLocal, onSetupDone= () =>
 
     async function finishAuth(user = getSessionUser()) {
         const profile = await refreshProfile(user);
-        if (profile) close();
+        if (profile) { close(); onGoToShelf(); }
         else show("setup");
     }
 
@@ -370,7 +370,8 @@ export function initAuthModal({ getLocalCount, onImportLocal, onSetupDone= () =>
 
             await renameProfile(user.uid, current, next);
             await refreshProfile(user);
-            show("account");
+            close();
+            onGoToShelf();
         }
 
         catch (err) {

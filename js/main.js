@@ -32,8 +32,10 @@ let currentSortOrder = settings.sortOrder;
 let view = settings.view;
 const route = getRoute();
 const SESSION_WAIT_MS = 8000;
-const readOnly = route.type === "public";
-let displayMode = readOnly ? "public" : "local";
+const isPublicRoute = route.type === "public";
+let readOnly = isPublicRoute;
+let ownerMode = false;
+let displayMode = isPublicRoute ? "public" : "local";
 let publicUsername = null;
 
 const profileUI = initProfile({
@@ -143,6 +145,25 @@ function isOwnShelf() {
     return !!own && own.toLowerCase() === route.handle?.toLowerCase();
 }
 
+const ownShelfUrl = () => `/u/${getSessionProfile().username}${location.search}`;
+
+function goToOwnShelf() {
+    if (getSessionProfile()) location.replace(ownShelfUrl());
+}
+
+function enterOwnerMode() {
+    if (ownerMode) return;
+    ownerMode = true;
+    readOnly = false;
+
+    addGameBtn.hidden = false;
+    document.querySelector(".backupActions").hidden = false;
+    history.replaceState(null, "", ownShelfUrl());
+
+    onSessionChange(applyMode);
+    applyMode();
+}
+
 async function startPublicView() {
     const token = ++loadToken;
     status = "loading";
@@ -154,17 +175,21 @@ async function startPublicView() {
             new Promise((resolve) => setTimeout(resolve, SESSION_WAIT_MS)),
         ]);
         if (token !== loadToken) return;
+        if (isOwnShelf()) return enterOwnerMode();
     }
 
     try {
         const result = route.handle
-            ? await resolvePublicShelf(route.handle, { asOwner: isOwnShelf() })
+            ? await resolvePublicShelf(route.handle)
             : { status: "notFound" };
         if (token !== loadToken) return;
 
         if (result.username) {
             publicUsername = result.username;
             document.title = `${result.username} · ShelfTracker`;
+            if (route.handle && route.handle !== result.username) {
+                history.replaceState(null, "", `/u/${result.username}${location.search}`);
+            }
             profileUI.render();
         }
 
@@ -237,6 +262,15 @@ function applyMode() {
         activeKey = null;
         status = mode === "pending" ? "loading" : "error";
         refresh();
+        return;
+    }
+
+    if (isPublicRoute) {
+        if (mode !== "account") location.replace("/" + location.search);
+    }
+
+    else if (mode === "account") {
+        if (!authModal.isOpen()) location.replace(ownShelfUrl());
         return;
     }
 
@@ -472,11 +506,6 @@ async function importLocalGames({ deleteLocal }) {
     }
 
     if (deleteLocal) saveGamesToStorage([]);
-
-    if (!readOnly) {
-        activeKey = null;
-        applyMode();
-    }
 }
 
 addGameBtn.hidden = readOnly;
@@ -485,7 +514,8 @@ document.querySelector(".backupActions").hidden = readOnly;
 const authModal = initAuthModal({
     getLocalCount,
     onImportLocal: importLocalGames,
-    onSetupDone: () => { if (readOnly) location.href = "/" + location.search },
+    onGoToShelf: goToOwnShelf,
+    onClosed: () => { if (!readOnly) applyMode(); }
 });
 
 const accountBtn = document.querySelector("#accountBtn");
@@ -503,19 +533,15 @@ function renderAccountUI() {
 }
 
 accountBtn.addEventListener("click", () => {
-   if (readOnly && getSessionProfile()) location.href = "/" + location.search;
+   if (readOnly && getSessionProfile()) location.href = ownShelfUrl();
    else authModal.open(); 
 });
 
 onLanguageChange(renderAccountUI);
 
-if (readOnly) {
+if (isPublicRoute) {
     renderAccountUI();
-    onSessionChange(() => {
-        renderAccountUI();
-        if (status === "private" && isOwnShelf()) startPublicView();
-    });
-
+    onSessionChange(renderAccountUI);
     if (mightHaveSession()) startSession();
     startPublicView();
 }
