@@ -2,7 +2,7 @@
 
 A video game tracker to log what you're playing, what you've already played and what you plan to play, with details like how intensely you play and when you started and finished each game.
 
-**[Live demo](https://IgSilveiras.github.io/shelftracker/)**
+**[Live demo](https://shelftrackergg.web.app)**
 
 ![ShelfTracker screenshot](assets/demo.png)
 
@@ -15,55 +15,50 @@ A video game tracker to log what you're playing, what you've already played and 
 - **Custom order:** arrange your shelf with drag and drop (it also works with keyboard).
 - **Import and export:** back up your list as a JSON file and restore it anywhere.
 - **English and Spanish:** switch languages from the footer.
+- **Accounts (optional):** sign up with email and password, verify your email and pick a username. Your shelf is then saved in the cloud.
+- **Public shelves:** share a read-only view at `/u/<username>`, or make your shelf private from your account.
+- **Local list import:** when you sign up, you can bring over the list you had as a guest.
 
-No account needed: everything is stored in your browser.
+You can use ShelfTracker as a guest with no account (everything stays in your browser), or create an account to keep your shelf in the cloud.
 
 ## Your data
 
-Your list lives in your browser's `localStorage`. It stays on your device, and clearing the site's data removes it. Use **Export List** to keep a backup and **Import List** to restore it (importing replaces your current list).
+**Guest mode.** Your list lives in your browser's `localStorage`. It stays on your device, and clearing the site's data removes it. Use **Export List** to keep a backup and **Import List** to restore it (importing replaces your current list).
+
+**With an account.** Your list is stored in Firestore and is public by default: anyone with your link can see it. You can make it private from your account dialog. Public shelves are served with `noindex`, so search engines shouldn't list them. To delete your account, email nanashidev774@gmail.com.
 
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript (ES modules), with no frameworks and no build step
-- Data saved in `localStorage`
+- Guest data saved in `localStorage`
+- Firebase (Authentication with email and password, Firestore and Hosting), loaded from the CDN only when needed
+- [SortableJS](https://sortablejs.github.io/Sortable/) for drag and drop
 - [Tabler Icons](https://tabler.io/icons) and Google Fonts ([Fraunces](https://fonts.google.com/specimen/Fraunces) and [Inter](https://fonts.google.com/specimen/Inter))
 
 ## Running locally
 
-ShelfTracker has no build step, but you can't open `index.html` by double-clicking it. The app uses ES modules and `fetch` (to load the demo games), and browsers block both on `file://` addresses. Serve the folder with a local web server instead.
+**Guest mode only:** serve the folder with any static server (`python -m http.server 8000`, `npx serve`, Live Server). Opening `index.html` by double-clicking doesn't work, because browsers block ES modules and `fetch` on `file://`.
 
-1. Clone the repository:
+**Accounts and public shelves:** use the Firebase emulators, which also handle the `/u/**` rewrite.
 
-   ```bash
-   git clone https://github.com/IgSilveiras/shelftracker.git
-   cd shelftracker
-   ```
+1. `npm install`
+2. `npx firebase-tools emulators:start --project demo-shelftracker`
+3. Open `http://localhost:5000/?emulator`
 
-2. Start a local server. Pick one:
+Without `?emulator`, the app talks to the real project. If you fork this repo, replace `firebaseConfig` in `js/firebase.js` with your own project's.
 
-   ```bash
-   # Python 3
-   python -m http.server 8000
-
-   # Node.js
-   npx serve
-   ```
-
-   You can also use the Live Server extension in VS Code.
-
-3. Open the address it shows in your browser. With the Python command above, that's `http://localhost:8000`.
-
-On your first visit the shelf is empty. Use **Load Demo Games** to fill it with sample data.
+Run the Firestore rules tests with `npm run test:rules`.
 
 
 ## Roadmap
 
 - A React version of ShelfTracker
-- A fullstack version with a backend and a database
+- Connection with a game database
 
 ## Credits
 
 - Icons by [Tabler Icons](https://tabler.io/icons) (MIT License).
+- Drag and drop by [SortableJS](https://github.com/SortableJS/Sortable) (MIT License).
 - Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces) and [Inter](https://fonts.google.com/specimen/Inter), both under the SIL Open Font License.
 - Game artwork shown in the demo data, and in any cover URL you add, belongs to its respective owners.
 

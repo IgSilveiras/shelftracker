@@ -2,10 +2,10 @@ const SDK_VERSION = "13.1.0";
 export const CDN = `https://www.gstatic.com/firebasejs/${SDK_VERSION}`;
 
 const firebaseConfig = {
-    apiKey: "...",
-    authDomain: "...",
-    projectId: "...",
-    appId: "...",
+    apiKey: "AIzaSyAn8k0jZGtR_wo65JuzuWBtwHXbEjI8wdg",
+    authDomain: "shelftrackergg.firebaseapp.com",
+    projectId: "shelftrackergg",
+    appId: "1:289230705186:web:b790b7885b19af19c2307b",
 };
 
 // testing
