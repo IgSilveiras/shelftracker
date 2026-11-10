@@ -1,7 +1,7 @@
 import { loadFirebase } from "./firebase.js";
 import { createFirestoreStore } from "./firestore-store.js"
 
-export async function resolvePublicShelf(handle) {
+export async function resolvePublicShelf(handle, { asOwner = false } = {}) {
     const { db, sdk } = await loadFirebase();
 
     const handleSnap = await sdk.getDoc(sdk.doc(db, "usernames", handle.toLowerCase()));
@@ -12,7 +12,7 @@ export async function resolvePublicShelf(handle) {
     if (!userSnap.exists()) return { status: "notFound" };
 
     const { username, isPublic } = userSnap.data();
-    if (!isPublic) return { status: "private", username };
+    if (!isPublic && !asOwner) return { status: "private", username };
 
     const full = createFirestoreStore({ db, uid, sdk });
     return { status: "ok", username, store: { loadGames: full.loadGames } };

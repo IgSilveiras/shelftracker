@@ -138,14 +138,9 @@ function getGameById(id) {
     return gamesArray.find(g => g.id === id);
 }
 
-function redirectIfOwner() {
-    if (!readOnly) return false;
-
+function isOwnShelf() {
     const own = getSessionProfile()?.username;
-    if (!own || own.toLowerCase() !== route.handle?.toLowerCase()) return false;
-
-    location.replace("/" + location.search);
-    return true;
+    return !!own && own.toLowerCase() === route.handle?.toLowerCase();
 }
 
 async function startPublicView() {
@@ -159,12 +154,11 @@ async function startPublicView() {
             new Promise((resolve) => setTimeout(resolve, SESSION_WAIT_MS)),
         ]);
         if (token !== loadToken) return;
-        if (redirectIfOwner()) return;
     }
 
     try {
         const result = route.handle
-            ? await resolvePublicShelf(route.handle)
+            ? await resolvePublicShelf(route.handle, { asOwner: isOwnShelf() })
             : { status: "notFound" };
         if (token !== loadToken) return;
 
@@ -492,7 +486,6 @@ const authModal = initAuthModal({
     getLocalCount,
     onImportLocal: importLocalGames,
     onSetupDone: () => { if (readOnly) location.href = "/" + location.search },
-    onClosed: redirectIfOwner,
 });
 
 const accountBtn = document.querySelector("#accountBtn");
@@ -520,7 +513,7 @@ if (readOnly) {
     renderAccountUI();
     onSessionChange(() => {
         renderAccountUI();
-        if (!authModal.isOpen()) redirectIfOwner();
+        if (status === "private" && isOwnShelf()) startPublicView();
     });
 
     if (mightHaveSession()) startSession();
